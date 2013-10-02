@@ -1,0 +1,22 @@
+form {
+    table {
+        width: 100%;
+    }
+
+    label {
+        line-height: 30px;
+    }
+    div {
+        clear: both;
+        margin-bottom: 5px;
+    }
+
+    .field-row,
+    .button-row {
+        clear: both;
+        margin-bottom: 10px;
+    }
+    .indent {
+        margin-left: 100px;
+    }
+}

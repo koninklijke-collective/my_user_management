@@ -1,0 +1,31 @@
+.f3-widget-paginator {
+    display: block;
+    float: left;
+    margin: 0 0 10px;
+
+    li {
+        font-weight: bold;
+        display: block;
+        float: left;
+        width: 30px;
+        text-align: center;
+        margin: 0 2px 2px;
+        &.current {
+            border: 1px solid black;
+            padding: 2px;
+        }
+        &.next,
+        &.previous {
+            width: auto;
+        }
+    }
+
+    a {
+        font-weight: normal;
+        display: block;
+        border: 1px solid black;
+        padding: 2px;
+    }
+
+}
+

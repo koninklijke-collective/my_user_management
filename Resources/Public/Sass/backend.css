@@ -1,0 +1,97 @@
+/* line 1, _default.scss */
+#compareUsers {
+    margin-bottom: 10px;
+}
+
+/* line 5, _default.scss */
+#tx_beuser_compare td {
+    min-width: 170px;
+}
+
+/* line 9, _default.scss */
+div.collapsibleSection {
+    background-color: #ededed;
+    border-top: 1px solid #cdcdcd;
+    border-bottom: 1px solid #cdcdcd;
+    padding: 12px;
+    margin-bottom: 24px;
+}
+
+/* line 2, elements/_form.scss */
+form table {
+    width: 100%;
+}
+
+/* line 6, elements/_form.scss */
+form label {
+    line-height: 30px;
+}
+
+/* line 9, elements/_form.scss */
+form div {
+    clear: both;
+    margin-bottom: 5px;
+}
+
+/* line 15, elements/_form.scss */
+form .field-row,
+form .button-row {
+    clear: both;
+    margin-bottom: 10px;
+}
+
+/* line 19, elements/_form.scss */
+form .indent {
+    margin-left: 100px;
+}
+
+/* line 2, elements/_filter.scss */
+.backend-users-filters label {
+    float: left;
+    height: 20px;
+    line-height: 20px;
+    margin-right: 10px;
+    width: 90px;
+}
+
+/* line 9, elements/_filter.scss */
+.backend-users-filters div {
+    clear: both;
+    margin-bottom: 5px;
+}
+
+/* line 1, elements/_paginator.scss */
+.f3-widget-paginator {
+    display: block;
+    float: left;
+    margin: 0 0 10px;
+}
+
+/* line 6, elements/_paginator.scss */
+.f3-widget-paginator li {
+    font-weight: bold;
+    display: block;
+    float: left;
+    width: 30px;
+    text-align: center;
+    margin: 0 2px 2px;
+}
+
+/* line 13, elements/_paginator.scss */
+.f3-widget-paginator li.current {
+    border: 1px solid black;
+    padding: 2px;
+}
+
+/* line 18, elements/_paginator.scss */
+.f3-widget-paginator li.next, .f3-widget-paginator li.previous {
+    width: auto;
+}
+
+/* line 23, elements/_paginator.scss */
+.f3-widget-paginator a {
+    font-weight: normal;
+    display: block;
+    border: 1px solid black;
+    padding: 2px;
+}

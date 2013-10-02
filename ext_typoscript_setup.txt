@@ -1,0 +1,1 @@
+<INCLUDE_TYPOSCRIPT: source="FILE:EXT:my_user_management/Configuration/TypoScript/setup.ts">
