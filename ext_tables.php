@@ -67,5 +67,21 @@ if (TYPO3_MODE === 'BE') {
             'navigationComponentId' => 'typo3-pagetree',
         )
     );
+
+	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+		'Serfhos.' . $_EXTKEY,
+		'MyUserManagement',
+		'groupAdmin',
+		'',
+		array(
+			'BackendUserGroup' => 'list, compare, addToCompareList, removeFromCompareList',
+		),
+		array(
+			'access' => 'user,group',
+			'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/moduleicon_myusermanagement_groupadmin.gif',
+			'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/BackendUserGroup.xlf',
+		)
+	);
+
 }
 ?>

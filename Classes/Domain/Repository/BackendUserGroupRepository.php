@@ -30,7 +30,31 @@ namespace Serfhos\MyUserManagement\Domain\Repository;
  *
  * @package Serfhos\MyUserManagement\Domain\Repository
  */
-class BackendUserGroupRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
+class BackendUserGroupRepository extends \TYPO3\CMS\Extbase\Domain\Repository\BackendUserGroupRepository {
+
+	/**
+	 * Initializes the repository.
+	 *
+	 * @return void
+	 */
+	public function initializeObject() {
+		/** @var $querySettings \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings */
+		$querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
+		$querySettings->setIgnoreEnableFields(TRUE);
+		$querySettings->setEnableFieldsToBeIgnored(array('hidden'));
+		$this->setDefaultQuerySettings($querySettings);
+	}
+
+	/**
+	 * Finds Backend Users on a given list of uids
+	 *
+	 * @param array $uidList
+	 * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult<\Serfhos\MyUserManagement\Domain\Model\BackendUser>
+	 */
+	public function findByUidList(array $uidList) {
+		$query = $this->createQuery();
+		return $query->matching($query->in('uid', $GLOBALS['TYPO3_DB']->cleanIntArray($uidList)))->execute();
+	}
 
 }
 ?>

@@ -60,7 +60,15 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
 
         $moduleData = $GLOBALS['BE_USER']->getModuleData(self::PREFIX . $this->key);
         if (empty($moduleData) || !$moduleData) {
-            $moduleData = $this->objectManager->get('TYPO3\\CMS\\Beuser\\Domain\\Model\\ModuleData');
+			switch($this->key) {
+				case '_backend_user_group':
+					$moduleData = $this->objectManager->get('Serfhos\\MyUserManagement\\Domain\\Model\\BackendUserGroupModuleData');
+					break;
+				case '_backend_user':
+				default:
+					$moduleData = $this->objectManager->get('TYPO3\\CMS\\Beuser\\Domain\\Model\\ModuleData');
+					break;
+			}
         } else {
             $moduleData = @unserialize($moduleData);
         }
@@ -70,10 +78,10 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
     /**
      * Persists serialized module data to user settings
      *
-     * @param \TYPO3\CMS\Beuser\Domain\Model\ModuleData $moduleData
+     * @param mixed $moduleData
      * @return void
      */
-    public function persistModuleData(\TYPO3\CMS\Beuser\Domain\Model\ModuleData $moduleData) {
+    public function persistModuleData($moduleData) {
         $GLOBALS['BE_USER']->pushModuleData(self::PREFIX . $this->key, serialize($moduleData));
     }
 

@@ -22,7 +22,7 @@ module.tx_myusermanagement {
                     columns {
                         subgroup.mapOnProperty = subGroups
                         db_mountpoints.mapOnProperty = dbMountPoints
-
+						hidden.mapOnProperty = isDisabled
                     }
                 }
             }
