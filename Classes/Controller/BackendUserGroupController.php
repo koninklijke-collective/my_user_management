@@ -92,7 +92,7 @@ class BackendUserGroupController extends \TYPO3\CMS\Extbase\Mvc\Controller\Actio
 	protected function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view) {
 		$view->assignMultiple(array(
 			'currentUser' => $this->backendUser,
-			'returnUrl' => 'mod.php?M=EurUserManagementEurusermanagement_EurUserManagementGroupadmin',
+			'returnUrl' => 'mod.php?M=MyUserManagementMyusermanagement_MyUserManagementGroupadmin',
 			'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
 			'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
 		));
