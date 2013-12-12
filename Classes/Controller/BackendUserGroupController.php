@@ -120,15 +120,23 @@ class BackendUserGroupController extends \TYPO3\CMS\Extbase\Mvc\Controller\Actio
 	}
 
 	/**
-	 * List all backend groups
+	 * List all (demanded) backend groups
 	 *
+	 * @param \Serfhos\MyUserManagement\Domain\Model\BackendUserGroupDemand $backendUserGroupDemand
 	 * @return void
 	 */
-	public function listAction() {
+	public function listAction(\Serfhos\MyUserManagement\Domain\Model\BackendUserGroupDemand $backendUserGroupDemand = NULL) {
+		if ($backendUserGroupDemand === NULL) {
+			$backendUserGroupDemand = $this->moduleData->getDemand();
+		} else {
+			$this->moduleData->setDemand($backendUserGroupDemand);
+		}
+
 		$compareBackendUserGroupList = $this->moduleData->getCompareGroupList();
 		$this->view->assignMultiple(
 			array(
-				'backendUserGroups' => $this->backendUserGroupRepository->findAll(),
+				'backendUserGroupDemand' => $backendUserGroupDemand,
+				'backendUserGroups' => $this->backendUserGroupRepository->findByDemand($backendUserGroupDemand),
 				'compareBackendUserGroupList' => !empty($compareBackendUserGroupList) ? $this->backendUserGroupRepository->findByUidList($compareBackendUserGroupList) : '',
 			)
 

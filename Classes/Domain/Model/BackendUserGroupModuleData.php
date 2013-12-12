@@ -24,6 +24,7 @@ namespace Serfhos\MyUserManagement\Domain\Model;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Backend user group module data
@@ -37,6 +38,13 @@ class BackendUserGroupModuleData {
 	 * @var array
 	 */
 	protected $compareGroupList = array();
+
+	/**
+	 * The demand
+	 *
+	 * @var \Serfhos\MyUserManagement\Domain\Model\BackendUserGroupDemand
+	 */
+	protected $demand;
 
 	/**
 	 * Returns the compare list as array of user uis
@@ -67,4 +75,27 @@ class BackendUserGroupModuleData {
 	public function detachUidCompareGroup($uid) {
 		unset($this->compareGroupList[$uid]);
 	}
+
+	/**
+	 * Sets the demand
+	 *
+	 * @param \Serfhos\MyUserManagement\Domain\Model\BackendUserGroupDemand $demand
+	 * @return void
+	 */
+	public function setDemand($demand) {
+		$this->demand = $demand;
+	}
+
+	/**
+	 * Gets the demand
+	 *
+	 * @return \Serfhos\MyUserManagement\Domain\Model\BackendUserGroupDemand
+	 */
+	public function getDemand() {
+		if (!($this->demand instanceof \Serfhos\MyUserManagement\Domain\Model\BackendUserGroupDemand)) {
+			$this->demand = GeneralUtility::makeInstance('Serfhos\\MyUserManagement\\Domain\\Model\\BackendUserGroupDemand');
+		}
+		return $this->demand;
+	}
+
 }

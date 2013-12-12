@@ -75,5 +75,30 @@ class BackendUserGroupRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Ba
 		return $query->execute();
 	}
 
+	/**
+	 * Find all backend user groups by demand
+	 *
+	 * @param \Serfhos\MyUserManagement\Domain\Model\BackendUserGroupDemand $demand
+	 * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+	 */
+	public function findByDemand(\Serfhos\MyUserManagement\Domain\Model\BackendUserGroupDemand $demand) {
+		$query = $this->createQuery();
+		$constraints = array();
+
+		// Apply title filter
+		if ($demand->getTitle()) {
+			$constraints[] = $query->like('title', '%' . $demand->getTitle() . '%');
+		}
+
+		// Compile constraints
+		if (count($constraints) > 0) {
+			$query->matching(
+				$query->logicalAnd($constraints)
+			);
+		}
+
+		return $query->execute();
+	}
+
 }
 ?>
