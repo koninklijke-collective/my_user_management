@@ -56,5 +56,24 @@ class BackendUserGroupRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Ba
 		return $query->matching($query->in('uid', $GLOBALS['TYPO3_DB']->cleanIntArray($uidList)))->execute();
 	}
 
+	/**
+	 * Finds all groups containing the specified file mount
+	 *
+	 * @param \Serfhos\MyUserManagement\Domain\Model\FileMount $fileMount
+	 * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+	 */
+	public function findByFileMount(\Serfhos\MyUserManagement\Domain\Model\FileMount $fileMount) {
+		$query = $this->createQuery();
+		$query->matching(
+			$query->logicalOr(
+				$query->equals('fileMountpoints', intval($fileMount->getUid())),
+				$query->like('fileMountpoints', intval($fileMount->getUid()) . ',%'),
+				$query->like('fileMountpoints', '%,' . intval($fileMount->getUid())),
+				$query->like('fileMountpoints', '%,' . intval($fileMount->getUid()) . ',%')
+			)
+		);
+		return $query->execute();
+	}
+
 }
 ?>

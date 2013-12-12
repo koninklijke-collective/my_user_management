@@ -83,5 +83,20 @@ if (TYPO3_MODE === 'BE') {
 		)
 	);
 
+	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+		'Serfhos.' . $_EXTKEY,
+		'MyUserManagement',
+		'fileMountAdmin',
+		'',
+		array(
+			'FileMount' => 'list, detail',
+		),
+		array(
+			'access' => 'user,group',
+			'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/moduleicon_myusermanagement_filemountadmin.gif',
+			'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/FileMount.xlf',
+		)
+	);
+
 }
 ?>

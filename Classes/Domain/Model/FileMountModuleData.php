@@ -1,5 +1,5 @@
 <?php
-namespace Serfhos\MyUserManagement\ViewHelpers\Widget;
+namespace Serfhos\MyUserManagement\Domain\Model;
 
 /***************************************************************
  * Copyright notice
@@ -24,29 +24,43 @@ namespace Serfhos\MyUserManagement\ViewHelpers\Widget;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Renders a list of users from the specified group
+ * File mount module data
  *
  * @package my_user_management
  * @author Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
  */
-class UsersFromGroupWidgetViewHelper extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper {
+class FileMountModuleData {
 
 	/**
-	 * @var \Serfhos\MyUserManagement\ViewHelpers\Widget\Controller\UsersFromGroupController
-	 * @inject
-	 */
-	protected $controller;
-
-	/**
-	 * Render
+	 * The demand
 	 *
-	 * @param \Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $backendUserGroup
-	 * @return string
+	 * @var \Serfhos\MyUserManagement\Domain\Model\FileMountDemand
 	 */
-	public function render(\Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $backendUserGroup) {
-		return $this->initiateSubRequest();
+	protected $demand;
+
+	/**
+	 * Gets the demand
+	 *
+	 * @return FileMountDemand
+	 */
+	public function getDemand() {
+		if ($this->demand === NULL) {
+			$this->demand = GeneralUtility::makeInstance('Serfhos\\MyUserManagement\\Domain\\Model\\FileMountDemand');
+		}
+		return $this->demand;
+	}
+
+	/**
+	 * Sets the demand
+	 *
+	 * @param FileMountDemand $demand
+	 * @return void
+	 */
+	public function setDemand(\Serfhos\MyUserManagement\Domain\Model\FileMountDemand $demand) {
+		$this->demand = $demand;
 	}
 
 }

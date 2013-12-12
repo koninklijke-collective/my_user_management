@@ -1,5 +1,5 @@
 <?php
-namespace Serfhos\MyUserManagement\ViewHelpers\Widget;
+namespace Serfhos\MyUserManagement\Domain\Model;
 
 /***************************************************************
  * Copyright notice
@@ -24,29 +24,64 @@ namespace Serfhos\MyUserManagement\ViewHelpers\Widget;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
 /**
- * Renders a list of users from the specified group
+ * Domain for file mount demands
  *
  * @package my_user_management
  * @author Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
  */
-class UsersFromGroupWidgetViewHelper extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper {
+class FileMountDemand extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 
 	/**
-	 * @var \Serfhos\MyUserManagement\ViewHelpers\Widget\Controller\UsersFromGroupController
-	 * @inject
-	 */
-	protected $controller;
-
-	/**
-	 * Render
+	 * The title
 	 *
-	 * @param \Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $backendUserGroup
+	 * @var string
+	 */
+	protected $title;
+
+	/**
+	 * The path
+	 *
+	 * @var string
+	 */
+	protected $path;
+
+	/**
+	 * Sets the Path
+	 *
+	 * @param string $path
+	 * @return void
+	 */
+	public function setPath($path) {
+		$this->path = $path;
+	}
+
+	/**
+	 * Gets the Path
+	 *
 	 * @return string
 	 */
-	public function render(\Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $backendUserGroup) {
-		return $this->initiateSubRequest();
+	public function getPath() {
+		return $this->path;
+	}
+
+	/**
+	 * Sets the Title
+	 *
+	 * @param string $title
+	 * @return void
+	 */
+	public function setTitle($title) {
+		$this->title = $title;
+	}
+
+	/**
+	 * Gets the Title
+	 *
+	 * @return string
+	 */
+	public function getTitle() {
+		return $this->title;
 	}
 
 }

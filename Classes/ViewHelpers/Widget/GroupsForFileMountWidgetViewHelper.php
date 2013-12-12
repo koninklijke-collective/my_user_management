@@ -24,17 +24,16 @@ namespace Serfhos\MyUserManagement\ViewHelpers\Widget;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
 /**
- * Renders a list of users from the specified group
+ * Groups for file mount view helper
  *
  * @package my_user_management
  * @author Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
  */
-class UsersFromGroupWidgetViewHelper extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper {
+class GroupsForFileMountWidgetViewHelper extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper {
 
 	/**
-	 * @var \Serfhos\MyUserManagement\ViewHelpers\Widget\Controller\UsersFromGroupController
+	 * @var \Serfhos\MyUserManagement\ViewHelpers\Widget\Controller\GroupsForFileMountController
 	 * @inject
 	 */
 	protected $controller;
@@ -42,10 +41,10 @@ class UsersFromGroupWidgetViewHelper extends \TYPO3\CMS\Fluid\Core\Widget\Abstra
 	/**
 	 * Render
 	 *
-	 * @param \Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $backendUserGroup
+	 * @param \Serfhos\MyUserManagement\Domain\Model\FileMount $fileMount
 	 * @return string
 	 */
-	public function render(\Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $backendUserGroup) {
+	public function render(\Serfhos\MyUserManagement\Domain\Model\FileMount $fileMount) {
 		return $this->initiateSubRequest();
 	}
 

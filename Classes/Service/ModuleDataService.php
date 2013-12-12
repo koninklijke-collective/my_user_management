@@ -53,7 +53,7 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
      * Loads module data for user settings or returns a fresh object initially
      *
      * @param string $key
-     * @return \TYPO3\CMS\Beuser\Domain\Model\ModuleData
+     * @return mixed
      */
     public function loadModuleData($key = '') {
         $this->key = $key;
@@ -63,6 +63,9 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
 			switch($this->key) {
 				case '_backend_user_group':
 					$moduleData = $this->objectManager->get('Serfhos\\MyUserManagement\\Domain\\Model\\BackendUserGroupModuleData');
+					break;
+				case '_file_mount':
+					$moduleData = $this->objectManager->get('Serfhos\\MyUserManagement\\Domain\\Model\\FileMountModuleData');
 					break;
 				case '_backend_user':
 				default:

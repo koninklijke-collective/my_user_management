@@ -26,6 +26,14 @@ module.tx_myusermanagement {
                     }
                 }
             }
+            Serfhos\MyUserManagement\Domain\Model\FileMount {
+				mapping {
+					tableName = sys_filemounts
+					columns {
+						hidden.mapOnProperty = isDisabled
+					}
+				}
+			}
         }
     }
     settings {

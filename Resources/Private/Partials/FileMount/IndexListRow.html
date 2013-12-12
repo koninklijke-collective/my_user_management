@@ -1,0 +1,41 @@
+{namespace bu = TYPO3\CMS\Beuser\ViewHelpers}
+
+<tr class="db_list_normal">
+	<td class="col-icon">
+		<a href="#" onClick="showClickmenu('sys_filemounts', '{fileMount.uid}', '1', '', '', ''); return false;" title="" id={fileMount.uid}">
+			<bu:spriteIconForRecord table="sys_filemounts" object="{fileMount}" />
+		</a>
+	</td>
+	<td>{fileMount.title}</td>
+	<td>{fileMount.path}</td>
+	<td>
+		<f:if condition="{fileMount.isAbsolutePath}">
+			<f:then>
+				<f:translate key="yes">Yes</f:translate>
+			</f:then>
+			<f:else>
+				<f:translate key="no">No</f:translate>
+			</f:else>
+		</f:if>
+	</td>
+	<td>
+		<a href="alt_doc.php?edit[sys_filemounts][{fileMount.uid}]=edit&returnUrl={returnUrl}">
+			<bu:spriteManagerIcon iconName="actions-document-open" />
+		</a>
+		<f:if condition="{fileMount.isDisabled} == 1">
+			<f:then>
+				<a href="<bu:issueCommand parameters="tce_db.php?&data[sys_filemounts][{fileMount.uid}][hidden]=0&redirect={redirectUrl}" />">
+					<bu:spriteManagerIcon iconName="actions-edit-unhide" options="{title: 'unhide'}" />
+				</a>
+			</f:then>
+			<f:else>
+				<a href="<bu:issueCommand parameters="tce_db.php?&data[sys_filemounts][{fileMount.uid}][hidden]=1&redirect={redirectUrl}" />">
+					<bu:spriteManagerIcon iconName="actions-edit-hide" options="{title: 'hide'}" />
+				</a>
+			</f:else>
+		</f:if>
+		<f:link.action action="detail" arguments="{fileMount: fileMount.uid}">
+			<bu:spriteManagerIcon iconName="actions-document-info" />
+		</f:link.action>
+	</td>
+</tr>

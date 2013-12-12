@@ -1,5 +1,5 @@
 <?php
-namespace Serfhos\MyUserManagement\ViewHelpers\Widget;
+namespace Serfhos\MyUserManagement\Domain\Model;
 
 /***************************************************************
  * Copyright notice
@@ -26,27 +26,37 @@ namespace Serfhos\MyUserManagement\ViewHelpers\Widget;
  ***************************************************************/
 
 /**
- * Renders a list of users from the specified group
+ * Domain model for file mounts
  *
  * @package my_user_management
  * @author Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
  */
-class UsersFromGroupWidgetViewHelper extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper {
+class FileMount extends \TYPO3\CMS\Extbase\Domain\Model\FileMount {
 
 	/**
-	 * @var \Serfhos\MyUserManagement\ViewHelpers\Widget\Controller\UsersFromGroupController
-	 * @inject
-	 */
-	protected $controller;
-
-	/**
-	 * Render
+	 * Disabled record?
 	 *
-	 * @param \Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $backendUserGroup
-	 * @return string
+	 * @var boolean
 	 */
-	public function render(\Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $backendUserGroup) {
-		return $this->initiateSubRequest();
+	protected $isDisabled;
+
+	/**
+	 * Sets the disabled state
+	 *
+	 * @param boolean $isDisabled
+	 * @return void
+	 */
+	public function setIsDisabled($isDisabled) {
+		$this->isDisabled = $isDisabled;
+	}
+
+	/**
+	 * Gets the disabled state
+	 *
+	 * @return boolean
+	 */
+	public function getIsDisabled() {
+		return $this->isDisabled;
 	}
 
 }

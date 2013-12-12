@@ -1,5 +1,5 @@
 <?php
-namespace Serfhos\MyUserManagement\ViewHelpers\Widget;
+namespace Serfhos\MyUserManagement\ViewHelpers\Widget\Controller;
 
 /***************************************************************
  * Copyright notice
@@ -24,29 +24,35 @@ namespace Serfhos\MyUserManagement\ViewHelpers\Widget;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
 /**
- * Renders a list of users from the specified group
+ * Groups for file mount controller
  *
  * @package my_user_management
  * @author Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
  */
-class UsersFromGroupWidgetViewHelper extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper {
+class GroupsForFileMountController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController {
 
 	/**
-	 * @var \Serfhos\MyUserManagement\ViewHelpers\Widget\Controller\UsersFromGroupController
+	 * The backend user group repository
+	 *
+	 * @var \Serfhos\MyUserManagement\Domain\Repository\BackendUserGroupRepository
 	 * @inject
 	 */
-	protected $controller;
+	protected $backendUserGroupRepository;
 
 	/**
-	 * Render
+	 * Displays all users from the group
 	 *
-	 * @param \Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $backendUserGroup
-	 * @return string
+	 * @return void
 	 */
-	public function render(\Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $backendUserGroup) {
-		return $this->initiateSubRequest();
+	public function indexAction() {
+		/* @var $fileMount \Serfhos\MyUserManagement\Domain\Model\FileMount */
+		$fileMount = $this->widgetConfiguration['fileMount'];
+
+		/* @var $demand \TYPO3\CMS\Beuser\Domain\Model\Demand */
+		$backendUserGroups = $this->backendUserGroupRepository->findByFileMount($fileMount);
+
+		$this->view->assign('backendUserGroups', $backendUserGroups);
 	}
 
 }
