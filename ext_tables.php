@@ -67,35 +67,35 @@ if (TYPO3_MODE === 'BE') {
         )
     );
 
-	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-		'Serfhos.' . $_EXTKEY,
-		'MyUserManagement',
-		'groupAdmin',
-		'',
-		array(
-			'BackendUserGroup' => 'list, compare, addToCompareList, removeFromCompareList',
-		),
-		array(
-			'access' => 'user,group',
-			'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/GroupAdmin.png',
-			'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/BackendUserGroup.xlf',
-		)
-	);
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+        'Serfhos.' . $_EXTKEY,
+        'MyUserManagement',
+        'groupAdmin',
+        '',
+        array(
+            'BackendUserGroup' => 'list, compare, addToCompareList, removeFromCompareList',
+        ),
+        array(
+            'access' => 'user,group',
+            'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/GroupAdmin.png',
+            'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/BackendUserGroup.xlf',
+        )
+    );
 
-	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-		'Serfhos.' . $_EXTKEY,
-		'MyUserManagement',
-		'fileMountAdmin',
-		'',
-		array(
-			'FileMount' => 'list, detail',
-		),
-		array(
-			'access' => 'user,group',
-			'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/FileMountAdmin.png',
-			'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/FileMount.xlf',
-		)
-	);
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+        'Serfhos.' . $_EXTKEY,
+        'MyUserManagement',
+        'fileMountAdmin',
+        '',
+        array(
+            'FileMount' => 'list, detail',
+        ),
+        array(
+            'access' => 'user,group',
+            'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/FileMountAdmin.png',
+            'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/FileMount.xlf',
+        )
+    );
 
 }
 ?>

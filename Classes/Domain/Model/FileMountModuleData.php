@@ -1,5 +1,6 @@
 <?php
 namespace Serfhos\MyUserManagement\Domain\Model;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
  * Copyright notice
@@ -24,7 +25,6 @@ namespace Serfhos\MyUserManagement\Domain\Model;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * File mount module data
@@ -34,33 +34,33 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class FileMountModuleData {
 
-	/**
-	 * The demand
-	 *
-	 * @var \Serfhos\MyUserManagement\Domain\Model\FileMountDemand
-	 */
-	protected $demand;
+    /**
+     * The demand
+     *
+     * @var \Serfhos\MyUserManagement\Domain\Model\FileMountDemand
+     */
+    protected $demand;
 
-	/**
-	 * Gets the demand
-	 *
-	 * @return FileMountDemand
-	 */
-	public function getDemand() {
-		if ($this->demand === NULL) {
-			$this->demand = GeneralUtility::makeInstance('Serfhos\\MyUserManagement\\Domain\\Model\\FileMountDemand');
-		}
-		return $this->demand;
-	}
+    /**
+     * Gets the demand
+     *
+     * @return FileMountDemand
+     */
+    public function getDemand() {
+        if ($this->demand === NULL) {
+            $this->demand = GeneralUtility::makeInstance('Serfhos\\MyUserManagement\\Domain\\Model\\FileMountDemand');
+        }
+        return $this->demand;
+    }
 
-	/**
-	 * Sets the demand
-	 *
-	 * @param FileMountDemand $demand
-	 * @return void
-	 */
-	public function setDemand(\Serfhos\MyUserManagement\Domain\Model\FileMountDemand $demand) {
-		$this->demand = $demand;
-	}
+    /**
+     * Sets the demand
+     *
+     * @param FileMountDemand $demand
+     * @return void
+     */
+    public function setDemand(\Serfhos\MyUserManagement\Domain\Model\FileMountDemand $demand) {
+        $this->demand = $demand;
+    }
 
 }

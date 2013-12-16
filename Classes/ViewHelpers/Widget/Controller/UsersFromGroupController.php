@@ -1,5 +1,6 @@
 <?php
 namespace Serfhos\MyUserManagement\ViewHelpers\Widget\Controller;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
  * Copyright notice
@@ -24,7 +25,6 @@ namespace Serfhos\MyUserManagement\ViewHelpers\Widget\Controller;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * User from group controller
@@ -34,29 +34,29 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class UsersFromGroupController extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetController {
 
-	/**
-	 * The backend user repository
-	 *
-	 * @var \Serfhos\MyUserManagement\Domain\Repository\BackendUserRepository
-	 * @inject
-	 */
-	protected $backendUserRepository;
+    /**
+     * The backend user repository
+     *
+     * @var \Serfhos\MyUserManagement\Domain\Repository\BackendUserRepository
+     * @inject
+     */
+    protected $backendUserRepository;
 
-	/**
-	 * Displays all users from the group
-	 *
-	 * @return void
-	 */
-	public function indexAction() {
-		/* @var $backendUserGroup \Serfhos\MyUserManagement\Domain\Model\BackendUserGroup */
-		$backendUserGroup = $this->widgetConfiguration['backendUserGroup'];
+    /**
+     * Displays all users from the group
+     *
+     * @return void
+     */
+    public function indexAction() {
+        /* @var $backendUserGroup \Serfhos\MyUserManagement\Domain\Model\BackendUserGroup */
+        $backendUserGroup = $this->widgetConfiguration['backendUserGroup'];
 
-		/* @var $demand \TYPO3\CMS\Beuser\Domain\Model\Demand */
-		$demand = GeneralUtility::makeInstance('TYPO3\\CMS\\Beuser\\Domain\\Model\\Demand');
-		$demand->setBackendUserGroup($backendUserGroup);
-		$backendUsers = $this->backendUserRepository->findDemanded($demand);
+        /* @var $demand \TYPO3\CMS\Beuser\Domain\Model\Demand */
+        $demand = GeneralUtility::makeInstance('TYPO3\\CMS\\Beuser\\Domain\\Model\\Demand');
+        $demand->setBackendUserGroup($backendUserGroup);
+        $backendUsers = $this->backendUserRepository->findDemanded($demand);
 
-		$this->view->assign('backendUsers', $backendUsers);
-	}
+        $this->view->assign('backendUsers', $backendUsers);
+    }
 
 }

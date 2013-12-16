@@ -24,6 +24,7 @@ namespace Serfhos\MyUserManagement\ViewHelpers\Widget;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * Groups for file mount view helper
  *
@@ -32,20 +33,20 @@ namespace Serfhos\MyUserManagement\ViewHelpers\Widget;
  */
 class GroupsForFileMountWidgetViewHelper extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper {
 
-	/**
-	 * @var \Serfhos\MyUserManagement\ViewHelpers\Widget\Controller\GroupsForFileMountController
-	 * @inject
-	 */
-	protected $controller;
+    /**
+     * @var \Serfhos\MyUserManagement\ViewHelpers\Widget\Controller\GroupsForFileMountController
+     * @inject
+     */
+    protected $controller;
 
-	/**
-	 * Render
-	 *
-	 * @param \Serfhos\MyUserManagement\Domain\Model\FileMount $fileMount
-	 * @return string
-	 */
-	public function render(\Serfhos\MyUserManagement\Domain\Model\FileMount $fileMount) {
-		return $this->initiateSubRequest();
-	}
+    /**
+     * Render
+     *
+     * @param \Serfhos\MyUserManagement\Domain\Model\FileMount $fileMount
+     * @return string
+     */
+    public function render(\Serfhos\MyUserManagement\Domain\Model\FileMount $fileMount) {
+        return $this->initiateSubRequest();
+    }
 
 }

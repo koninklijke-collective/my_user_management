@@ -22,18 +22,18 @@ module.tx_myusermanagement {
                     columns {
                         subgroup.mapOnProperty = subGroups
                         db_mountpoints.mapOnProperty = dbMountPoints
-						hidden.mapOnProperty = isDisabled
+                        hidden.mapOnProperty = isDisabled
                     }
                 }
             }
             Serfhos\MyUserManagement\Domain\Model\FileMount {
-				mapping {
-					tableName = sys_filemounts
-					columns {
-						hidden.mapOnProperty = isDisabled
-					}
-				}
-			}
+                mapping {
+                    tableName = sys_filemounts
+                    columns {
+                        hidden.mapOnProperty = isDisabled
+                    }
+                }
+            }
         }
     }
     settings {

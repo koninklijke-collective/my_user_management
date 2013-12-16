@@ -60,33 +60,33 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
 
         $moduleData = $GLOBALS['BE_USER']->getModuleData(self::PREFIX . $this->key);
         if (empty($moduleData) || !$moduleData) {
-			switch($this->key) {
-				case '_backend_user_group':
-					$moduleData = $this->objectManager->get('Serfhos\\MyUserManagement\\Domain\\Model\\BackendUserGroupModuleData');
-					break;
-				case '_file_mount':
-					$moduleData = $this->objectManager->get('Serfhos\\MyUserManagement\\Domain\\Model\\FileMountModuleData');
-					break;
-				case '_backend_user':
-				default:
-					$moduleData = $this->objectManager->get('TYPO3\\CMS\\Beuser\\Domain\\Model\\ModuleData');
-					break;
-			}
+            switch($this->key) {
+                case '_backend_user_group':
+                    $moduleData = $this->objectManager->get('Serfhos\\MyUserManagement\\Domain\\Model\\BackendUserGroupModuleData');
+                    break;
+                case '_file_mount':
+                    $moduleData = $this->objectManager->get('Serfhos\\MyUserManagement\\Domain\\Model\\FileMountModuleData');
+                    break;
+                case '_backend_user':
+                default:
+                    $moduleData = $this->objectManager->get('TYPO3\\CMS\\Beuser\\Domain\\Model\\ModuleData');
+                    break;
+            }
         } else {
             $moduleData = @unserialize($moduleData);
         }
         return $moduleData;
     }
 
-	/**
-	 * Sets the key
-	 *
-	 * @param string $key
-	 * @return void
-	 */
-	public function setKey($key) {
-		$this->key = $key;
-	}
+    /**
+     * Sets the key
+     *
+     * @param string $key
+     * @return void
+     */
+    public function setKey($key) {
+        $this->key = $key;
+    }
 
     /**
      * Persists serialized module data to user settings

@@ -24,6 +24,7 @@ namespace Serfhos\MyUserManagement\Domain\Repository;
  *
  * This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 /**
  * File mount repository
  *
@@ -32,47 +33,47 @@ namespace Serfhos\MyUserManagement\Domain\Repository;
  */
 class FileMountRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FileMountRepository {
 
-	/**
-	 * Initializes the repository.
-	 *
-	 * @return void
-	 */
-	public function initializeObject() {
-		/** @var $querySettings \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings */
-		$querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
-		$querySettings->setIgnoreEnableFields(TRUE);
-		$querySettings->setEnableFieldsToBeIgnored(array('hidden'));
-		$this->setDefaultQuerySettings($querySettings);
-	}
+    /**
+     * Initializes the repository.
+     *
+     * @return void
+     */
+    public function initializeObject() {
+        /** @var $querySettings \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings */
+        $querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
+        $querySettings->setIgnoreEnableFields(TRUE);
+        $querySettings->setEnableFieldsToBeIgnored(array('hidden'));
+        $this->setDefaultQuerySettings($querySettings);
+    }
 
-	/**
-	 * Find file mounts by demand
-	 *
-	 * @param \Serfhos\MyUserManagement\Domain\Model\FileMountDemand $demand
-	 * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-	 */
-	public function findByDemand(\Serfhos\MyUserManagement\Domain\Model\FileMountDemand $demand) {
-		$query = $this->createQuery();
-		$constraints = array();
+    /**
+     * Find file mounts by demand
+     *
+     * @param \Serfhos\MyUserManagement\Domain\Model\FileMountDemand $demand
+     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     */
+    public function findByDemand(\Serfhos\MyUserManagement\Domain\Model\FileMountDemand $demand) {
+        $query = $this->createQuery();
+        $constraints = array();
 
-		// Filter by title
-		if ($demand->getTitle()) {
-			$constraints[] = $query->like('title', '%' . $demand->getTitle() . '%');
-		}
+        // Filter by title
+        if ($demand->getTitle()) {
+            $constraints[] = $query->like('title', '%' . $demand->getTitle() . '%');
+        }
 
-		// Filter by path
-		if ($demand->getPath()) {
-			$constraints[] = $query->like('path', '%' . $demand->getPath() . '%');
-		}
+        // Filter by path
+        if ($demand->getPath()) {
+            $constraints[] = $query->like('path', '%' . $demand->getPath() . '%');
+        }
 
-		// Add constraints
-		if (count($constraints) > 0) {
-			$query->matching(
-				$query->logicalAnd($constraints)
-			);
-		}
+        // Add constraints
+        if (count($constraints) > 0) {
+            $query->matching(
+                $query->logicalAnd($constraints)
+            );
+        }
 
-		return $query->execute();
-	}
+        return $query->execute();
+    }
 
 }

@@ -33,30 +33,30 @@ namespace Serfhos\MyUserManagement\Domain\Model;
  */
 class BackendUserGroupDemand {
 
-	/**
-	 * The title
-	 *
-	 * @var string
-	 */
-	protected $title;
+    /**
+     * The title
+     *
+     * @var string
+     */
+    protected $title;
 
-	/**
-	 * Sets the title
-	 *
-	 * @param string $title
-	 * @return void
-	 */
-	public function setTitle($title) {
-		$this->title = $title;
-	}
+    /**
+     * Sets the title
+     *
+     * @param string $title
+     * @return void
+     */
+    public function setTitle($title) {
+        $this->title = $title;
+    }
 
-	/**
-	 * Gets the title
-	 *
-	 * @return string
-	 */
-	public function getTitle() {
-		return $this->title;
-	}
+    /**
+     * Gets the title
+     *
+     * @return string
+     */
+    public function getTitle() {
+        return $this->title;
+    }
 
 }

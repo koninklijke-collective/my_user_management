@@ -33,30 +33,30 @@ namespace Serfhos\MyUserManagement\Domain\Model;
  */
 class FileMount extends \TYPO3\CMS\Extbase\Domain\Model\FileMount {
 
-	/**
-	 * Disabled record?
-	 *
-	 * @var boolean
-	 */
-	protected $isDisabled;
+    /**
+     * Disabled record?
+     *
+     * @var boolean
+     */
+    protected $isDisabled;
 
-	/**
-	 * Sets the disabled state
-	 *
-	 * @param boolean $isDisabled
-	 * @return void
-	 */
-	public function setIsDisabled($isDisabled) {
-		$this->isDisabled = $isDisabled;
-	}
+    /**
+     * Sets the disabled state
+     *
+     * @param boolean $isDisabled
+     * @return void
+     */
+    public function setIsDisabled($isDisabled) {
+        $this->isDisabled = $isDisabled;
+    }
 
-	/**
-	 * Gets the disabled state
-	 *
-	 * @return boolean
-	 */
-	public function getIsDisabled() {
-		return $this->isDisabled;
-	}
+    /**
+     * Gets the disabled state
+     *
+     * @return boolean
+     */
+    public function getIsDisabled() {
+        return $this->isDisabled;
+    }
 
 }

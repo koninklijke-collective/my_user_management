@@ -33,20 +33,20 @@ namespace Serfhos\MyUserManagement\ViewHelpers\Widget;
  */
 class UsersFromGroupWidgetViewHelper extends \TYPO3\CMS\Fluid\Core\Widget\AbstractWidgetViewHelper {
 
-	/**
-	 * @var \Serfhos\MyUserManagement\ViewHelpers\Widget\Controller\UsersFromGroupController
-	 * @inject
-	 */
-	protected $controller;
+    /**
+     * @var \Serfhos\MyUserManagement\ViewHelpers\Widget\Controller\UsersFromGroupController
+     * @inject
+     */
+    protected $controller;
 
-	/**
-	 * Render
-	 *
-	 * @param \Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $backendUserGroup
-	 * @return string
-	 */
-	public function render(\Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $backendUserGroup) {
-		return $this->initiateSubRequest();
-	}
+    /**
+     * Render
+     *
+     * @param \Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $backendUserGroup
+     * @return string
+     */
+    public function render(\Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $backendUserGroup) {
+        return $this->initiateSubRequest();
+    }
 
 }
