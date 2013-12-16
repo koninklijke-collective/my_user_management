@@ -72,12 +72,41 @@ class BackendUserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
      */
     protected $backEndUser;
 
+	/**
+	 * The action menu items
+	 *
+	 * @var array
+	 */
+	protected $actionMenuItems = array();
+
     /**
      * Initialize used variables
      */
     public function __construct() {
         $this->backEndUser = $GLOBALS['BE_USER'];
     }
+
+	/**
+	 * Initialize the action menu items
+	 *
+	 * @return void
+	 */
+	protected function initializeActionMenu() {
+		$this->actionMenuItems = array(
+			array(
+				'controller' => 'BackendUser',
+				'action' => 'list',
+				'labelKey' => 'backendUsers',
+				'defaultLabel' => '',
+			),
+			array(
+				'controller' => 'BackendUser',
+				'action' => 'online',
+				'labelKey' => 'onlineUsers',
+				'defaultLabel' => '',
+			)
+		);
+	}
 
     /**
      * Initializes the view before invoking an action method.
@@ -86,7 +115,10 @@ class BackendUserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
      * @return void
      */
     protected function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view) {
+		$this->initializeActionMenu();
+
         $view->assignMultiple(array(
+			'actionMenuItems' => $this->actionMenuItems,
             'currentUser' => $this->backEndUser,
             'returnUrl' => 'mod.php?M=MyUserManagementMyusermanagement_MyUserManagementUseradmin',
             'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],

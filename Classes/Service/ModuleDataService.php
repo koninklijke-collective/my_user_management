@@ -56,7 +56,7 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
      * @return mixed
      */
     public function loadModuleData($key = '') {
-        $this->key = $key;
+        if (!isset($this->key)) $this->key = $key;
 
         $moduleData = $GLOBALS['BE_USER']->getModuleData(self::PREFIX . $this->key);
         if (empty($moduleData) || !$moduleData) {
@@ -77,6 +77,16 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
         }
         return $moduleData;
     }
+
+	/**
+	 * Sets the key
+	 *
+	 * @param string $key
+	 * @return void
+	 */
+	public function setKey($key) {
+		$this->key = $key;
+	}
 
     /**
      * Persists serialized module data to user settings
