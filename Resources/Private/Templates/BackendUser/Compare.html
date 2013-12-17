@@ -4,8 +4,9 @@
 
 <f:section name="actionMenu">
 	<f:be.menus.actionMenu>
-		<f:be.menus.actionMenuItem label="{f:translate(key: 'backendUsers')}" controller="BackendUser" action="list" />
-		<f:be.menus.actionMenuItem label="{f:translate(key: 'onlineUsers')}" controller="BackendUser" action="online" />
+		<f:for each="{actionMenuItems}" as="actionMenuItem">
+			<f:be.menus.actionMenuItem label="{f:translate(key: '{actionMenuItem.labelKey}', default: '{actionMenuItem.defaultLabel}')}" controller="{actionMenuItem.controller}" action="{actionMenuItem.action}" />
+		</f:for>
 	</f:be.menus.actionMenu>
 </f:section>
 

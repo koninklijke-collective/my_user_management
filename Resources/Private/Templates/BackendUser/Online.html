@@ -5,7 +5,7 @@
 <f:section name="actionMenu">
 	<f:be.menus.actionMenu>
 		<f:for each="{actionMenuItems}" as="actionMenuItem">
-			<f:be.menus.actionMenuItem label="{f:translate(key: '{actionMenuItem.labelKey}')}" controller="{actionMenuItem.controller}" action="{actionMenuItem.action}" />
+			<f:be.menus.actionMenuItem label="{f:translate(key: '{actionMenuItem.labelKey}', default: '{actionMenuItem.defaultLabel}')}" controller="{actionMenuItem.controller}" action="{actionMenuItem.action}" />
 		</f:for>
 	</f:be.menus.actionMenu>
 </f:section>
