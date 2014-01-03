@@ -53,14 +53,25 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
      * Loads module data for user settings or returns a fresh object initially
      *
      * @param string $key
-     * @return \TYPO3\CMS\Beuser\Domain\Model\ModuleData
+     * @return mixed
      */
     public function loadModuleData($key = '') {
-        $this->key = $key;
+        if (!isset($this->key)) $this->key = $key;
 
         $moduleData = $GLOBALS['BE_USER']->getModuleData(self::PREFIX . $this->key);
         if (empty($moduleData) || !$moduleData) {
-            $moduleData = $this->objectManager->get('TYPO3\\CMS\\Beuser\\Domain\\Model\\ModuleData');
+            switch($this->key) {
+                case '_backend_user_group':
+                    $moduleData = $this->objectManager->get('Serfhos\\MyUserManagement\\Domain\\Model\\BackendUserGroupModuleData');
+                    break;
+                case '_file_mount':
+                    $moduleData = $this->objectManager->get('Serfhos\\MyUserManagement\\Domain\\Model\\FileMountModuleData');
+                    break;
+                case '_backend_user':
+                default:
+                    $moduleData = $this->objectManager->get('TYPO3\\CMS\\Beuser\\Domain\\Model\\ModuleData');
+                    break;
+            }
         } else {
             $moduleData = @unserialize($moduleData);
         }
@@ -68,12 +79,22 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
     }
 
     /**
-     * Persists serialized module data to user settings
+     * Sets the key
      *
-     * @param \TYPO3\CMS\Beuser\Domain\Model\ModuleData $moduleData
+     * @param string $key
      * @return void
      */
-    public function persistModuleData(\TYPO3\CMS\Beuser\Domain\Model\ModuleData $moduleData) {
+    public function setKey($key) {
+        $this->key = $key;
+    }
+
+    /**
+     * Persists serialized module data to user settings
+     *
+     * @param mixed $moduleData
+     * @return void
+     */
+    public function persistModuleData($moduleData) {
         $GLOBALS['BE_USER']->pushModuleData(self::PREFIX . $this->key, serialize($moduleData));
     }
 

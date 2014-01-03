@@ -1,0 +1,73 @@
+{namespace bu = TYPO3\CMS\Beuser\ViewHelpers}
+
+<f:layout name="Backend/Default" />
+
+<f:section name="actionMenu" />
+
+<f:section name="iconButtons">
+	<a href="#" onclick="window.location.href='alt_doc.php?returnUrl='+T3_THIS_LOCATION+'&edit[sys_filemounts][0]=new'; return false;"><bu:spriteManagerIcon iconName="actions-document-new" /></a>
+</f:section>
+
+<f:section name="content">
+
+	<f:comment>
+		Filter section
+	</f:comment>
+
+	<f:render partial="Filters/FileMount/Index" arguments="{fileMountDemand: fileMountDemand}" />
+
+	<f:comment>
+		Listing of all file mounts
+	</f:comment>
+
+	<h3><f:translate key="fileMountListing">File Mount Listing</f:translate></h3>
+
+	<f:if condition="<f:count subject='{fileMounts}' /> > 50">
+		<f:then>
+			<f:be.widget.paginate objects="{fileMounts}" as="paginatedFileMounts" configuration="{itemsPerPage: 50, insertAbove: 1, insertBelow: 1}">
+				<table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist">
+					<tr class="t3-row-header">
+						<td></td>
+						<td><f:translate key="title">Title</f:translate></td>
+						<td><f:translate key="path">Path</f:translate></td>
+						<td><f:translate key="isAbsolutePath">Is absolute path?</f:translate></td>
+						<td>&nbsp;</td>
+					</tr>
+					<f:for each="{paginatedFileMounts}" as="fileMount">
+						<f:render partial="FileMount/IndexListRow" arguments="{fileMount: fileMount, returnUrl: returnUrl}" />
+					</f:for>
+					<f:comment>
+						Footer row: no officially defined style yet
+					</f:comment>
+					<tr>
+						<td colspan="5">
+							<f:count subject="{fileMounts}" /> <f:translate key="fileMounts">File Mounts</f:translate>
+						</td>
+					</tr>
+				</table>
+			</f:be.widget.paginate>
+		</f:then>
+		<f:else>
+			<table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist">
+				<tr class="t3-row-header">
+					<td></td>
+					<td><f:translate key="title">Title</f:translate></td>
+					<td><f:translate key="path">Path</f:translate></td>
+					<td><f:translate key="isAbsolutePath">Is absolute path?</f:translate></td>
+					<td>&nbsp;</td>
+				</tr>
+				<f:for each="{fileMounts}" as="fileMount">
+					<f:render partial="FileMount/IndexListRow" arguments="{fileMount: fileMount, returnUrl: returnUrl}" />
+				</f:for>
+				<f:comment>
+					Footer row: no officially defined style yet
+				</f:comment>
+				<tr>
+					<td colspan="5">
+						<f:count subject="{fileMounts}" /> <f:translate key="fileMounts">File Mounts</f:translate>
+					</td>
+				</tr>
+			</table>
+		</f:else>
+	</f:if>
+</f:section>
