@@ -5,7 +5,7 @@ namespace Serfhos\MyUserManagement\Domain\Model;
  * Copyright notice
  *
  * (c) 2013 Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
- *  
+ *
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -31,7 +31,28 @@ namespace Serfhos\MyUserManagement\Domain\Model;
  * @package my_user_management
  * @author Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
  */
-class FileMount extends \TYPO3\CMS\Extbase\Domain\Model\FileMount {
+class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
+
+    /**
+     * Title of the file mount.
+     *
+     * @var string
+     * @validate notEmpty
+     */
+    protected $title = '';
+
+    /**
+     * Path of the file mount.
+     *
+     * @var string
+     * @validate notEmpty
+     */
+    protected $path = '';
+
+    /**
+     * @var integer
+     */
+    protected $storage;
 
     /**
      * Disabled record?
@@ -39,6 +60,63 @@ class FileMount extends \TYPO3\CMS\Extbase\Domain\Model\FileMount {
      * @var boolean
      */
     protected $isDisabled;
+
+    /**
+     * Getter for the title of the file mount.
+     *
+     * @return string
+     */
+    public function getTitle() {
+        return $this->title;
+    }
+
+    /**
+     * Setter for the title of the file mount.
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setTitle($value) {
+        $this->title = $value;
+    }
+
+    /**
+     * Getter for the path of the file mount.
+     *
+     * @return string
+     */
+    public function getPath() {
+        return $this->path;
+    }
+
+    /**
+     * Setter for the path of the file mount.
+     *
+     * @param string $value
+     * @return void
+     */
+    public function setPath($value) {
+        $this->path = $value;
+    }
+
+    /**
+     * Sets the Storage
+     *
+     * @param int $storage
+     * @return void
+     */
+    public function setStorage($storage) {
+        $this->storage = $storage;
+    }
+
+    /**
+     * Returns the Storage
+     *
+     * @return int
+     */
+    public function getStorage() {
+        return $this->storage;
+    }
 
     /**
      * Sets the disabled state

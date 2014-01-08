@@ -1,5 +1,5 @@
 {namespace bu = TYPO3\CMS\Beuser\ViewHelpers}
-{namespace mum = Serfhos\MyUserManagement\ViewHelpers}
+{namespace um = Serfhos\MyUserManagement\ViewHelpers}
 
 <f:layout name="Backend/Default" />
 
@@ -49,7 +49,7 @@
 		<tr class="db_list_normal">
 			<td><h5><f:translate key="relatedBackendUserGroups">Related backend user groups</f:translate></h5></td>
 			<td>
-				<mum:widget.groupsForFileMountWidget fileMount="{fileMount}" />
+				<um:widget.groupsForFileMountWidget fileMount="{fileMount}" />
 			</td>
 		</tr>
 	</table>

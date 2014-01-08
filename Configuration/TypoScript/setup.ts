@@ -2,7 +2,6 @@
 module.tx_myusermanagement {
     persistence {
         storagePid = 0
-
         classes {
             Serfhos\MyUserManagement\Domain\Model\BackendUser {
                 mapping {
@@ -26,10 +25,14 @@ module.tx_myusermanagement {
                     }
                 }
             }
+
             Serfhos\MyUserManagement\Domain\Model\FileMount {
                 mapping {
                     tableName = sys_filemounts
                     columns {
+                        title.mapOnProperty = title
+                        path.mapOnProperty = path
+                        base.mapOnProperty = storage
                         hidden.mapOnProperty = isDisabled
                     }
                 }

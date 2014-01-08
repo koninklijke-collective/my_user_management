@@ -1,4 +1,5 @@
 {namespace bu = TYPO3\CMS\Beuser\ViewHelpers}
+{namespace um = Serfhos\MyUserManagement\ViewHelpers}
 
 <tr class="db_list_normal">
 	<td class="col-icon">
@@ -7,14 +8,13 @@
 		</a>
 	</td>
 	<td>{fileMount.title}</td>
-	<td>{fileMount.path}</td>
 	<td>
-		<f:if condition="{fileMount.isAbsolutePath}">
+		<f:if condition="{fileMount.storage} > 0">
 			<f:then>
-				<f:translate key="yes">Yes</f:translate>
+				<um:storageLocation storageId="{fileMount.storage}" location="{fileMount.path}" />
 			</f:then>
 			<f:else>
-				<f:translate key="no">No</f:translate>
+				{fileMount.path} (absolute path)
 			</f:else>
 		</f:if>
 	</td>

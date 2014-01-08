@@ -46,7 +46,7 @@ if (TYPO3_MODE === 'BE') {
         ),
         array(
             'access' => 'user,group',
-            'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/UserAdmin.png',
+            'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/moduleicon_myusermanagement_user.png',
             'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_be_user_admin.xlf',
         )
     );
@@ -61,7 +61,7 @@ if (TYPO3_MODE === 'BE') {
         ),
         array(
             'access' => 'user,group',
-            'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/UserAccess.gif',
+            'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/moduleicon_myusermanagement_useraccess.gif',
             'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_be_user_access.xlf',
             'navigationComponentId' => 'typo3-pagetree',
         )
@@ -77,7 +77,7 @@ if (TYPO3_MODE === 'BE') {
         ),
         array(
             'access' => 'user,group',
-            'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/GroupAdmin.png',
+            'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/moduleicon_myusermanagement_group.png',
             'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/BackendUserGroup.xlf',
         )
     );
@@ -92,7 +92,7 @@ if (TYPO3_MODE === 'BE') {
         ),
         array(
             'access' => 'user,group',
-            'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/FileMountAdmin.png',
+            'icon'   => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/moduleicon_myusermanagement_filemount.png',
             'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/FileMount.xlf',
         )
     );

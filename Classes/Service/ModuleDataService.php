@@ -50,15 +50,27 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
     protected $objectManager;
 
     /**
+     * @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected $backendUser;
+
+    /**
+     * Initialize global variables
+     */
+    public function __construct() {
+        $this->backendUser = $GLOBALS['BE_USER'];
+    }
+
+    /**
      * Loads module data for user settings or returns a fresh object initially
      *
      * @param string $key
      * @return mixed
      */
     public function loadModuleData($key = '') {
-        if (!isset($this->key)) $this->key = $key;
+        if (empty($this->key)) $this->key = $key;
 
-        $moduleData = $GLOBALS['BE_USER']->getModuleData(self::PREFIX . $this->key);
+        $moduleData = $this->backendUser->getModuleData(self::PREFIX . $this->key);
         if (empty($moduleData) || !$moduleData) {
             switch($this->key) {
                 case '_backend_user_group':
@@ -95,7 +107,7 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
      * @return void
      */
     public function persistModuleData($moduleData) {
-        $GLOBALS['BE_USER']->pushModuleData(self::PREFIX . $this->key, serialize($moduleData));
+        $this->backendUser->pushModuleData(self::PREFIX . $this->key, serialize($moduleData));
     }
 
 }

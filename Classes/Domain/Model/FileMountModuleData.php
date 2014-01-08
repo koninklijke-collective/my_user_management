@@ -6,7 +6,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * Copyright notice
  *
  * (c) 2013 Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
- *  
+ *
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -44,7 +44,7 @@ class FileMountModuleData {
     /**
      * Gets the demand
      *
-     * @return FileMountDemand
+     * @return \Serfhos\MyUserManagement\Domain\Model\FileMountDemand
      */
     public function getDemand() {
         if ($this->demand === NULL) {
@@ -56,10 +56,10 @@ class FileMountModuleData {
     /**
      * Sets the demand
      *
-     * @param FileMountDemand $demand
+     * @param \Serfhos\MyUserManagement\Domain\Model\FileMountDemand $demand
      * @return void
      */
-    public function setDemand(\Serfhos\MyUserManagement\Domain\Model\FileMountDemand $demand) {
+    public function setDemand(FileMountDemand $demand) {
         $this->demand = $demand;
     }
 

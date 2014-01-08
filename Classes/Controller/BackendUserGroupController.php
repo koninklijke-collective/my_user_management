@@ -5,7 +5,7 @@ namespace Serfhos\MyUserManagement\Controller;
  * Copyright notice
  *
  * (c) 2013 Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
- *  
+ *
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is

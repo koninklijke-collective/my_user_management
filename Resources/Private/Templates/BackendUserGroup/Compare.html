@@ -1,5 +1,5 @@
 {namespace bu = TYPO3\CMS\Beuser\ViewHelpers}
-{namespace mum = Serfhos\MyUserManagement\ViewHelpers}
+{namespace um = Serfhos\MyUserManagement\ViewHelpers}
 
 <f:layout name="Backend/Default" />
 
@@ -110,7 +110,7 @@
 			<td><h5><f:translate key="users">Users</f:translate></h5></td>
 			<f:for each="{compareBackendUserGroupList}" as="compareBackendUserGroup">
 				<td>
-					<mum:widget.usersFromGroupWidget backendUserGroup="{compareBackendUserGroup}" />
+					<um:widget.usersFromGroupWidget backendUserGroup="{compareBackendUserGroup}" />
 				</td>
 			</f:for>
 		</tr>
