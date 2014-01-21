@@ -25,7 +25,11 @@ namespace Serfhos\MyUserManagement\ViewHelpers;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
+/**
+ * ViewHelper: Storage Location
+ *
+ * @package Serfhos\MyUserManagement\ViewHelpers
+ */
 class StorageLocationViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper implements \TYPO3\CMS\Core\SingletonInterface {
 
     /**
@@ -51,7 +55,9 @@ class StorageLocationViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\Abstrac
     public function render($storageId, $location = '/') {
         $output = NULL;
         if (!isset($this->storage[$storageId]) || !($this->storage[$storageId] instanceof \TYPO3\CMS\Core\Resource\ResourceStorage)) {
-            $this->storage[$storageId] = $this->storageRepository->findByUid($storageId);
+            try {
+                $this->storage[$storageId] = $this->storageRepository->findByUid($storageId);
+            } catch (\Exception $e) {}
         }
         /** @var \TYPO3\CMS\Core\Resource\ResourceStorage $storage */
         $storage = $this->storage[$storageId];
@@ -60,7 +66,7 @@ class StorageLocationViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\Abstrac
             $folder = NULL;
             try {
                 $folder = $storage->getFolder($location);
-            } catch(\TYPO3\CMS\Core\Resource\Exception\FolderDoesNotExistException $e) {}
+            } catch (\Exception $e) {}
 
             if ($folder instanceof \TYPO3\CMS\Core\Resource\Folder) {
                 $output = $folder->getPublicUrl();
@@ -68,11 +74,10 @@ class StorageLocationViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\Abstrac
         }
 
         if (empty($output)) {
-            $output = $storageId.': ' .$location;
+            $output = $storageId . ': ' . $location;
         }
 
         return $output;
     }
-
 }
 ?>

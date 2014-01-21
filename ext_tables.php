@@ -5,6 +5,8 @@ if (!defined('TYPO3_MODE')) {
 
 // Adjust be_user TCA for editor access configuration
 include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/BackendUser.php');
+include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/BackendGroup.php');
+include_once(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'Configuration/TCA/FileMount.php');
 
 if (TYPO3_MODE === 'BE') {
 
