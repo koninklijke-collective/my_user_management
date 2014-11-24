@@ -16,4 +16,3 @@ foreach ($GLOBALS['TCA']['be_users']['columns'] as $key => $configuration) {
 
     $GLOBALS['TCA']['be_users']['columns'][$key] = $configuration;
 }
-?>

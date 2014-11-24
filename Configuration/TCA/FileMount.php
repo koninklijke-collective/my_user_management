@@ -16,4 +16,3 @@ foreach ($GLOBALS['TCA']['sys_filemounts']['columns'] as $key => $configuration)
 
     $GLOBALS['TCA']['sys_filemounts']['columns'][$key] = $configuration;
 }
-?>

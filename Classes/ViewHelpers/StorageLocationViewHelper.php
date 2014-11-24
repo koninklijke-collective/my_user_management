@@ -80,4 +80,3 @@ class StorageLocationViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\Abstrac
         return $output;
     }
 }
-?>

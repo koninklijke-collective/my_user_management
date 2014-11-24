@@ -115,4 +115,3 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup {
     }
 
 }
-?>

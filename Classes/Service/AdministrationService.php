@@ -104,4 +104,3 @@ class AdministrationService implements \TYPO3\CMS\Core\SingletonInterface {
     }
 
 }
-?>

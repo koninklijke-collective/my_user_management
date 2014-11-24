@@ -53,4 +53,3 @@ class PageInfoViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHe
     }
 
 }
-?>

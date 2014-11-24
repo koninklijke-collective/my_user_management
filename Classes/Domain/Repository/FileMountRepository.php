@@ -5,7 +5,7 @@ namespace Serfhos\MyUserManagement\Domain\Repository;
  * Copyright notice
  *
  * (c) 2013 Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
- *  
+ *
  * All rights reserved
  *
  * This script is part of the TYPO3 project. The TYPO3 project is
@@ -32,6 +32,13 @@ namespace Serfhos\MyUserManagement\Domain\Repository;
  * @author Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
  */
 class FileMountRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FileMountRepository {
+
+    /**
+     * @var array
+     */
+    protected $defaultOrderings = array(
+        'title' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
+    );
 
     /**
      * Initializes the repository.

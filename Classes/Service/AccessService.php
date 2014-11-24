@@ -147,4 +147,3 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface {
     }
 
 }
-?>

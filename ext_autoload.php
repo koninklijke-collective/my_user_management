@@ -26,4 +26,3 @@ return array(
     'Serfhos\\MyUserManagement\\Service\\AdministrationService' => $extensionPath . 'Classes/Service/AdministrationService.php',
     'Serfhos\\MyUserManagement\\Service\\ModuleDataStorageService' => $extensionPath . 'Classes/Service/ModuleDataService.php',
 );
-?>

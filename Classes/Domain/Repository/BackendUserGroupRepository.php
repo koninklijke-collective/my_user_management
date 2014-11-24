@@ -32,6 +32,14 @@ namespace Serfhos\MyUserManagement\Domain\Repository;
  */
 class BackendUserGroupRepository extends \TYPO3\CMS\Extbase\Domain\Repository\BackendUserGroupRepository {
 
+
+    /**
+     * @var array
+     */
+    protected $defaultOrderings = array(
+        'title' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
+    );
+
     /**
      * Initializes the repository.
      *
@@ -101,4 +109,3 @@ class BackendUserGroupRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Ba
     }
 
 }
-?>
