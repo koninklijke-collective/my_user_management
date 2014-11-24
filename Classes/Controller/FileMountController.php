@@ -106,7 +106,7 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
         $this->view->assignMultiple(
             array(
                 'fileMountDemand' => $fileMountDemand,
-                'returnUrl' => 'mod.php?M=MyUserManagementMyusermanagement_MyUserManagementFilemountadmin',
+                'returnUrl' => urlencode(\TYPO3\CMS\Backend\Utility\BackendUtility::getModuleUrl('MyUserManagementMyusermanagement_MyUserManagementFilemountadmin')),
                 'fileMounts' => $this->fileMountRepository->findByDemand($fileMountDemand)
             )
         );

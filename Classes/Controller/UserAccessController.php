@@ -97,7 +97,7 @@ class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
     protected function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view) {
         $view->assignMultiple(array(
             'currentUser' => $this->currentUser,
-            'returnUrl' => 'mod.php?M=MyUserManagementMyusermanagement_MyUserManagementUseraccess',
+            'returnUrl' => urlencode(\TYPO3\CMS\Backend\Utility\BackendUtility::getModuleUrl('MyUserManagementMyusermanagement_MyUserManagementUseraccess')),
             'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
             'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
             'pageId' => $this->id,

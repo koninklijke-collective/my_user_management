@@ -120,7 +120,7 @@ class BackendUserController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
         $view->assignMultiple(array(
             'actionMenuItems' => $this->actionMenuItems,
             'currentUser' => $this->backEndUser,
-            'returnUrl' => 'mod.php?M=MyUserManagementMyusermanagement_MyUserManagementUseradmin',
+            'returnUrl' => urlencode(\TYPO3\CMS\Backend\Utility\BackendUtility::getModuleUrl('MyUserManagementMyusermanagement_MyUserManagementUseradmin')),
             'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
             'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
             'backendUserGroups' => array_merge(array(''), $this->backendUserGroupRepository->findAll()->toArray()),
