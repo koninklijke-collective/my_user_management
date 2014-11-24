@@ -17,14 +17,9 @@
 			<ul id="compareBackendUserGroups">
 				<f:for each="{compareBackendUserGroupList}" as="compareBackendUserGroup">
 					<li>
-						<f:link.action
-							action="removeFromCompareList"
-							arguments="{uid: compareBackendUserGroup.uid}"
-							><bu:SpriteManagerIcon iconName="actions-selection-delete" /></f:link.action>
+						<f:link.action action="removeFromCompareList" arguments="{uid: compareBackendUserGroup.uid}"><bu:SpriteManagerIcon iconName="actions-selection-delete" /></f:link.action>
 
-						<a href="#" onClick="showClickmenu('be_groups', '{compareBackendUserGroup.uid}', '1', '', '', ''); return false;" title="id={compareBackendUserGroup.uid}">
-							<bu:spriteIconForRecord table="be_groups" object="{compareBackendUserGroup}" />
-						</a>
+						<a href="#" onClick="showClickmenu('be_groups', '{compareBackendUserGroup.uid}', '1', '', '', ''); return false;" title="id={compareBackendUserGroup.uid}"><bu:spriteIconForRecord table="be_groups" object="{compareBackendUserGroup}" /></a>
 
 						{compareBackendUserGroup.title}
 					</li>

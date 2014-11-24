@@ -7,9 +7,7 @@
 		{onlineUser.backendUser.realName}
 	</td>
 	<td>
-		<a href="alt_doc.php?edit[be_users][{onlineUser.backendUser.uid}]=edit&returnUrl={returnUrl}">
-			<bu:spriteManagerIcon iconName="actions-document-open" />
-		</a>
+		<a href="alt_doc.php?edit[be_users][{onlineUser.backendUser.uid}]=edit&returnUrl={returnUrl}"><bu:spriteManagerIcon iconName="actions-document-open" /></a>
 	</td>
 	<f:for each="{onlineUser.sessions}" as="session" key="sessionKey">
 		<f:if condition="{sessionKey} > 0">
@@ -25,15 +23,7 @@
 		<td>
 			<f:if condition="{currentSessionId} == {session.id}">
 				<f:else>
-					<f:link.action
-						action="terminateBackendUserSession"
-						controller="BackendUser"
-						arguments="{backendUser: onlineUser.backendUser, sessionId: session.id}"
-						onclick="javascript:return confirm('{f:translate(key: \"reallyLogout\")} {onlineUser.backendUser.userName}?');"
-					>
-						<bu:spriteManagerIcon iconName="actions-document-close" />
-						<f:translate key="endSession">End session</f:translate>
-					</f:link.action>
+					<f:link.action action="terminateBackendUserSession" controller="BackendUser" arguments="{backendUser: onlineUser.backendUser, sessionId: session.id}" onclick="javascript:return confirm('{f:translate(key: \"reallyLogout\")} {onlineUser.backendUser.userName}?');"><bu:spriteManagerIcon iconName="actions-document-close" /><f:translate key="endSession">End session</f:translate></f:link.action>
 				</f:else>
 			</f:if>
 		</td>
