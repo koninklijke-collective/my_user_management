@@ -1,0 +1,32 @@
+{
+    "name": "typo3cms/my_user_management",
+    "description": "TYPO3 Extension: A module that makes it possible for editors to maintain backend users.",
+    "type": "typo3-cms-extension",
+
+    "keywords": [
+        "TYPO3",
+        "CMS",
+        "Serfhos",
+        "Benjamin Serfhos",
+        "Extbase",
+        "User Management"
+    ],
+    "homepage": "https://github.com/bmoex/my_user_management",
+    "license": "LGPL-3.0+",
+
+    "version": "1.1.3",
+
+    "authors": [
+        {
+            "name": "Benjamin Serfhos",
+            "email": "benjamin@serfhos.com",
+            "homepage": "http://serfhos.com"
+        }
+    ],
+
+    "require": {
+        "composer/installers": "~1.0"
+    },
+
+    "minimum-stability": "dev"
+}
