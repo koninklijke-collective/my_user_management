@@ -1,36 +1,13 @@
 <?php
 namespace Serfhos\MyUserManagement\Domain\Repository;
-/***************************************************************
- *  Copyright notice
- *
- *  (c) 2013 Benjamin Serfhos <serfhos@serfhos.com>,
- *  Rotterdam School of Management, Erasmus University
- *
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
 
 /**
  * Repository for \Serfhos\MyUserManagement\Domain\Model\BackendUser
  *
  * @package Serfhos\MyUserManagement\Domain\Repository
  */
-class BackendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\BackendUserGroupRepository {
+class BackendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\BackendUserGroupRepository
+{
 
     /**
      * Finds Backend Users on a given list of uids
@@ -38,9 +15,10 @@ class BackendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Backend
      * @param array $uidList
      * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult<\Serfhos\MyUserManagement\Domain\Model\BackendUser>
      */
-    public function findByUidList(array $uidList) {
+    public function findByUidList(array $uidList)
+    {
         $query = $this->createQuery();
-        return $query->matching($query->in('uid', $GLOBALS['TYPO3_DB']->cleanIntArray($uidList)))->execute();
+        return $query->matching($query->in('uid', $this->getDatabaseConnection()->cleanIntArray($uidList)))->execute();
     }
 
     /**
@@ -49,7 +27,8 @@ class BackendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Backend
      * @param \TYPO3\CMS\Beuser\Domain\Model\Demand $demand
      * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult<\Serfhos\MyUserManagement\Domain\Model\BackendUser>
      */
-    public function findDemanded(\TYPO3\CMS\Beuser\Domain\Model\Demand $demand) {
+    public function findDemanded(\TYPO3\CMS\Beuser\Domain\Model\Demand $demand)
+    {
         $constraints = array();
         $query = $this->createQuery();
         // Find invisible as well, but not deleted
@@ -59,7 +38,7 @@ class BackendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Backend
         if ($demand->getUserName() !== '') {
             $constraints[] = $query->like(
                 'userName',
-                '%' . $GLOBALS['TYPO3_DB']->escapeStrForLike($demand->getUserName(), 'be_users') . '%'
+                '%' . $this->getDatabaseConnection()->escapeStrForLike($demand->getUserName(), 'be_users') . '%'
             );
         }
         // Only display admin users
@@ -90,10 +69,10 @@ class BackendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Backend
         // @TODO: Refactor for real n:m relations
         if ($demand->getBackendUserGroup()) {
             $constraints[] = $query->logicalOr(
-                $query->equals('usergroup', intval($demand->getBackendUserGroup()->getUid())),
-                $query->like('usergroup', intval($demand->getBackendUserGroup()->getUid()) . ',%'),
-                $query->like('usergroup', '%,' . intval($demand->getBackendUserGroup()->getUid())),
-                $query->like('usergroup', '%,' . intval($demand->getBackendUserGroup()->getUid()) . ',%')
+                $query->equals('usergroup', (int) $demand->getBackendUserGroup()->getUid()),
+                $query->like('usergroup', (int) $demand->getBackendUserGroup()->getUid() . ',%'),
+                $query->like('usergroup', '%,' . (int) $demand->getBackendUserGroup()->getUid()),
+                $query->like('usergroup', '%,' . (int) $demand->getBackendUserGroup()->getUid() . ',%')
             );
             $query->contains('usergroup', $demand->getBackendUserGroup());
         }
@@ -106,13 +85,14 @@ class BackendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Backend
      *
      * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult<\Serfhos\MyUserManagement\Domain\Model\BackendUser>
      */
-    public function findOnline() {
+    public function findOnline()
+    {
         $uids = array();
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('DISTINCT ses_userid', 'be_sessions', '');
-        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            $uids[] = $row['ses_userid'];
+        $res = $this->getDatabaseConnection()->exec_SELECTquery('DISTINCT ses_userid', 'be_sessions', '');
+        while ($row = $this->getDatabaseConnection()->sql_fetch_assoc($res)) {
+            $uids[] = (int) $row['ses_userid'];
         }
-        $GLOBALS['TYPO3_DB']->sql_free_result($res);
+        $this->getDatabaseConnection()->sql_free_result($res);
         $query = $this->createQuery();
         $query->matching($query->in('uid', $uids));
         return $query->execute();
@@ -123,11 +103,19 @@ class BackendUserRepository extends \TYPO3\CMS\Extbase\Domain\Repository\Backend
      *
      * @return \TYPO3\CMS\Extbase\Persistence\QueryInterface
      */
-    public function createQuery() {
+    public function createQuery()
+    {
         $query = parent::createQuery();
-        $query->getQuerySettings()->setIgnoreEnableFields(TRUE);
-        $query->getQuerySettings()->setIncludeDeleted(TRUE);
+        $query->getQuerySettings()->setIgnoreEnableFields(true);
+        $query->getQuerySettings()->setIncludeDeleted(true);
         return $query;
     }
 
+    /**
+     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
+     */
+    protected function getDatabaseConnection()
+    {
+        return $GLOBALS['TYPO3_DB'];
+    }
 }

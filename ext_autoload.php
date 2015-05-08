@@ -2,6 +2,7 @@
 $extensionPath = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('my_user_management');
 return array(
     // Controllers
+    'Serfhos\\MyUserManagement\\Controller\\AbstractBackendController' => $extensionPath . 'Classes/Controller/AbstractBackendController.php',
     'Serfhos\\MyUserManagement\\Controller\\BackendUserController' => $extensionPath . 'Classes/Controller/BackendUserController.php',
     'Serfhos\\MyUserManagement\\Controller\\BackendUserGroupController' => $extensionPath . 'Classes/Controller/BackendUserGroupController.php',
     'Serfhos\\MyUserManagement\\Controller\\FileMountController' => $extensionPath . 'Classes/Controller/FileMountController.php',

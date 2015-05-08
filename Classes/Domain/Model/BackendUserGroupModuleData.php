@@ -1,29 +1,6 @@
 <?php
 namespace Serfhos\MyUserManagement\Domain\Model;
 
-/***************************************************************
- * Copyright notice
- *
- * (c) 2013 Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
- *  
- * All rights reserved
- *
- * This script is part of the TYPO3 project. The TYPO3 project is
- * free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
- *
- * This script is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -32,7 +9,8 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package my_user_management
  * @author Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
  */
-class BackendUserGroupModuleData {
+class BackendUserGroupModuleData
+{
 
     /**
      * @var array
@@ -51,7 +29,8 @@ class BackendUserGroupModuleData {
      *
      * @return array
      */
-    public function getCompareGroupList() {
+    public function getCompareGroupList()
+    {
         return array_keys($this->compareGroupList);
     }
 
@@ -62,8 +41,9 @@ class BackendUserGroupModuleData {
      * @param integer $uid
      * @return void
      */
-    public function attachUidCompareGroup($uid) {
-        $this->compareGroupList[$uid] = TRUE;
+    public function attachUidCompareGroup($uid)
+    {
+        $this->compareGroupList[$uid] = true;
     }
 
     /**
@@ -72,7 +52,8 @@ class BackendUserGroupModuleData {
      * @param integer $uid
      * @return void
      */
-    public function detachUidCompareGroup($uid) {
+    public function detachUidCompareGroup($uid)
+    {
         unset($this->compareGroupList[$uid]);
     }
 
@@ -82,7 +63,8 @@ class BackendUserGroupModuleData {
      * @param \Serfhos\MyUserManagement\Domain\Model\BackendUserGroupDemand $demand
      * @return void
      */
-    public function setDemand($demand) {
+    public function setDemand($demand)
+    {
         $this->demand = $demand;
     }
 
@@ -91,11 +73,11 @@ class BackendUserGroupModuleData {
      *
      * @return \Serfhos\MyUserManagement\Domain\Model\BackendUserGroupDemand
      */
-    public function getDemand() {
+    public function getDemand()
+    {
         if (!($this->demand instanceof \Serfhos\MyUserManagement\Domain\Model\BackendUserGroupDemand)) {
             $this->demand = GeneralUtility::makeInstance('Serfhos\\MyUserManagement\\Domain\\Model\\BackendUserGroupDemand');
         }
         return $this->demand;
     }
-
 }

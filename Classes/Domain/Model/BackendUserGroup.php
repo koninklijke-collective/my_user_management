@@ -1,37 +1,13 @@
 <?php
 namespace Serfhos\MyUserManagement\Domain\Model;
 
-/***************************************************************
- *  Copyright notice
- *
- *  (c) 2013 Benjamin Serfhos <serfhos@serfhos.com>,
- *  Rotterdam School of Management, Erasmus University
- *
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
-
 /**
  * Model for backend user group
  *
  * @package Serfhos\MyUserManagement\Domain\Model
  */
-class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup {
+class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
+{
 
     /**
      * Flag for record being hidden
@@ -63,7 +39,8 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup {
      * @param string $dbMountPoints
      * @return void
      */
-    public function setDbMountPoints($dbMountPoints) {
+    public function setDbMountPoints($dbMountPoints)
+    {
         $this->dbMountPoints = $dbMountPoints;
     }
 
@@ -72,7 +49,8 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup {
      *
      * @return string
      */
-    public function getDbMountPoints() {
+    public function getDbMountPoints()
+    {
         return $this->dbMountPoints;
     }
 
@@ -82,7 +60,8 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup {
      * @param string $fileMountPoints
      * @return void
      */
-    public function setFileMountpoints($fileMountPoints) {
+    public function setFileMountpoints($fileMountPoints)
+    {
         $this->fileMountpoints = $fileMountPoints;
     }
 
@@ -91,7 +70,8 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup {
      *
      * @return string
      */
-    public function getFileMountpoints() {
+    public function getFileMountpoints()
+    {
         return $this->fileMountpoints;
     }
 
@@ -101,7 +81,8 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup {
      * @param boolean $isDisabled
      * @return void
      */
-    public function setIsDisabled($isDisabled) {
+    public function setIsDisabled($isDisabled)
+    {
         $this->isDisabled = $isDisabled;
     }
 
@@ -110,8 +91,8 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup {
      *
      * @return boolean
      */
-    public function getIsDisabled() {
+    public function getIsDisabled()
+    {
         return $this->isDisabled;
     }
-
 }

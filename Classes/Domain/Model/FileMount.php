@@ -1,37 +1,14 @@
 <?php
 namespace Serfhos\MyUserManagement\Domain\Model;
 
-/***************************************************************
- * Copyright notice
- *
- * (c) 2013 Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
- *
- * All rights reserved
- *
- * This script is part of the TYPO3 project. The TYPO3 project is
- * free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
- *
- * The GNU General Public License can be found at
- * http://www.gnu.org/copyleft/gpl.html.
- *
- * This script is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
-
 /**
  * Domain model for file mounts
  *
  * @package my_user_management
  * @author Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
  */
-class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
+class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+{
 
     /**
      * Title of the file mount.
@@ -66,7 +43,8 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
      *
      * @return string
      */
-    public function getTitle() {
+    public function getTitle()
+    {
         return $this->title;
     }
 
@@ -76,7 +54,8 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
      * @param string $value
      * @return void
      */
-    public function setTitle($value) {
+    public function setTitle($value)
+    {
         $this->title = $value;
     }
 
@@ -85,7 +64,8 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
      *
      * @return string
      */
-    public function getPath() {
+    public function getPath()
+    {
         return $this->path;
     }
 
@@ -95,7 +75,8 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
      * @param string $value
      * @return void
      */
-    public function setPath($value) {
+    public function setPath($value)
+    {
         $this->path = $value;
     }
 
@@ -105,7 +86,8 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
      * @param int $storage
      * @return void
      */
-    public function setStorage($storage) {
+    public function setStorage($storage)
+    {
         $this->storage = $storage;
     }
 
@@ -114,7 +96,8 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
      *
      * @return int
      */
-    public function getStorage() {
+    public function getStorage()
+    {
         return $this->storage;
     }
 
@@ -124,7 +107,8 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
      * @param boolean $isDisabled
      * @return void
      */
-    public function setIsDisabled($isDisabled) {
+    public function setIsDisabled($isDisabled)
+    {
         $this->isDisabled = $isDisabled;
     }
 
@@ -133,8 +117,8 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
      *
      * @return boolean
      */
-    public function getIsDisabled() {
+    public function getIsDisabled()
+    {
         return $this->isDisabled;
     }
-
 }

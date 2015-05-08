@@ -2,61 +2,61 @@
 
 <f:layout name="Backend/Default" />
 
-<f:section name="actionMenu">
-</f:section>
+<f:section name="actionMenu"/>
 
-<f:section name="iconButtons">
+<f:section name="iconButtons"/>
+
+<f:section name="title">
+    <h1><f:translate key="backendUserAccessOverview">Backend Access Overview</f:translate></h1>
 </f:section>
 
 <f:section name="content">
-	<f:if condition="{pageId} > 0">
-		<f:then>
-			<f:comment>
-				Filter section
-			</f:comment>
+    <f:if condition="{pageId} > 0">
+        <f:then>
+            <f:comment>
+                Filter section
+            </f:comment>
 
-			<f:render partial="Filters/UserAccess/Index" arguments="{demand: demand, backendUserGroups: backendUserGroups, isAdmin: currentUser.admin}" />
+            <f:render partial="Filters/UserAccess/Index" arguments="{demand: demand, backendUserGroups: backendUserGroups, isAdmin: currentUser.admin}" />
 
-			<f:comment>
-				Listing of all users
-			</f:comment>
+            <f:comment>
+                Listing of all users
+            </f:comment>
 
-			<h3><f:translate key="backendUserAccessOverview">Backend Access Overview</f:translate></h3>
-
-			<f:if condition="{backendUsers}">
-				<f:then>
-					<table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist">
-						<tr class="t3-row-header">
-							<td></td>
-							<td><f:translate key="userName">Username</f:translate></td>
-							<td><f:translate key="realName">Real name</f:translate></td>
-							<td><f:translate key="inheritedMountPoints">Inherited from</f:translate></td>
-							<td>&nbsp;</td>
-							<td><f:translate key="lastLogin">Last login</f:translate></td>
-						</tr>
-						<f:for each="{backendUsers}" as="backendUser">
-							<f:render partial="UserAccess/IndexListRow" arguments="{demand: demand, backendUser: backendUser, dateFormat: dateFormat, timeFormat: timeFormat, returnUrl: returnUrl, isAdmin: currentUser.admin}" />
-						</f:for>
-						<f:comment>
-							Footer row: no officially defined style yet
-						</f:comment>
-						<tr>
-							<td colspan="6">
-								<f:count subject="{backendUsers}" /> <f:translate key="users">Users</f:translate>
-							</td>
-						</tr>
-					</table>
-				</f:then>
-				<f:else>
-					<p><f:translate key="backendUserAccessOverview_empty" arguments="{0: pageId}">No users found which has access to page id: {pageId}</f:translate></p>å
-				</f:else>
-			</f:if>
-		</f:then>
-		<f:else>
-			<div class="typo3-message message-information">
-				<div class="message-header">User Access Overview</div>
-				<div class="message-body">Please click a page title in the page tree.</div>
-			</div>
-		</f:else>
-	</f:if>
+            <f:if condition="{backendUsers}">
+                <f:then>
+                    <table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist">
+                        <tr class="t3-row-header">
+                            <td></td>
+                            <td><f:translate key="userName">Username</f:translate></td>
+                            <td><f:translate key="realName">Real name</f:translate></td>
+                            <td><f:translate key="inheritedMountPoints">Inherited from</f:translate></td>
+                            <td>&nbsp;</td>
+                            <td><f:translate key="lastLogin">Last login</f:translate></td>
+                        </tr>
+                        <f:for each="{backendUsers}" as="backendUser">
+                            <f:render partial="UserAccess/IndexListRow" arguments="{demand: demand, backendUser: backendUser, dateFormat: dateFormat, timeFormat: timeFormat, returnUrl: returnUrl, isAdmin: currentUser.admin}" />
+                        </f:for>
+                        <f:comment>
+                            Footer row: no officially defined style yet
+                        </f:comment>
+                        <tr>
+                            <td colspan="6">
+                                <f:count subject="{backendUsers}" /> <f:translate key="users">Users</f:translate>
+                            </td>
+                        </tr>
+                    </table>
+                </f:then>
+                <f:else>
+                    <p><f:translate key="backendUserAccessOverview_empty" arguments="{0: pageId}">No users found which has access to page id: {pageId}</f:translate></p>å
+                </f:else>
+            </f:if>
+        </f:then>
+        <f:else>
+            <div class="typo3-message message-information">
+                <div class="message-header">User Access Overview</div>
+                <div class="message-body">Please click a page title in the page tree.</div>
+            </div>
+        </f:else>
+    </f:if>
 </f:section>

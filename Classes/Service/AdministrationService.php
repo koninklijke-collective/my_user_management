@@ -1,54 +1,15 @@
 <?php
 namespace Serfhos\MyUserManagement\Service;
-/***************************************************************
- *  Copyright notice
- *
- *  (c) 2013 Benjamin Serfhos <serfhos@serfhos.com>,
- *  Rotterdam School of Management, Erasmus University
- *
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 
 /**
  * Class AdministrationService
  *
  * @package Serfhos\MyUserManagement\Service
  */
-class AdministrationService implements \TYPO3\CMS\Core\SingletonInterface {
-
-    /**
-     * @var \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected $database;
-
-    /**
-     * @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
-     */
-    protected $backEndUser;
-
-    /**
-     * Initialize used variables
-     */
-    public function __construct() {
-        $this->database = $GLOBALS['TYPO3_DB'];
-        $this->backEndUser = $GLOBALS['BE_USER'];
-    }
+class AdministrationService implements \TYPO3\CMS\Core\SingletonInterface
+{
 
     /**
      * Terminate BackendUser session and logout corresponding client
@@ -58,12 +19,16 @@ class AdministrationService implements \TYPO3\CMS\Core\SingletonInterface {
      * @param string $sessionId
      * @return string
      */
-    public function terminateBackendUserSession(\Serfhos\MyUserManagement\Domain\Model\BackendUser $backendUser, $sessionId) {
-        $this->database->exec_DELETEquery(
+    public function terminateBackendUserSession(
+        \Serfhos\MyUserManagement\Domain\Model\BackendUser $backendUser,
+        $sessionId
+    ) {
+        $this->getDatabaseConnection()->exec_DELETEquery(
             'be_sessions',
-            'ses_userid = "' . intval($backendUser->getUid()) . '" AND ses_id = ' . $this->database->fullQuoteStr($sessionId, 'be_sessions') . ' LIMIT 1'
+            'ses_userid = "' . (int) $backendUser->getUid() . '" AND ses_id = ' . $this->getDatabaseConnection()->fullQuoteStr($sessionId,
+                'be_sessions') . ' LIMIT 1'
         );
-        if ($this->database->sql_affected_rows() == 1) {
+        if ($this->getDatabaseConnection()->sql_affected_rows() == 1) {
             return 'Session successfully terminated.';
         }
         return '';
@@ -76,24 +41,27 @@ class AdministrationService implements \TYPO3\CMS\Core\SingletonInterface {
      * @param boolean $switchBack
      * @return void
      */
-    public function switchUser($switchUser, $switchBack = FALSE) {
+    public function switchUser($switchUser, $switchBack = false)
+    {
         $targetUser = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecord('be_users', $switchUser);
         if (is_array($targetUser)) {
-            // Cannot switch to user, when current user is not an admin!
-            if ((bool) $targetUser['admin'] === TRUE && !$this->backEndUser->isAdmin()) {
+            // Cannot switch to admin user, when current user is not an admin!
+            if ((bool) $targetUser['admin'] === true && !$this->getBackendUserAuthentication()->isAdmin()) {
                 return;
             }
             $updateData['ses_userid'] = $targetUser['uid'];
             // User switchback or replace current session?
             if ($switchBack) {
-                $updateData['ses_backuserid'] = intval($GLOBALS['BE_USER']->user['uid']);
+                $updateData['ses_backuserid'] = (int) $GLOBALS['BE_USER']->user['uid'];
             }
 
-            $whereClause = 'ses_id=' . $this->database->fullQuoteStr($GLOBALS['BE_USER']->id, 'be_sessions');
-            $whereClause .= ' AND ses_name=' . $this->database->fullQuoteStr(\TYPO3\CMS\Core\Authentication\BackendUserAuthentication::getCookieName(), 'be_sessions');
-            $whereClause .= ' AND ses_userid=' . intval($GLOBALS['BE_USER']->user['uid']);
+            $whereClause = 'ses_id=' . $this->getDatabaseConnection()->fullQuoteStr($GLOBALS['BE_USER']->id,
+                    'be_sessions');
+            $whereClause .= ' AND ses_name=' . $this->getDatabaseConnection()->fullQuoteStr(BackendUserAuthentication::getCookieName(),
+                    'be_sessions');
+            $whereClause .= ' AND ses_userid=' . (int) $GLOBALS['BE_USER']->user['uid'];
 
-            $this->database->exec_UPDATEquery(
+            $this->getDatabaseConnection()->exec_UPDATEquery(
                 'be_sessions',
                 $whereClause,
                 $updateData
@@ -103,4 +71,19 @@ class AdministrationService implements \TYPO3\CMS\Core\SingletonInterface {
         }
     }
 
+    /**
+     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
+     */
+    protected function getDatabaseConnection()
+    {
+        return $GLOBALS['TYPO3_DB'];
+    }
+
+    /**
+     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected function getBackendUserAuthentication()
+    {
+        return $GLOBALS['BE_USER'];
+    }
 }

@@ -1,29 +1,5 @@
 <?php
 namespace Serfhos\MyUserManagement\Service;
-/***************************************************************
- *  Copyright notice
- *
- *  (c) 2013 Benjamin Serfhos <serfhos@serfhos.com>,
- *  Rotterdam School of Management, Erasmus University
- *
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
 
 /**
  * Module data storage service.
@@ -31,7 +7,8 @@ namespace Serfhos\MyUserManagement\Service;
  *
  * @package Serfhos\MyUserManagement\Service
  */
-class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
+class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface
+{
 
     /**
      * @var string
@@ -50,36 +27,27 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
     protected $objectManager;
 
     /**
-     * @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
-     */
-    protected $backendUser;
-
-    /**
-     * Initialize global variables
-     */
-    public function __construct() {
-        $this->backendUser = $GLOBALS['BE_USER'];
-    }
-
-    /**
      * Loads module data for user settings or returns a fresh object initially
      *
      * @param string $key
      * @return mixed
      */
-    public function loadModuleData($key = '') {
-        if (empty($this->key)) $this->key = $key;
+    public function loadModuleData($key = '')
+    {
+        if (empty($this->key)) {
+            $this->key = $key;
+        }
 
-        $moduleData = $this->backendUser->getModuleData(self::PREFIX . $this->key);
+        $moduleData = $this->getBackendUserAuthentication()->getModuleData(self::PREFIX . $this->key);
         if (empty($moduleData) || !$moduleData) {
-            switch($this->key) {
-                case '_backend_user_group':
+            switch ($this->key) {
+                case 'MyUserManagementMyusermanagement_MyUserManagementGroupadmin':
                     $moduleData = $this->objectManager->get('Serfhos\\MyUserManagement\\Domain\\Model\\BackendUserGroupModuleData');
                     break;
-                case '_file_mount':
+                case 'MyUserManagementMyusermanagement_MyUserManagementFilemountadmin':
                     $moduleData = $this->objectManager->get('Serfhos\\MyUserManagement\\Domain\\Model\\FileMountModuleData');
                     break;
-                case '_backend_user':
+                case 'MyUserManagementMyusermanagement_MyUserManagementUseradmin':
                 default:
                     $moduleData = $this->objectManager->get('TYPO3\\CMS\\Beuser\\Domain\\Model\\ModuleData');
                     break;
@@ -87,6 +55,16 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
         } else {
             $moduleData = @unserialize($moduleData);
         }
+
+        //  Force module data to only display non-admin users before returning
+        if ($moduleData instanceof \TYPO3\CMS\Beuser\Domain\Model\ModuleData) {
+            if (!$this->getBackendUserAuthentication()->isAdmin()) {
+                $demand = $moduleData->getDemand();
+                $demand->setUserType(2);
+                $moduleData->setDemand($demand);
+            }
+        }
+
         return $moduleData;
     }
 
@@ -96,7 +74,8 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
      * @param string $key
      * @return void
      */
-    public function setKey($key) {
+    public function setKey($key)
+    {
         $this->key = $key;
     }
 
@@ -106,8 +85,16 @@ class ModuleDataStorageService implements \TYPO3\CMS\Core\SingletonInterface {
      * @param mixed $moduleData
      * @return void
      */
-    public function persistModuleData($moduleData) {
-        $this->backendUser->pushModuleData(self::PREFIX . $this->key, serialize($moduleData));
+    public function persistModuleData($moduleData)
+    {
+        $this->getBackendUserAuthentication()->pushModuleData(self::PREFIX . $this->key, serialize($moduleData));
     }
 
+    /**
+     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected function getBackendUserAuthentication()
+    {
+        return $GLOBALS['BE_USER'];
+    }
 }

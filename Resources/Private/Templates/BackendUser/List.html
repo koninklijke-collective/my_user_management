@@ -3,108 +3,110 @@
 <f:layout name="Backend/Default" />
 
 <f:section name="actionMenu">
-	<f:be.menus.actionMenu>
-		<f:for each="{actionMenuItems}" as="actionMenuItem">
-			<f:be.menus.actionMenuItem label="{f:translate(key: '{actionMenuItem.labelKey}', default: '{actionMenuItem.defaultLabel}')}" controller="{actionMenuItem.controller}" action="{actionMenuItem.action}" />
-		</f:for>
-	</f:be.menus.actionMenu>
+    <f:be.menus.actionMenu>
+        <f:for each="{actionMenuItems}" as="actionMenuItem">
+            <f:be.menus.actionMenuItem label="{f:translate(key: '{actionMenuItem.labelKey}', default: '{actionMenuItem.defaultLabel}')}" controller="{actionMenuItem.controller}" action="{actionMenuItem.action}" />
+        </f:for>
+    </f:be.menus.actionMenu>
 </f:section>
 
 <f:section name="iconButtons">
-	<a href="#" onclick="window.location.href='alt_doc.php?returnUrl='+T3_THIS_LOCATION+'&edit[be_users][0]=new'; return false;"><bu:spriteManagerIcon iconName="actions-document-new" /></a>
+    <a href="#" onclick="window.location.href='alt_doc.php?returnUrl='+T3_THIS_LOCATION+'&edit[be_users][0]=new'; return false;"><bu:spriteManagerIcon iconName="actions-document-new" /></a>
+</f:section>
+
+<f:section name="title">
+    <h1><f:translate key="backendUserListing">Backend User Listing</f:translate></h1>
 </f:section>
 
 <f:section name="content">
-	<f:comment>
-		Listing of users on compare list
-	</f:comment>
+    <f:comment>
+        Listing of users on compare list
+    </f:comment>
 
-	<f:if condition="{compareUserList}">
-		<bu:Section title="{f:translate(key: 'section.compare', default: 'Compare')}" collapsible="TRUE">
-			<ul id="compareUsers">
-				<f:for each="{compareUserList}" as="compareUser">
-					<li>
-						<f:link.action
-							action="removeFromCompareList"
-							arguments="{uid: compareUser.uid}"
-							><bu:SpriteManagerIcon iconName="actions-selection-delete" /></f:link.action>
+    <f:if condition="{compareUserList}">
+        <bu:Section title="{f:translate(key: 'section.compare', default: 'Compare')}" collapsible="TRUE">
+            <ul id="compareUsers">
+                <f:for each="{compareUserList}" as="compareUser">
+                    <li>
+                        <f:link.action
+                            action="removeFromCompareList"
+                            arguments="{uid: compareUser.uid}"
+                            ><bu:SpriteManagerIcon iconName="actions-selection-delete" /></f:link.action>
 
-						<a href="#" onClick="showClickmenu('be_users', '{compareUser.uid}', '1', '', '', ''); return false;" title="id={compareUser.uid}">
-							<bu:spriteIconForRecord table="be_users" object="{compareUser}" />
-						</a>
+                        <a href="#" onClick="showClickmenu('be_users', '{compareUser.uid}', '1', '', '', ''); return false;" title="id={compareUser.uid}">
+                            <bu:spriteIconForRecord table="be_users" object="{compareUser}" />
+                        </a>
 
-						{compareUser.userName}
-					</li>
-				</f:for>
-			</ul>
+                        {compareUser.userName}
+                    </li>
+                </f:for>
+            </ul>
 
-			<f:form action="compare">
-				<f:form.submit value="{f:translate(key: 'compareUserList', default: 'Compare user list')}" />
-			</f:form>
+            <f:form action="compare">
+                <f:form.submit value="{f:translate(key: 'compareUserList', default: 'Compare user list')}" />
+            </f:form>
 
-		</bu:Section>
-	</f:if>
+        </bu:Section>
+    </f:if>
 
-	<f:comment>
-		Filter section
-	</f:comment>
+    <f:comment>
+        Filter section
+    </f:comment>
 
-	<f:render partial="Filters/BackendUser/Index" arguments="{demand: demand, backendUserGroups: backendUserGroups, isAdmin: currentUser.admin}" />
+    <f:render partial="Filters/BackendUser/Index" arguments="{demand: demand, backendUserGroups: backendUserGroups, isAdmin: currentUser.admin}" />
 
-	<f:comment>
-		Listing of all users
-	</f:comment>
+    <f:comment>
+        Listing of all users
+    </f:comment>
 
-	<h3><f:translate key="backendUserListing">Backend User Listing</f:translate></h3>
-
-	<f:if condition="<f:count subject='{backendUsers}' /> > 50">
-		<f:then>
-			<f:be.widget.paginate objects="{backendUsers}" as="paginatedBackendUsers" configuration="{itemsPerPage: 50, insertAbove: 1, insertBelow: 1}">
-				<table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist">
-					<tr class="t3-row-header">
-						<td></td>
-						<td><f:translate key="userName">Username</f:translate></td>
-						<td><f:translate key="realName">Real name</f:translate></td>
-						<td>&nbsp;</td>
-						<td>&nbsp;</td>
-						<td><f:translate key="lastLogin">Last login</f:translate></td>
-					</tr>
-					<f:for each="{paginatedBackendUsers}" as="backendUser">
-						<f:render partial="BackendUser/IndexListRow" arguments="{demand: demand, backendUser: backendUser, dateFormat: dateFormat, timeFormat: timeFormat, returnUrl: returnUrl, isAdmin: currentUser.admin}" />
-					</f:for>
-					<f:comment>
-						Footer row: no officially defined style yet
-					</f:comment>
-					<tr>
-						<td colspan="6">
-							<f:count subject="{backendUsers}" /> <f:translate key="users">Users</f:translate>
-						</td>
-					</tr>
-				</table>
-			</f:be.widget.paginate>
-		</f:then>
-		<f:else>
-			<table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist">
-				<tr class="t3-row-header">
-					<td></td>
-					<td><f:translate key="userName">Username</f:translate></td>
-					<td><f:translate key="realName">Real name</f:translate></td>
-					<td>&nbsp;</td>
-					<td>&nbsp;</td>
-					<td><f:translate key="lastLogin">Last login</f:translate></td>
-				</tr>
-				<f:for each="{backendUsers}" as="backendUser">
-					<f:render partial="BackendUser/IndexListRow" arguments="{demand: demand, backendUser: backendUser, dateFormat: dateFormat, timeFormat: timeFormat, returnUrl: returnUrl, isAdmin: currentUser.admin}" />
-				</f:for>
-				<f:comment>
-					Footer row: no officially defined style yet
-				</f:comment>
-				<tr>
-					<td colspan="6">
-						<f:count subject="{backendUsers}" /> <f:translate key="users">Users</f:translate>
-					</td>
-				</tr>
-			</table>
-		</f:else>
-	</f:if>
+    <f:if condition="<f:count subject='{backendUsers}' /> > 50">
+        <f:then>
+            <f:be.widget.paginate objects="{backendUsers}" as="paginatedBackendUsers" configuration="{itemsPerPage: 50, insertAbove: 1, insertBelow: 1}">
+                <table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist">
+                    <tr class="t3-row-header">
+                        <td></td>
+                        <td><f:translate key="userName">Username</f:translate></td>
+                        <td><f:translate key="realName">Real name</f:translate></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td><f:translate key="lastLogin">Last login</f:translate></td>
+                    </tr>
+                    <f:for each="{paginatedBackendUsers}" as="backendUser">
+                        <f:render partial="BackendUser/IndexListRow" arguments="{demand: demand, backendUser: backendUser, dateFormat: dateFormat, timeFormat: timeFormat, returnUrl: returnUrl, isAdmin: currentUser.admin}" />
+                    </f:for>
+                    <f:comment>
+                        Footer row: no officially defined style yet
+                    </f:comment>
+                    <tr>
+                        <td colspan="6">
+                            <f:count subject="{backendUsers}" /> <f:translate key="users">Users</f:translate>
+                        </td>
+                    </tr>
+                </table>
+            </f:be.widget.paginate>
+        </f:then>
+        <f:else>
+            <table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist">
+                <tr class="t3-row-header">
+                    <td></td>
+                    <td><f:translate key="userName">Username</f:translate></td>
+                    <td><f:translate key="realName">Real name</f:translate></td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td><f:translate key="lastLogin">Last login</f:translate></td>
+                </tr>
+                <f:for each="{backendUsers}" as="backendUser">
+                    <f:render partial="BackendUser/IndexListRow" arguments="{demand: demand, backendUser: backendUser, dateFormat: dateFormat, timeFormat: timeFormat, returnUrl: returnUrl, isAdmin: currentUser.admin}" />
+                </f:for>
+                <f:comment>
+                    Footer row: no officially defined style yet
+                </f:comment>
+                <tr>
+                    <td colspan="6">
+                        <f:count subject="{backendUsers}" /> <f:translate key="users">Users</f:translate>
+                    </td>
+                </tr>
+            </table>
+        </f:else>
+    </f:if>
 </f:section>

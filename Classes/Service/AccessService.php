@@ -1,73 +1,21 @@
 <?php
 namespace Serfhos\MyUserManagement\Service;
-/***************************************************************
- *  Copyright notice
- *
- *  (c) 2013 Benjamin Serfhos <serfhos@serfhos.com>,
- *  Rotterdam School of Management, Erasmus University
- *
- *  All rights reserved
- *
- *  This script is part of the TYPO3 project. The TYPO3 project is
- *  free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 3 of the License, or
- *  (at your option) any later version.
- *
- *  The GNU General Public License can be found at
- *  http://www.gnu.org/copyleft/gpl.html.
- *
- *  This script is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/
+
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 
 /**
  * Class AccessService
  *
  * @package Serfhos\MyUserManagement\Service
  */
-class AccessService implements \TYPO3\CMS\Core\SingletonInterface {
-
-    /**
-     * @var \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected $database;
-
-    /**
-     * @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
-     */
-    protected $currentUser;
+class AccessService implements \TYPO3\CMS\Core\SingletonInterface
+{
 
     /**
      * @var \Serfhos\MyUserManagement\Domain\Repository\BackendUserRepository
      * @inject
      */
     protected $backendUserRepository;
-
-    /**
-     * @var \Serfhos\MyUserManagement\Domain\Repository\BackendUserGroupRepository
-     * @inject
-     */
-    protected $backendUserGroupRepository;
-
-    /**
-     * Cached Backend Users
-     *
-     * @var array
-     */
-    protected $_backendUsers = array();
-
-    /**
-     * Initialize used variables
-     */
-    public function __construct() {
-        $this->database = $GLOBALS['TYPO3_DB'];
-        $this->currentUser = $GLOBALS['BE_USER'];
-    }
 
     /**
      * Find users which has access to given page id
@@ -77,8 +25,9 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface {
      * @param \TYPO3\CMS\Beuser\Domain\Model\Demand $demand
      * @return array
      */
-    public function findUsersWithPageAccess($page, \TYPO3\CMS\Beuser\Domain\Model\Demand $demand) {
-        $rootLine = \TYPO3\CMS\Backend\Utility\BackendUtility::BEgetRootLine($page);
+    public function findUsersWithPageAccess($page, \TYPO3\CMS\Beuser\Domain\Model\Demand $demand)
+    {
+        $rootLine = BackendUtility::BEgetRootLine($page);
         $rootLineIds = array();
         foreach ($rootLine as $page) {
             $rootLineIds[] = (int) $page['uid'];
@@ -93,14 +42,14 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface {
      * @param \TYPO3\CMS\Beuser\Domain\Model\Demand $demand
      * @return array
      */
-    protected function findAllBackendUsers(\TYPO3\CMS\Beuser\Domain\Model\Demand $demand) {
+    protected function findAllBackendUsers(\TYPO3\CMS\Beuser\Domain\Model\Demand $demand)
+    {
         $returnedUsers = array();
-        if (empty($this->_backendUsers)) {
-            $users = $this->backendUserRepository->findDemanded($demand);
+        $users = $this->backendUserRepository->findDemanded($demand);
 
-            foreach ($users as $user) {
-                /** @var \Serfhos\MyUserManagement\Domain\Model\BackendUser $user */
-                if ($this->currentUser->isAdmin() === FALSE && $user->getIsAdministrator()) {
+        foreach ($users as $user) {
+            if ($user instanceof \Serfhos\MyUserManagement\Domain\Model\BackendUser) {
+                if ($this->getBackendUserAuthentication()->isAdmin() === false && $user->getIsAdministrator()) {
                     // Ignore admins if a non admin is retrieving the information!
                     continue;
                 }
@@ -116,8 +65,6 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface {
 
                 $returnedUsers[] = $user;
             }
-        } else {
-            $returnedUsers = $this->_backendUsers;
         }
 
         return $returnedUsers;
@@ -130,20 +77,30 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface {
      * @param \TYPO3\CMS\Beuser\Domain\Model\Demand $demand
      * @return array
      */
-    protected function findAllowedUsersInRootLine($rootLine, \TYPO3\CMS\Beuser\Domain\Model\Demand $demand) {
+    protected function findAllowedUsersInRootLine($rootLine, \TYPO3\CMS\Beuser\Domain\Model\Demand $demand)
+    {
         $returnedUsers = array();
         $users = $this->findAllBackendUsers($demand);
         foreach ($users as $user) {
-            if ($user->getIsAdministrator()) {
-                $returnedUsers[] = $user;
-            } else {
-                if (count($match = array_intersect($rootLine, $user->getInheritedMountPoints())) > 0) {
-                    $user->setActiveMountPoints($match);
+            if ($user instanceof \Serfhos\MyUserManagement\Domain\Model\BackendUser) {
+                if ($user->getIsAdministrator()) {
                     $returnedUsers[] = $user;
+                } else {
+                    if (count($match = array_intersect($rootLine, $user->getInheritedMountPoints())) > 0) {
+                        $user->setActiveMountPoints($match);
+                        $returnedUsers[] = $user;
+                    }
                 }
             }
         }
         return $returnedUsers;
     }
 
+    /**
+     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected function getBackendUserAuthentication()
+    {
+        return $GLOBALS['BE_USER'];
+    }
 }
