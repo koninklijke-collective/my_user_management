@@ -48,8 +48,8 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
 
         foreach ($users as $user) {
             if ($user instanceof \Serfhos\MyUserManagement\Domain\Model\BackendUser) {
+                // Ignore admins if a non admin is retrieving the information!
                 if ($this->getBackendUserAuthentication()->isAdmin() === false && $user->getIsAdministrator()) {
-                    // Ignore admins if a non admin is retrieving the information!
                     continue;
                 }
 
@@ -95,6 +95,11 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
         $users = $this->findAllBackendUsers();
         foreach ($users as $user) {
             if ($user instanceof \Serfhos\MyUserManagement\Domain\Model\BackendUser) {
+                // Ignore disabled users
+                if ($user->getIsDisabled()) {
+                    continue;
+                }
+
                 if ($user->getIsAdministrator()) {
                     $returnedUsers[] = $user;
                 } else {

@@ -150,6 +150,9 @@
 			<trans-unit id="path">
 				<source>Path</source>
 			</trans-unit>
+			<trans-unit id="inheritedMountPoints">
+				<source>Inherited from</source>
+			</trans-unit>
 			<trans-unit id="terminateSessionSuccess">
 				<source>Session successfully terminated.</source>
 			</trans-unit>
@@ -185,6 +188,15 @@
 			</trans-unit>
 			<trans-unit id="backendFileMountOverview_empty_description">
 				<source>No file mounts found in the database. Create a new filemount above.</source>
+			</trans-unit>
+			<trans-unit id="mount_action_edit">
+				<source>Edit filemount</source>
+			</trans-unit>
+			<trans-unit id="mount_action_delete">
+				<source>Delete filemount</source>
+			</trans-unit>
+			<trans-unit id="mount_confirm_delete">
+				<source><![CDATA[Are you sure you want to delete this filemount: "%s" (id: %s)]]></source>
 			</trans-unit>
 		</body>
 	</file>

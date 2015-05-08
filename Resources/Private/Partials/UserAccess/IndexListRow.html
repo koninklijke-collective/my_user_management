@@ -1,8 +1,7 @@
-{namespace be=TYPO3\CMS\Backend\ViewHelpers}
 {namespace bu=TYPO3\CMS\Beuser\ViewHelpers}
 {namespace um=Serfhos\MyUserManagement\ViewHelper}
 
-<tr>
+<tr class="db_list_normal">
     <td class="col-icon">
         <a href="#" class="t3-js-clickmenutrigger" data-table="be_users" data-uid="{backendUser.uid}"
             data-listframe="1" title="id={backendUser.uid}">
@@ -10,7 +9,7 @@
         </a>
     </td>
     <td class="col-title">
-        <b>{backendUser.userName}</b><br/>
+        <strong>{backendUser.userName}</strong><br/>
         {backendUser.realName}
     </td>
     <td>
@@ -29,10 +28,7 @@
     </td>
     <td class="col-control">
         <div class="btn-group" role="group">
-            <a class="btn btn-default" href="#"
-                onclick="top.launchView('be_users', '{backendUser.uid}',''); return false;">
-                <be:spriteManagerIcon iconName="actions-document-info"/>
-            </a>
+            <a class="btn btn-default" href="#" onclick="top.launchView('be_users', '{backendUser.uid}'); return false;"><f:be.buttons.icon icon="actions-document-info"/></a>
         </div>
     </td>
     <td>
@@ -46,4 +42,3 @@
         </f:if>
     </td>
 </tr>
-
