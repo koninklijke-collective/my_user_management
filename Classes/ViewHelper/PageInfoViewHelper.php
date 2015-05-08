@@ -1,5 +1,5 @@
 <?php
-namespace Serfhos\MyUserManagement\ViewHelpers;
+namespace Serfhos\MyUserManagement\ViewHelper;
 
 /**
  * Retrieve page information

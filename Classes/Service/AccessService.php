@@ -1,6 +1,7 @@
 <?php
 namespace Serfhos\MyUserManagement\Service;
 
+use Serfhos\MyUserManagement\Domain\Model\BackendUserGroup;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 
 /**
@@ -22,30 +23,28 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
      * Checks db mounts
      *
      * @param integer $page
-     * @param \TYPO3\CMS\Beuser\Domain\Model\Demand $demand
      * @return array
      */
-    public function findUsersWithPageAccess($page, \TYPO3\CMS\Beuser\Domain\Model\Demand $demand)
+    public function findUsersWithPageAccess($page)
     {
         $rootLine = BackendUtility::BEgetRootLine($page);
         $rootLineIds = array();
         foreach ($rootLine as $page) {
             $rootLineIds[] = (int) $page['uid'];
         }
-        $users = $this->findAllowedUsersInRootLine($rootLineIds, $demand);
+        $users = $this->findAllowedUsersInRootLine($rootLineIds);
         return $users;
     }
 
     /**
      * Find all known backend users
      *
-     * @param \TYPO3\CMS\Beuser\Domain\Model\Demand $demand
      * @return array
      */
-    protected function findAllBackendUsers(\TYPO3\CMS\Beuser\Domain\Model\Demand $demand)
+    protected function findAllBackendUsers()
     {
         $returnedUsers = array();
-        $users = $this->backendUserRepository->findDemanded($demand);
+        $users = $this->backendUserRepository->findAll();
 
         foreach ($users as $user) {
             if ($user instanceof \Serfhos\MyUserManagement\Domain\Model\BackendUser) {
@@ -54,33 +53,46 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
                     continue;
                 }
 
-                $dbMounts = $user->getDbMountPoints();
+                $mounts = $user->getDbMountPoints();
                 foreach ($user->getBackendUserGroups() as $group) {
-                    $_dbMounts = $group->getDbMountPoints();
-                    if (is_array($_dbMounts)) {
-                        $dbMounts = array_merge($dbMounts, $_dbMounts);
-                    }
+                    $mounts = $this->getAllDatabaseMountsFromUserGroup($group, $mounts);
                 }
-                $user->setInheritedMountPoints($dbMounts);
+                $user->setInheritedMountPoints($mounts);
 
                 $returnedUsers[] = $user;
             }
         }
-
         return $returnedUsers;
+    }
+
+    /**
+     * @param \Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $group
+     * @param array $mounts
+     * @return array
+     */
+    protected function getAllDatabaseMountsFromUserGroup(BackendUserGroup $group, array $mounts = array())
+    {
+        $dbMounts = $group->getDbMountPoints();
+        if (is_array($dbMounts)) {
+            $mounts = array_unique(array_merge($mounts, $dbMounts));
+        }
+
+        foreach ($group->getSubGroups() as $subGroup) {
+            $mounts = $this->getAllDatabaseMountsFromUserGroup($subGroup, $mounts);
+        }
+        return $mounts;
     }
 
     /**
      * Find users that has access in rootline
      *
      * @param array $rootLine
-     * @param \TYPO3\CMS\Beuser\Domain\Model\Demand $demand
      * @return array
      */
-    protected function findAllowedUsersInRootLine($rootLine, \TYPO3\CMS\Beuser\Domain\Model\Demand $demand)
+    protected function findAllowedUsersInRootLine($rootLine)
     {
         $returnedUsers = array();
-        $users = $this->findAllBackendUsers($demand);
+        $users = $this->findAllBackendUsers();
         foreach ($users as $user) {
             if ($user instanceof \Serfhos\MyUserManagement\Domain\Model\BackendUser) {
                 if ($user->getIsAdministrator()) {

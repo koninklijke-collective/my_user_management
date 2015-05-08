@@ -4,21 +4,6 @@ if (!defined('TYPO3_MODE')) {
 }
 
 if (TYPO3_MODE === 'BE') {
-    // add module before 'Help'
-    if (!isset($TBE_MODULES['MyUserManagementMyusermanagement'])) {
-        $temp_TBE_MODULES = array();
-        foreach ($TBE_MODULES as $key => $val) {
-            if ($key == 'help') {
-                $temp_TBE_MODULES['MyUserManagementMyusermanagement'] = '';
-                $temp_TBE_MODULES[$key] = $val;
-            } else {
-                $temp_TBE_MODULES[$key] = $val;
-            }
-        }
-
-        $TBE_MODULES = $temp_TBE_MODULES;
-    }
-
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'Serfhos.' . $_EXTKEY,
         'MyUserManagement',
@@ -27,10 +12,11 @@ if (TYPO3_MODE === 'BE') {
         array(),
         array(
             'access' => 'user, group',
-            'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/moduleicon_myusermanagement.gif',
+            'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/module-overview.png',
             'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/Module.xml',
         )
     );
+
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'Serfhos.' . $_EXTKEY,
@@ -38,11 +24,12 @@ if (TYPO3_MODE === 'BE') {
         'UserAdmin',
         '',
         array(
-            'BackendUser' => 'list, online, compare, addToCompareList, removeFromCompareList, terminateBackendUserSession',
+            'BackendUser' => 'index, online, compare, addToCompareList, removeFromCompareList, terminateBackendUserSession',
+            'BackendUserGroup' => 'index'
         ),
         array(
             'access' => 'user,group',
-            'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/moduleicon_myusermanagement_user.png',
+            'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/module-user-admin.png',
             'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/UserAdmin.xlf',
         )
     );
@@ -53,28 +40,13 @@ if (TYPO3_MODE === 'BE') {
         'UserAccess',
         '',
         array(
-            'UserAccess' => 'list',
+            'UserAccess' => 'index',
         ),
         array(
             'access' => 'user,group',
-            'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/moduleicon_myusermanagement_useraccess.gif',
+            'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/module-user-access.png',
             'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/UserAccess.xlf',
             'navigationComponentId' => 'typo3-pagetree',
-        )
-    );
-
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'Serfhos.' . $_EXTKEY,
-        'MyUserManagement',
-        'GroupAdmin',
-        '',
-        array(
-            'BackendUserGroup' => 'list, compare, addToCompareList, removeFromCompareList',
-        ),
-        array(
-            'access' => 'user,group',
-            'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/moduleicon_myusermanagement_group.png',
-            'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/BackendUserGroup.xlf',
         )
     );
 
@@ -84,11 +56,11 @@ if (TYPO3_MODE === 'BE') {
         'FileMountAdmin',
         '',
         array(
-            'FileMount' => 'list, detail',
+            'FileMount' => 'index',
         ),
         array(
             'access' => 'user,group',
-            'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/moduleicon_myusermanagement_filemount.png',
+            'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/module-file-mounts.png',
             'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/FileMount.xlf',
         )
     );

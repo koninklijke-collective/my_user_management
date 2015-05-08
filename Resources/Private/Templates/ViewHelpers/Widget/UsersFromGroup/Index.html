@@ -1,6 +1,0 @@
-{namespace bu = TYPO3\CMS\Beuser\ViewHelpers}
-
-<f:for each="{backendUsers}" as="backendUser">
-    <bu:spriteIconForRecord table="be_users" object="{backendUser}" />
-    {backendUser.realName} ({backendUser.username})<br />
-</f:for>

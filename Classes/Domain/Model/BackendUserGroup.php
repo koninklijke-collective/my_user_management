@@ -1,6 +1,8 @@
 <?php
 namespace Serfhos\MyUserManagement\Domain\Model;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Model for backend user group
  *
@@ -47,11 +49,11 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
     /**
      * Returns the Database Mount Points
      *
-     * @return string
+     * @return array
      */
     public function getDbMountPoints()
     {
-        return $this->dbMountPoints;
+        return GeneralUtility::intExplode(',', $this->dbMountPoints, true);
     }
 
     /**
