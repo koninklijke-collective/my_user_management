@@ -189,6 +189,9 @@
 			<trans-unit id="backendFileMountOverview_empty_description">
 				<source>No file mounts found in the database. Create a new filemount above.</source>
 			</trans-unit>
+			<trans-unit id="mount_action_new">
+				<source>Add new filemount</source>
+			</trans-unit>
 			<trans-unit id="mount_action_edit">
 				<source>Edit filemount</source>
 			</trans-unit>
