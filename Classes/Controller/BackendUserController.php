@@ -47,7 +47,10 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
         }
 
         parent::indexAction($demand);
-        $this->view->assign('returnUrl', rawurlencode(BackendUtility::getModuleUrl('MyUserManagementMyusermanagement_MyUserManagementUseradmin')));
+        $this->view->assign(
+            'returnUrl',
+            rawurlencode(BackendUtility::getModuleUrl('MyUserManagementMyusermanagement_MyUserManagementUseradmin'))
+        );
     }
 
     /**
@@ -76,6 +79,7 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
             parent::switchUser($switchUser);
         }
     }
+
     /**
      * Translate label for module
      *

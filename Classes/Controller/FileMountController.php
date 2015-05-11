@@ -28,7 +28,10 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
      */
     public function indexAction()
     {
-        $this->view->assign('returnUrl', rawurlencode(BackendUtility::getModuleUrl('MyUserManagementMyusermanagement_MyUserManagementFilemountadmin')));
+        $this->view->assign(
+            'returnUrl',
+            rawurlencode(BackendUtility::getModuleUrl('MyUserManagementMyusermanagement_MyUserManagementFilemountadmin'))
+        );
 
         $fileMounts = $this->fileMountRepository->findAll();
         if (count($fileMounts) === 0) {
