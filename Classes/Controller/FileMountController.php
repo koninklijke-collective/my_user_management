@@ -1,13 +1,16 @@
 <?php
 namespace Serfhos\MyUserManagement\Controller;
 
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+
 /**
- * File mount controller
+ * Controller: FileMount
  *
- * @package my_user_management
- * @author Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
+ * @package Serfhos\MyUserManagement\Controller
  */
-class FileMountController extends AbstractBackendController
+class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
 
     /**
@@ -19,57 +22,46 @@ class FileMountController extends AbstractBackendController
     protected $fileMountRepository;
 
     /**
-     * Override used class
+     * Action: List all file mounts
      *
-     * @var \Serfhos\MyUserManagement\Domain\Model\FileMountModuleData
-     */
-    protected $moduleData;
-
-    /**
-     * List of all file mounts
-     *
-     * @param \Serfhos\MyUserManagement\Domain\Model\FileMountDemand $fileMountDemand
      * @return void
      */
-    public function listAction(\Serfhos\MyUserManagement\Domain\Model\FileMountDemand $fileMountDemand = null)
+    public function indexAction()
     {
-        if ($fileMountDemand === null) {
-            $fileMountDemand = $this->moduleData->getDemand();
+        $this->view->assign(
+            'returnUrl',
+            rawurlencode(BackendUtility::getModuleUrl('MyUserManagementMyusermanagement_MyUserManagementFilemountadmin'))
+        );
+
+        $fileMounts = $this->fileMountRepository->findAll();
+        if (count($fileMounts) === 0) {
+            $this->addFlashMessage(
+                $this->translate('empty_description'),
+                $this->translate('empty_title'),
+                AbstractMessage::INFO
+            );
         } else {
-            $this->moduleData->setDemand($fileMountDemand);
+            $this->view->assign('fileMounts', $fileMounts);
         }
-
-        $this->view->assignMultiple(
-            array(
-                'fileMountDemand' => $fileMountDemand,
-                'fileMounts' => $this->fileMountRepository->findByDemand($fileMountDemand)
-            )
-        );
     }
 
     /**
-     * Detailed information of a file mount
+     * Translate label for module
      *
-     * @param int $fileMount (int because if the object is hidden, it will
-     * @return void
-     */
-    public function detailAction($fileMount)
-    {
-        $fileMount = $this->fileMountRepository->findByUid($fileMount);
-        $this->view->assignMultiple(
-            array(
-                'fileMount' => $fileMount
-            )
-        );
-    }
-
-    /**
-     * Returns generic module name
-     *
+     * @param string $key
+     * @param array $arguments
      * @return string
      */
-    protected function getModuleName()
+    protected function translate($key, $arguments = array())
     {
-        return 'MyUserManagementMyusermanagement_MyUserManagementFilemountadmin';
+        $label = null;
+        if (!empty($key)) {
+            $label = LocalizationUtility::translate(
+                'backendFileMountOverview_' . $key,
+                'my_user_management',
+                $arguments
+            );
+        }
+        return ($label) ? $label : $key;
     }
 }

@@ -1,12 +1,16 @@
 <?php
 namespace Serfhos\MyUserManagement\Controller;
 
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+
 /**
- * User management controller
+ * Controller: UserAccess
  *
  * @package Serfhos\MyUserManagement\Controller
  */
-class UserAccessController extends AbstractBackendController
+class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
 
     /**
@@ -18,31 +22,52 @@ class UserAccessController extends AbstractBackendController
     /**
      * Action: List users
      *
-     * @param \TYPO3\CMS\Beuser\Domain\Model\Demand $demand
      * @return void
      */
-    public function listAction(\TYPO3\CMS\Beuser\Domain\Model\Demand $demand = null)
+    public function indexAction()
     {
-        if ($demand === null) {
-            $demand = $this->moduleData->getDemand();
-        } else {
-            $this->moduleData->setDemand($demand);
-        }
+        $pageId = (int) GeneralUtility::_GP('id');
+        $backendUsers = $this->accessService->findUsersWithPageAccess($pageId);
 
-        $backendUsers = $this->accessService->findUsersWithPageAccess($this->pageId, $demand);
-        $this->view->assignMultiple(array(
-            'backendUsers' => $backendUsers,
-            'demand' => $demand
-        ));
+        if ($pageId === 0) {
+            $this->addFlashMessage(
+                $this->translate('no_selection_description'),
+                $this->translate('no_selection_title'),
+                AbstractMessage::NOTICE
+            );
+        } elseif (count($backendUsers) === 0) {
+            $this->addFlashMessage(
+                $this->translate('empty_description', array($pageId)),
+                $this->translate('empty_title', array($pageId)),
+                AbstractMessage::INFO
+            );
+        } else {
+            $this->view->assignMultiple(array(
+                'pageId' => $pageId,
+                'backendUsers' => $backendUsers,
+                'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
+                'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
+            ));
+        }
     }
 
     /**
-     * Returns generic module name
+     * Translate label for module
      *
+     * @param string $key
+     * @param array $arguments
      * @return string
      */
-    protected function getModuleName()
+    protected function translate($key, $arguments = array())
     {
-        return 'MyUserManagementMyusermanagement_MyUserManagementUseraccess';
+        $label = null;
+        if (!empty($key)) {
+            $label = LocalizationUtility::translate(
+                'backendUserAccessOverview_' . $key,
+                'my_user_management',
+                $arguments
+            );
+        }
+        return ($label) ? $label : $key;
     }
 }

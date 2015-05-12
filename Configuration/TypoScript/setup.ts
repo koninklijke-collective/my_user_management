@@ -1,37 +1,41 @@
 # Module configuration
 module.tx_myusermanagement {
+    view {
+        templateRootPaths {
+            10 = EXT:beuser/Resources/Private/Templates
+            20 = EXT:my_user_management/Resources/Private/Templates
+        }
+
+        partialRootPaths {
+            10 = EXT:beuser/Resources/Private/Partials
+            20 = EXT:my_user_management/Resources/Private/Partials
+        }
+
+        layoutRootPaths {
+            10 = EXT:beuser/Resources/Private/Layouts
+            20 = EXT:my_user_management/Resources/Private/Layouts
+        }
+    }
+
     persistence {
         storagePid = 0
         classes {
-            Serfhos\MyUserManagement\Domain\Model\BackendUser {
-                mapping {
-                    tableName = be_users
-                    columns {
-                        allowed_languages.mapOnProperty = allowedLanguages
-                        file_mountpoints.mapOnProperty = fileMountPoints
-                        db_mountpoints.mapOnProperty = dbMountPoints
-                        usergroup.mapOnProperty = backendUserGroups
-                    }
-                }
-            }
+            Serfhos\MyUserManagement\Domain\Model\BackendUser < config.tx_extbase.persistence.classes.TYPO3\CMS\Beuser\Domain\Model\BackendUser
 
+            Serfhos\MyUserManagement\Domain\Model\BackendUserGroup < config.tx_extbase.persistence.classes.TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
             Serfhos\MyUserManagement\Domain\Model\BackendUserGroup {
                 mapping {
-                    tableName = be_groups
                     columns {
-                        subgroup.mapOnProperty = subGroups
                         db_mountpoints.mapOnProperty = dbMountPoints
                         hidden.mapOnProperty = isDisabled
                     }
                 }
             }
 
+            Serfhos\MyUserManagement\Domain\Model\FileMount < config.tx_extbase.persistence.classes.TYPO3\CMS\Extbase\Domain\Model\FileMount
             Serfhos\MyUserManagement\Domain\Model\FileMount {
                 mapping {
-                    tableName = sys_filemounts
                     columns {
-                        title.mapOnProperty = title
-                        path.mapOnProperty = path
                         base.mapOnProperty = storage
                         hidden.mapOnProperty = isDisabled
                     }
@@ -39,6 +43,7 @@ module.tx_myusermanagement {
             }
         }
     }
+
     settings {
         // This is a dummy entry. It is used in  Tx_Beuser_Controller_BackendUserController
         // to test that some TypoScript configuration is set.

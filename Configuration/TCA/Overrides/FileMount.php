@@ -9,10 +9,8 @@ $GLOBALS['TCA']['sys_filemounts']['ctrl']['security']['ignoreRootLevelRestrictio
 $GLOBALS['TCA']['sys_filemounts']['ctrl']['security']['ignoreWebMountRestriction'] = 1;
 
 // make all fields to exclude for users
-foreach ($GLOBALS['TCA']['sys_filemounts']['columns'] as $key => $configuration) {
+foreach ($GLOBALS['TCA']['sys_filemounts']['columns'] as $key => &$configuration) {
     if (!isset($configuration['exclude'])) {
         $configuration['exclude'] = 1;
     }
-
-    $GLOBALS['TCA']['sys_filemounts']['columns'][$key] = $configuration;
 }

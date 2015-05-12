@@ -1,0 +1,23 @@
+.. |module-views|      image:: ../Images/module-views.png
+.. :align: center
+.. :border: 0
+.. :name: module-views
+.. :vspace: 50
+
+.. |user-admin|      image:: ../Images/user-admin.png
+.. :align: center
+.. :border: 0
+.. :name: user-admin
+.. :vspace: 50
+
+.. |user-access|      image:: ../Images/user-access.png
+.. :align: center
+.. :border: 0
+.. :name: user-access
+.. :vspace: 50
+
+.. |file-mounts|      image:: ../Images/file-mounts.png
+.. :align: center
+.. :border: 0
+.. :name: file-mounts
+.. :vspace: 50

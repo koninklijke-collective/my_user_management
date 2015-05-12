@@ -1,8 +1,0 @@
-{namespace bu = TYPO3\CMS\Beuser\ViewHelpers}
-
-<f:for each="{backendUserGroups}" as="backendUserGroup">
-    <a href="#" onClick="showClickmenu('be_groups', '{backendUserGroup.uid}', '1', '', '', ''); return false;" title="id={backendUserGroup.uid}">
-        <bu:spriteIconForRecord table="be_groups" object="{backendUserGroup}" />
-    </a>
-    <b>{backendUserGroup.title}</b><br />
-</f:for>

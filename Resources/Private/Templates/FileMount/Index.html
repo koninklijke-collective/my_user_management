@@ -1,0 +1,48 @@
+{namespace um=Serfhos\MyUserManagement\ViewHelper}
+
+<f:layout name="EmptyBackend"/>
+
+<f:section name="actionMenu"/>
+
+<f:section name="iconButtons">
+    <f:be.buttons.icon
+        uri="{um:editRecord(parameters: 'edit[sys_filemounts][0]=new&returnUrl={returnUrl}')}"
+        title="{f:translate(key: 'mount_action_new')}"
+        icon="actions-document-new"/>
+</f:section>
+
+<f:section name="headline">
+    <h1>
+        <f:translate key="fileMountListing">File Mount Listing</f:translate>
+    </h1>
+</f:section>
+
+<f:section name="content">
+    <f:if condition="{fileMounts}">
+        <f:comment>
+            Listing of all file mounts
+        </f:comment>
+
+        <div class="table-fit">
+            <table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist table table-striped table-hover">
+                <thead>
+                <tr class="t3-row-header">
+                    <th class="col-icon"></th>
+                    <th>
+                        <f:translate key="title"/>
+                    </th>
+                    <th>
+                        <f:translate key="path"/>
+                    </th>
+                    <th class="col-control"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <f:for each="{fileMounts}" as="mount">
+                    <f:render partial="FileMount/IndexListRow" arguments="{mount: mount, returnUrl: returnUrl}"/>
+                </f:for>
+                </tbody>
+            </table>
+        </div>
+    </f:if>
+</f:section>
