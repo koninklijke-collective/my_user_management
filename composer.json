@@ -14,7 +14,13 @@
     "homepage": "https://github.com/bmoex/my_user_management",
     "license": "LGPL-3.0+",
 
-    "version": "2.0.0",
+    "version": "2.0.1",
+
+    "autoload": {
+        "psr-4": {
+            "Serfhos\\MyUserManagement\\": "Classes/"
+        }
+    },
 
     "authors": [
         {
