@@ -1,5 +1,5 @@
 {
-    "name": "serfhos/my_user_management",
+    "name": "serfhos/my-user-management",
     "description": "TYPO3 Extension: A module that makes it possible for editors to maintain backend users.",
     "type": "typo3-cms-extension",
 
@@ -14,7 +14,7 @@
     "homepage": "https://github.com/bmoex/my_user_management",
     "license": "LGPL-3.0+",
 
-    "version": "2.0.3",
+    "version": "2.0.4",
 
     "autoload": {
         "psr-4": {
