@@ -81,6 +81,16 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
+     * Returns the Storage
+     *
+     * @return int
+     */
+    public function getStorage()
+    {
+        return $this->storage;
+    }
+
+    /**
      * Sets the Storage
      *
      * @param int $storage
@@ -92,13 +102,13 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     }
 
     /**
-     * Returns the Storage
+     * Gets the disabled state
      *
-     * @return int
+     * @return boolean
      */
-    public function getStorage()
+    public function getIsDisabled()
     {
-        return $this->storage;
+        return $this->isDisabled;
     }
 
     /**
@@ -110,15 +120,5 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     public function setIsDisabled($isDisabled)
     {
         $this->isDisabled = $isDisabled;
-    }
-
-    /**
-     * Gets the disabled state
-     *
-     * @return boolean
-     */
-    public function getIsDisabled()
-    {
-        return $this->isDisabled;
     }
 }

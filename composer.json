@@ -1,5 +1,5 @@
 {
-    "name": "typo3cms/my_user_management",
+    "name": "serfhos/my_user_management",
     "description": "TYPO3 Extension: A module that makes it possible for editors to maintain backend users.",
     "type": "typo3-cms-extension",
 

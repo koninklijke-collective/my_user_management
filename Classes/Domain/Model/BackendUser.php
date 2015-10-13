@@ -58,6 +58,16 @@ class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
     }
 
     /**
+     * Returns the ActivePageMount
+     *
+     * @return array
+     */
+    public function getActiveMountPoints()
+    {
+        return $this->activeMountPoints;
+    }
+
+    /**
      * Sets the ActivePageMount
      *
      * @param array $activePageMount
@@ -66,15 +76,5 @@ class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
     public function setActiveMountPoints(array $activePageMount)
     {
         $this->activeMountPoints = $activePageMount;
-    }
-
-    /**
-     * Returns the ActivePageMount
-     *
-     * @return array
-     */
-    public function getActiveMountPoints()
-    {
-        return $this->activeMountPoints;
     }
 }

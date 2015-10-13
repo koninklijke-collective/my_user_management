@@ -36,6 +36,16 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
     protected $fileMountpoints = '';
 
     /**
+     * Returns the Database Mount Points
+     *
+     * @return array
+     */
+    public function getDbMountPoints()
+    {
+        return GeneralUtility::intExplode(',', $this->dbMountPoints, true);
+    }
+
+    /**
      * Sets the Database Mount Points
      *
      * @param string $dbMountPoints
@@ -47,13 +57,13 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
     }
 
     /**
-     * Returns the Database Mount Points
+     * Gets the file mount points
      *
-     * @return array
+     * @return string
      */
-    public function getDbMountPoints()
+    public function getFileMountpoints()
     {
-        return GeneralUtility::intExplode(',', $this->dbMountPoints, true);
+        return $this->fileMountpoints;
     }
 
     /**
@@ -68,13 +78,13 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
     }
 
     /**
-     * Gets the file mount points
+     * Gets isDisabled
      *
-     * @return string
+     * @return boolean
      */
-    public function getFileMountpoints()
+    public function getIsDisabled()
     {
-        return $this->fileMountpoints;
+        return $this->isDisabled;
     }
 
     /**
@@ -86,15 +96,5 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
     public function setIsDisabled($isDisabled)
     {
         $this->isDisabled = $isDisabled;
-    }
-
-    /**
-     * Gets isDisabled
-     *
-     * @return boolean
-     */
-    public function getIsDisabled()
-    {
-        return $this->isDisabled;
     }
 }
