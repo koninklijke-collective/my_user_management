@@ -23,6 +23,7 @@ You need a backend user that have access to the following elements:
 | * Backend Management>User Admin *(optional)*                                                          |
 | * Backend Management>User Access *(optional)*                                                         |
 | * Backend Management>File Mounts *(optional)*                                                         |
+| * Backend Management>Login History *(optional)*                                                       |
 +-------------------------------------------------------------------------------------------------------+
 
 +-------------------------------------------------------------------------------------------------------+
