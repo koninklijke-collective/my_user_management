@@ -1,0 +1,22 @@
+{namespace um=Serfhos\MyUserManagement\ViewHelper}
+
+<tr class="db_list_normal">
+    <td class="col-icon">
+        <f:be.buttons.icon title="{log.user_ip}" icon="actions-document-info"/>
+    </td>
+    <td class="col-title">
+        <strong>{log.user_login}</strong>
+    </td>
+    <td class="col-date">
+        <f:format.date format="{dateFormat} {timeFormat}">{log.tstamp}</f:format.date>
+    </td>
+    <td class="col-control">
+        <div class="btn-group" role="group">
+            <f:be.buttons.icon
+                additionalAttributes="{class: 'btn btn-default'}"
+                uri="{f:uri.action(action: 'detail', arguments: '{user: log.user_id}')}"
+                title="{f:translate(key: 'history_user_show')}"
+                icon="actions-document-view"/>
+        </div>
+    </td>
+</tr>

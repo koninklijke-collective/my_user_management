@@ -1,0 +1,72 @@
+<f:layout name="EmptyBackend"/>
+
+<f:section name="actionMenu"/>
+
+<f:section name="iconButtons"/>
+
+<f:section name="headline">
+    <h1>{user.realName}</h1>
+</f:section>
+
+<f:section name="content">
+    <f:if condition="{user}">
+        <table class="t3-table">
+            <tbody>
+            <tr>
+                <th><strong>Username:</strong></th>
+                <td>{user.userName}</td>
+            </tr>
+            <tr>
+                <th><strong>Name:</strong></th>
+                <td>{user.realName}</td>
+            </tr>
+            <tr>
+                <th><strong>Email:</strong></th>
+                <td>{user.email}</td>
+            </tr>
+            <tr>
+                <th><strong>Last login:</strong></th>
+                <td><f:format.date format="{dateFormat} {timeFormat}">{user.lastLoginDateAndTime}</f:format.date></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div class="history">
+            <h2>
+                <f:translate key="backendLoginHistory_all_records"/>
+            </h2>
+            <f:if condition="{logs.items}">
+                <div class="table-fit">
+                    <table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist table table-striped table-hover">
+                        <thead>
+                        <tr class="t3-row-header">
+                            <th class="col-title">
+                                <strong>
+                                    <f:translate key="date"/>
+                                </strong>
+                            </th>
+                            <th class="col-from">
+                                <f:translate key="ip"/>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <f:for each="{logs.items}" as="log">
+                            <tr class="db_list_normal">
+                                <td class="col-title">
+                                    <f:format.date format="{dateFormat} {timeFormat}">{log.tstamp}</f:format.date>
+                                </td>
+                                <td class="col-date">
+                                    {log.user_ip}
+                                </td>
+                            </tr>
+                        </f:for>
+                        </tbody>
+                    </table>
+                </div>
+            </f:if>
+
+        </div>
+    </f:if>
+
+</f:section>

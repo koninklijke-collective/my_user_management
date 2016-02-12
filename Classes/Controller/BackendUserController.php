@@ -49,7 +49,7 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
         parent::indexAction($demand);
         $this->view->assign(
             'returnUrl',
-            rawurlencode(BackendUtility::getModuleUrl('MyUserManagementMyusermanagement_MyUserManagementUseradmin'))
+            rawurlencode(BackendUtility::getModuleUrl('myusermanagement_MyUserManagementUseradmin'))
         );
     }
 

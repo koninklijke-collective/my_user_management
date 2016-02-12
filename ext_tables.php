@@ -4,22 +4,18 @@ if (!defined('TYPO3_MODE')) {
 }
 
 if (TYPO3_MODE === 'BE') {
-    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'Serfhos.' . $_EXTKEY,
-        'MyUserManagement',
+    $mainModule = 'myusermanagement';
+
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule(
+        $mainModule,
         '',
         '',
-        array(),
-        array(
-            'access' => 'user, group',
-            'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/module-overview.png',
-            'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/Module.xml',
-        )
+        'EXT:my_user_management/Resources/Private/Modules/Container/'
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'Serfhos.' . $_EXTKEY,
-        'MyUserManagement',
+        $mainModule,
         'UserAdmin',
         '',
         array(
@@ -35,7 +31,7 @@ if (TYPO3_MODE === 'BE') {
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'Serfhos.' . $_EXTKEY,
-        'MyUserManagement',
+        $mainModule,
         'UserAccess',
         '',
         array(
@@ -51,7 +47,7 @@ if (TYPO3_MODE === 'BE') {
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
         'Serfhos.' . $_EXTKEY,
-        'MyUserManagement',
+        $mainModule,
         'FileMountAdmin',
         '',
         array(
@@ -61,6 +57,21 @@ if (TYPO3_MODE === 'BE') {
             'access' => 'user,group',
             'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/module-file-mounts.png',
             'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/FileMount.xlf',
+        )
+    );
+
+    \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+        'Serfhos.' . $_EXTKEY,
+        $mainModule,
+        'LoginHistory',
+        '',
+        array(
+            'LoginHistory' => 'index, detail',
+        ),
+        array(
+            'access' => 'user,group',
+            'icon' => 'EXT:' . $_EXTKEY . '/Resources/Public/Icons/module-login-history.png',
+            'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/LoginHistory.xlf',
         )
     );
 }

@@ -1,11 +1,13 @@
 <?php
 namespace Serfhos\MyUserManagement\Service;
 
+use Serfhos\MyUserManagement\Domain\Model\BackendUser;
 use Serfhos\MyUserManagement\Domain\Model\BackendUserGroup;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Class AccessService
+ * Service: Access Look up
  *
  * @package Serfhos\MyUserManagement\Service
  */
@@ -41,15 +43,14 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
      *
      * @return array
      */
-    protected function findAllBackendUsers()
+    public function findAllBackendUsers()
     {
         $returnedUsers = array();
-        $users = $this->backendUserRepository->findAll();
+        $users = $this->backendUserRepository->findAllActive();
 
         foreach ($users as $user) {
-            if ($user instanceof \Serfhos\MyUserManagement\Domain\Model\BackendUser) {
-                // Ignore admins if a non admin is retrieving the information!
-                if ($this->getBackendUserAuthentication()->isAdmin() === false && $user->getIsAdministrator()) {
+            if ($user instanceof BackendUser) {
+                if ($this->isAllowedUser($user) === false) {
                     continue;
                 }
 
@@ -63,6 +64,52 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
             }
         }
         return $returnedUsers;
+    }
+
+    /**
+     * Find backend user
+     *
+     * @param integer $userId
+     * @return array
+     */
+    public function findBackendUser($userId)
+    {
+        $user = $this->backendUserRepository->findByUid((int) $userId);
+
+        if ($user instanceof BackendUser) {
+            if ($this->isAllowedUser($user) === false) {
+                return null;
+            }
+
+            $mounts = $user->getDbMountPoints();
+            foreach ($user->getBackendUserGroups() as $group) {
+                $mounts = $this->getAllDatabaseMountsFromUserGroup($group, $mounts);
+            }
+            $user->setInheritedMountPoints($mounts);
+        }
+
+        return $user;
+    }
+
+    /**
+     * Check if given user is allowed for current logged in user
+     *
+     * @param BackendUser $user
+     * @return boolean
+     */
+    protected function isAllowedUser(BackendUser $user)
+    {
+        if ($user->getIsDisabled() === true) {
+            return false;
+        } elseif ($this->getBackendUserAuthentication()->isAdmin() === false && $user->getIsAdministrator()) {
+            // Ignore admins if a non admin is retrieving the information!
+            return false;
+        } elseif (GeneralUtility::isFirstPartOfStr($user->getUserName(), '_cli_')) {
+            // Ignore _cli users
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -94,12 +141,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
         $returnedUsers = array();
         $users = $this->findAllBackendUsers();
         foreach ($users as $user) {
-            if ($user instanceof \Serfhos\MyUserManagement\Domain\Model\BackendUser) {
-                // Ignore disabled users
-                if ($user->getIsDisabled()) {
-                    continue;
-                }
-
+            if ($user instanceof BackendUser) {
                 if ($user->getIsAdministrator()) {
                     $returnedUsers[] = $user;
                 } else {

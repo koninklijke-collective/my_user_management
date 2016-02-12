@@ -21,9 +21,9 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
         parent::indexAction();
         $this->view->assign(
             'returnUrl',
-            rawurlencode(BackendUtility::getModuleUrl('MyUserManagementMyusermanagement_MyUserManagementUseradmin',
+            rawurlencode(BackendUtility::getModuleUrl('myusermanagement_MyUserManagementUseradmin',
                 array(
-                    'tx_myusermanagement_myusermanagementmyusermanagement_myusermanagementuseradmin' => array(
+                    'tx_myusermanagement_myusermanagement_myusermanagementuseradmin' => array(
                         'action' => 'index',
                         'controller' => 'BackendUserGroup'
                     )
