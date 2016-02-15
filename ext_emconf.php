@@ -4,7 +4,7 @@ $EM_CONF[$_EXTKEY] = array(
     'title' => 'My Backend User Management',
     'description' => 'A module that makes it possible for editors to maintain backend users.',
     'category' => 'module',
-    'version' => '2.0.4',
+    'version' => '2.1.0',
     'state' => 'stable',
     'uploadFolder' => false,
     'clearCacheOnLoad' => true,
@@ -19,4 +19,10 @@ $EM_CONF[$_EXTKEY] = array(
         'conflicts' => array(),
         'suggests' => array(),
     ),
+    'autoload' => array(
+        'psr-4' => array(
+            'Serfhos\\MyUserManagement\\' => 'Classes'
+        )
+    ),
 );
+

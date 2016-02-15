@@ -28,7 +28,7 @@ EXT: My User Management
     TYPO3 Backend User Management
 
 :Copyright:
-    2013-2015z
+    2013-2016
 
 :Author:
     Benjamin Serfhos
@@ -37,7 +37,7 @@ EXT: My User Management
     2013-11-03
 
 :Changed:
-    2015-05-11
+    2016-02-12
 
 :Email:
     benjamin@serfhos.com

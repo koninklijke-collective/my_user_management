@@ -1,0 +1,66 @@
+<f:layout name="EmptyBackend"/>
+
+<f:section name="actionMenu"/>
+
+<f:section name="iconButtons"/>
+
+<f:section name="headline">
+    <h1>
+        <f:translate key="loginHistoryOverview">User Login History</f:translate>
+    </h1>
+</f:section>
+
+<f:section name="content">
+
+    <f:if condition="{backendUsers}">
+        <div class="user-selection">
+            <h2>
+                <f:translate key="loginHistoryUser">User</f:translate>
+            </h2>
+            <div class="selection">
+                <f:form action="detail">
+                    <div class="user-selection">
+                        <label for="tx_myusermanagement_backendUser">User</label>
+                        <f:form.select name="user" id="tx_myusermanagement_backendUser" options="{backendUsers}" optionValueField="uid" optionLabelField="username"
+                            prependOptionLabel="All"/>
+                    </div>
+                    <f:form.button>View</f:form.button>
+                </f:form>
+            </div>
+        </div>
+    </f:if>
+
+    <f:if condition="{logs.items}">
+        <div class="global-overview">
+            <h2>
+                <f:translate key="backendLoginHistory_last_known_records"/>
+            </h2>
+
+            <div class="table-fit">
+                <table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist table table-striped table-hover">
+                    <thead>
+                    <tr class="t3-row-header">
+                        <th class="col-icon"></th>
+                        <th class="col-title">
+                            <strong>
+                                <f:translate key="userName"/>
+                            </strong>
+                        </th>
+                        <th class="col-date">
+                            <f:translate key="date"/>
+                        </th>
+                        <th class="col-control"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <f:for each="{logs.items}" as="log">
+                        <f:render partial="LoginHistory/IndexListRow" arguments="{_all}"/>
+                    </f:for>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </f:if>
+
+
+</f:section>
