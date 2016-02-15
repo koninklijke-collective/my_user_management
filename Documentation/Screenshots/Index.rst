@@ -37,3 +37,10 @@ File Mount
 |file-mounts|
 
 Adjust filemounts for backend users
+
+Login History
+^^^^^^^^^^
+
+|login-history|
+
+Simple layout for login history per user

@@ -22,7 +22,7 @@
 .. :name: file-mounts
 .. :vspace: 50
 
-.. |file-mounts|      image:: ../Images/login-history.png
+.. |login-history|      image:: ../Images/login-history.png
 .. :align: center
 .. :border: 0
 .. :name: login-history
