@@ -4,6 +4,7 @@ namespace Serfhos\MyUserManagement\Controller;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Beuser\Domain\Model\Demand;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -21,6 +22,24 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
      * @inject
      */
     protected $backendUserRepository;
+
+    /**
+     * Set up the view template configuration correctly for BackendTemplateView
+     *
+     * @param ViewInterface $view
+     * @return void
+     */
+    protected function setViewConfiguration(ViewInterface $view)
+    {
+        if (class_exists('\TYPO3\CMS\Backend\View\BackendTemplateView') && ($view instanceof \TYPO3\CMS\Backend\View\BackendTemplateView)) {
+            /** @var \TYPO3\CMS\Fluid\View\TemplateView $_view */
+            $_view = $this->objectManager->get('TYPO3\CMS\Fluid\View\TemplateView');
+            $this->setViewConfiguration($_view);
+            $view->injectTemplateView($_view);
+        } else {
+            parent::setViewConfiguration($view);
+        }
+    }
 
     /**
      * Displays all BackendUsers
