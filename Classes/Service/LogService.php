@@ -24,24 +24,29 @@ class LogService implements \TYPO3\CMS\Core\SingletonInterface
     public function findUserLoginActions($parameters = null)
     {
         $whereParts = array(
-            'userId' => '`userId` > 0',
-            'tstamp' => '`tstamp` > 0',
-            'level' => '`level` = 0',
-            'type' => '`type` = ' . self::TYPE_LOGGED_IN,
-            'action' => '`action` = ' . self::ACTION_LOG_IN,
+            'join' => 'sys_log.`userId` = be_users.uid',
+            'enabled' => '(be_users.disable = 0 AND be_users.deleted = 0)',
+            'userId' => 'sys_log.`userId` > 0',
+            'tstamp' => 'sys_log.`tstamp` > 0',
+            'level' => 'sys_log.`level` = 0',
+            'type' => 'sys_log.`type` = ' . self::TYPE_LOGGED_IN,
+            'action' => 'sys_log.`action` = ' . self::ACTION_LOG_IN,
         );
 
         // Set parameter query parts
         if (!empty($parameters)) {
             if ($parameters['user'] !== null) {
-                $whereParts['userId'] = '`userId` = ' . (int) $parameters['user'];
+                $whereParts['userId'] = 'sys_log.`userId` = ' . (int) $parameters['user'];
+            }
+            if ((bool) $parameters['hide-admin'] === true) {
+                $whereParts['hide-admin'] = 'be_users.admin = 0';
             }
         }
 
         // Set default variables for output
         $logs = array(
             'information' => array(
-                'total' => $this->getDatabaseConnection()->exec_SELECTcountRows('uid', 'sys_log', implode(' AND ', $whereParts)),
+                'total' => $this->getDatabaseConnection()->exec_SELECTcountRows('sys_log.uid', 'sys_log, be_users', implode(' AND ', $whereParts)),
                 'itemsPerPage' => null,
                 'page' => 1,
             ),
@@ -67,10 +72,10 @@ class LogService implements \TYPO3\CMS\Core\SingletonInterface
         // Render all requested logs
         $res = $this->getDatabaseConnection()->exec_SELECTquery(
             '*',
-            'sys_log',
+            'sys_log, be_users',
             implode(' AND ', $whereParts),
             '',
-            'tstamp DESC',
+            'sys_log.tstamp DESC',
             ($limit ? implode(', ', $limit) : null)
         );
         while ($row = $this->getDatabaseConnection()->sql_fetch_assoc($res)) {

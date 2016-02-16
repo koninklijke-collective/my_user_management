@@ -52,6 +52,7 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
         $parameters = array(
             'page' => $page,
             'itemsPerPage' => 20,
+            'hide-admin' => ($this->getCurrentBackendUserAuthentication()->isAdmin() === false),
         );
         $logs = $this->getLogService()->findUserLoginActions($parameters);
         if (empty($logs['items'])) {
@@ -136,5 +137,13 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
             $this->accessService = $this->objectManager->get('Serfhos\MyUserManagement\Service\AccessService');
         }
         return $this->accessService;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected function getCurrentBackendUserAuthentication()
+    {
+        return $GLOBALS['BE_USER'];
     }
 }
