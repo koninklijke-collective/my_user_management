@@ -14,3 +14,5 @@ foreach ($GLOBALS['TCA']['be_groups']['columns'] as $key => &$configuration) {
         $configuration['exclude'] = 1;
     }
 }
+
+$GLOBALS['TCA']['be_groups']['columns']['subgroup']['config']['itemsProcFunc'] = 'Serfhos\\MyUserManagement\\Hooks\\ItemsProcFunc->getRestrictedBackendUserGroups';

@@ -52,3 +52,6 @@ module.tx_myusermanagement {
         dummy = foo
     }
 }
+
+// TYPO3 throws an error if not set on extbase config.
+config.tx_extbase.persistence.classes.Serfhos\MyUserManagement\Domain\Model\BackendUserGroup < module.tx_myusermanagement.persistence.classes.Serfhos\MyUserManagement\Domain\Model\BackendUserGroup
