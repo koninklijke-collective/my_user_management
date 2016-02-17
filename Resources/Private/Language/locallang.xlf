@@ -219,6 +219,9 @@
             <trans-unit id="backendLoginHistory_all_records">
                 <source>All known records</source>
             </trans-unit>
+            <trans-unit id="restrictbackendusergroup.header">
+                <source>My Backend User Management: Restrict user group listing.</source>
+            </trans-unit>
         </body>
     </file>
 </xliff>
