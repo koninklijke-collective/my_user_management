@@ -71,7 +71,7 @@ class LogService implements \TYPO3\CMS\Core\SingletonInterface
 
         // Render all requested logs
         $res = $this->getDatabaseConnection()->exec_SELECTquery(
-            '*',
+            'sys_log.*',
             'sys_log, be_users',
             implode(' AND ', $whereParts),
             '',
