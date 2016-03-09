@@ -67,6 +67,35 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
     }
 
     /**
+     * Find all inactive backend users
+     *
+     * @return array
+     */
+    public function findAllInactiveBackendUsers()
+    {
+        $returnedUsers = array();
+        $loginSince = new \DateTime('- 6 months');
+        $users = $this->backendUserRepository->findAllInactive($loginSince);
+
+        foreach ($users as $user) {
+            if ($user instanceof BackendUser) {
+                if ($this->isAllowedUser($user) === false) {
+                    continue;
+                }
+
+                $mounts = $user->getDbMountPoints();
+                foreach ($user->getBackendUserGroups() as $group) {
+                    $mounts = $this->getAllDatabaseMountsFromUserGroup($group, $mounts);
+                }
+                $user->setInheritedMountPoints($mounts);
+
+                $returnedUsers[] = $user;
+            }
+        }
+        return $returnedUsers;
+    }
+
+    /**
      * Find backend user
      *
      * @param integer $userId

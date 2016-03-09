@@ -207,6 +207,15 @@
             <trans-unit id="mount_confirm_delete">
                 <source><![CDATA[Are you sure you want to delete this filemount: "%s" (id: %s)]]></source>
             </trans-unit>
+            <trans-unit id="backendLoginHistory_inactive_users">
+                <source><![CDATA[Inactive users <small>Last login of 6 months or older</small>]]></source>
+            </trans-unit>
+            <trans-unit id="backendLoginHistory_user_show">
+                <source>Show user %s</source>
+            </trans-unit>
+            <trans-unit id="backendLoginHistory_close">
+                <source>Close</source>
+            </trans-unit>
             <trans-unit id="backendLoginHistory_empty_title">
                 <source>No login records found</source>
             </trans-unit>

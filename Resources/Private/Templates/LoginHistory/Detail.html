@@ -2,7 +2,13 @@
 
 <f:section name="actionMenu"/>
 
-<f:section name="iconButtons"/>
+<f:section name="iconButtons">
+    <f:be.buttons.icon
+        additionalAttributes="{class: 'btn btn-default'}"
+        uri="{f:uri.action(action: 'index')}"
+        title="{f:translate(key: 'backendLoginHistory_close')}"
+        icon="actions-document-close"/>
+</f:section>
 
 <f:section name="headline">
     <h1>{user.realName}</h1>
@@ -35,6 +41,7 @@
             <h2>
                 <f:translate key="backendLoginHistory_all_records"/>
             </h2>
+
             <f:if condition="{logs.items}">
                 <div class="table-fit">
                     <table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist table table-striped table-hover">

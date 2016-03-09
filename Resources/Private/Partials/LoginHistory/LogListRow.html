@@ -15,7 +15,7 @@
             <f:be.buttons.icon
                 additionalAttributes="{class: 'btn btn-default'}"
                 uri="{f:uri.action(action: 'detail', arguments: '{user: log.user_id}')}"
-                title="{f:translate(key: 'history_user_show')}"
+                title="{f:translate(key: 'backendLoginHistory_user_show', arguments: '{0: log.user_login}')}"
                 icon="actions-document-view"/>
         </div>
     </td>

@@ -65,6 +65,8 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
 
         $this->view->assignMultiple(array(
             'backendUsers' => $this->getAccessService()->findAllBackendUsers(),
+            'inactiveUsers' => $this->getAccessService()->findAllInactiveBackendUsers(),
+            'userModuleAccess' => $this->beUserHasRightToSeeModule('myusermanagement_MyUserManagementUseradmin'),
             'logs' => $logs,
         ));
     }
@@ -145,5 +147,21 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
     protected function getCurrentBackendUserAuthentication()
     {
         return $GLOBALS['BE_USER'];
+    }
+
+    /**
+     * Check if user has access to module
+     *
+     * @param string $moduleName
+     * @return boolean
+     */
+    protected function beUserHasRightToSeeModule($moduleName = 'myusermanagement_module')
+    {
+        $hasAccess = false;
+        if (BackendUtility::isModuleSetInTBE_MODULES($moduleName)) {
+            $hasAccess = $this->getCurrentBackendUserAuthentication()->check('modules', $moduleName);;
+        }
+
+        return $hasAccess;
     }
 }
