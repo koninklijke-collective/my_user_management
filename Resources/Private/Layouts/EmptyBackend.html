@@ -1,10 +1,12 @@
-<f:be.container>
+<f:be.container includeCssFiles="{0: '{f:uri.resource(path:\'Styles/backend.css\')}'}">
     <div class="typo3-fullDoc">
         <div id="typo3-docheader">
             <div class="typo3-docheader-functions">
                 <div class="left">
-                    <f:be.buttons.csh/>
-                    <f:render section="actionMenu"/>
+                    <div class="btn-toolbar" role="toolbar">
+                        <f:be.buttons.csh/>
+                        <f:render section="actionMenu"/>
+                    </div>
                 </div>
                 <div class="right">
                     <f:be.pagePath/>
@@ -12,10 +14,14 @@
             </div>
             <div class="typo3-docheader-buttons">
                 <div class="left">
-                    <f:render section="iconButtons"/>
+                    <div class="btn-toolbar" role="toolbar">
+                        <f:render section="iconButtons"/>
+                    </div>
                 </div>
                 <div class="right">
-                    <f:be.buttons.shortcut/>
+                    <div class="btn-toolbar" role="toolbar">
+                        <f:be.buttons.shortcut/>
+                    </div>
                 </div>
             </div>
         </div>
