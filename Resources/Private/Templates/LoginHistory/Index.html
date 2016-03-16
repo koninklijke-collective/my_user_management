@@ -1,5 +1,3 @@
-{namespace bu = TYPO3\CMS\Beuser\ViewHelpers}
-
 <f:layout name="EmptyBackend"/>
 
 <f:section name="actionMenu"/>
@@ -88,46 +86,7 @@
                 </thead>
                 <tbody>
                 <f:for each="{inactiveUsers}" as="backendUser">
-                    <tr class="db_list_normal">
-                        <td class="col-icon">
-                            <a href="#" onClick="Clickmenu.show('be_users', '{backendUser.uid}', '1', '', '', ''); return false;" title="id={backendUser.uid}">
-                                <bu:spriteIconForRecord table="be_users" object="{backendUser}" />
-                            </a>
-                        </td>
-                        <td class="t3-title-column">
-                            <a href="alt_doc.php?edit[be_users][{backendUser.uid}]=edit&returnUrl={returnUrl}">
-                                <b>{backendUser.userName}</b><br />
-                                {backendUser.realName}
-                            </a>
-                        </td>
-                        <td>
-                            <f:if condition="{userModuleAccess}">
-                                <a href="#" onclick="top.launchView('be_users', '{backendUser.uid}'); return false;"><bu:spriteManagerIcon iconName="actions-document-info" /></a>
-                                <a href="alt_doc.php?edit[be_users][{backendUser.uid}]=edit&returnUrl={returnUrl}"><bu:spriteManagerIcon iconName="actions-document-open" /></a>
-
-                                <f:if condition="{backendUser.isDisabled} == 1">
-                                    <f:then>
-                                        <a href="<bu:issueCommand parameters="tce_db.php?&data[be_users][{backendUser.uid}][disable]=0&redirect={redirectUrl}" />"><bu:spriteManagerIcon iconName="actions-edit-unhide" options="{title: 'unhide'}" /></a>
-                                    </f:then>
-                                    <f:else>
-                                        <a href="<bu:issueCommand parameters="tce_db.php?&data[be_users][{backendUser.uid}][disable]=1&redirect={redirectUrl}" />"><bu:spriteManagerIcon iconName="actions-edit-hide" options="{title: 'hide'}" /></a>
-                                    </f:else>
-                                </f:if>
-
-                                <bu:removeUser backendUser="{backendUser}" />
-                            </f:if>
-                        </td>
-                        <td>
-                            <f:if condition="{backendUser.lastLoginDateAndTime}">
-                                <f:then>
-                                    <f:format.date format="{dateFormat} {timeFormat}">{backendUser.lastLoginDateAndTime}</f:format.date>
-                                </f:then>
-                                <f:else>
-                                    <f:translate key="never">Never</f:translate>
-                                </f:else>
-                            </f:if>
-                        </td>
-                    </tr>
+                    <f:render partial="LoginHistory/UserListRow" arguments="{_all}"/>
                 </f:for>
                 <f:comment>
                     Footer row: no officially defined style yet
@@ -143,6 +102,5 @@
         </div>
 
     </f:if>
-
 
 </f:section>

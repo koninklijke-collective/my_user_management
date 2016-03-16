@@ -1,0 +1,45 @@
+{namespace bu = TYPO3\CMS\Beuser\ViewHelpers}
+
+<tr class="db_list_normal">
+    <td class="col-icon">
+        <a href="#" onClick="Clickmenu.show('be_users', '{backendUser.uid}', '1', '', '', ''); return false;" title="id={backendUser.uid}">
+            <bu:spriteIconForRecord table="be_users" object="{backendUser}" />
+        </a>
+    </td>
+    <td class="t3-title-column">
+        <a href="alt_doc.php?edit[be_users][{backendUser.uid}]=edit&returnUrl={returnUrl}">
+            <b>{backendUser.userName}</b><br />
+            {backendUser.realName}
+        </a>
+    </td>
+    <td>
+        <f:be.buttons.icon
+            additionalAttributes="{class: 'btn btn-default'}"
+            uri="{f:uri.action(action: 'detail', arguments: '{user: backendUser.uid}')}"
+            title="{f:translate(key: 'backendLoginHistory_user_show', arguments: '{0: backendUser.username}')}"
+            icon="actions-document-view"/>
+
+        <f:if condition="{userModuleAccess}">
+            <f:if condition="{backendUser.isDisabled} == 1">
+                <f:then>
+                    <a class="btn btn-default" href="<bu:issueCommand parameters="tce_db.php?&data[be_users][{backendUser.uid}][disable]=0&redirect={redirectUrl}" />"><f:be.buttons.icon icon="actions-edit-unhide" title="unhide"/></a>
+                </f:then>
+                <f:else>
+                    <a class="btn btn-default" href="<bu:issueCommand parameters="tce_db.php?&data[be_users][{backendUser.uid}][disable]=1&redirect={redirectUrl}" />"><f:be.buttons.icon icon="actions-edit-hide" title="hide"/></a>
+                </f:else>
+            </f:if>
+
+            <bu:removeUser backendUser="{backendUser}" />
+        </f:if>
+    </td>
+    <td>
+        <f:if condition="{backendUser.lastLoginDateAndTime}">
+            <f:then>
+                <f:format.date format="{dateFormat} {timeFormat}">{backendUser.lastLoginDateAndTime}</f:format.date>
+            </f:then>
+            <f:else>
+                <f:translate key="never">Never</f:translate>
+            </f:else>
+        </f:if>
+    </td>
+</tr>
