@@ -74,4 +74,6 @@ if (TYPO3_MODE === 'BE') {
             'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/Backend/LoginHistory.xlf',
         )
     );
+
+    $GLOBALS['TYPO3_CONF_VARS']['BE']['customPermOptions'][$mainModule . '_group_permissions'] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Serfhos\\MyUserManagement\\Domain\\DataTransferObject\\BackendUserGroupPermission');
 }
