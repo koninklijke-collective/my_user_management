@@ -10,6 +10,11 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
 {
 
     /**
+     * @var string
+     */
+    const TABLE = 'be_users';
+
+    /**
      * @var array
      */
     protected $defaultOrderings = array(

@@ -10,6 +10,11 @@ class FileMountRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FileMount
 {
 
     /**
+     * @var string
+     */
+    const TABLE = 'sys_filemounts';
+
+    /**
      * @var array
      */
     protected $defaultOrderings = array(

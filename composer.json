@@ -28,7 +28,5 @@
             "email": "benjamin@serfhos.com",
             "homepage": "http://serfhos.com"
         }
-    ],
-
-    "minimum-stability": "dev"
+    ]
 }

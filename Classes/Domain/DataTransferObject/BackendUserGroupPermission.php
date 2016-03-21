@@ -9,6 +9,8 @@ namespace Serfhos\MyUserManagement\Domain\DataTransferObject;
 class BackendUserGroupPermission implements \ArrayAccess
 {
 
+    const KEY = 'my_user_management_group_permissions';
+
     /**
      * @var array
      */
@@ -29,15 +31,14 @@ class BackendUserGroupPermission implements \ArrayAccess
     {
         if ($this->data === null) {
             $this->data = array(
-                'header' => '',
+                'header' => 'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backendAccessGroupsPerGroup',
                 'items' => array(),
             );
             $groups = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecordsByField('be_groups', 'hide_in_lists', 0);
-            $icon = \TYPO3\CMS\Backend\Utility\IconUtility::getIcon('be_groups');
             foreach ((array) $groups as $group) {
                 $this->data['items'][$group['uid']] = array(
                     $group['title'],
-                    $icon,
+                    'EXT:my_user_management/Resources/Public/Icons/table-user-group-backend.svg',
                     $group['description'],
                 );
             }
