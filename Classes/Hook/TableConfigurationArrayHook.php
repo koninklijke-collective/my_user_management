@@ -2,6 +2,7 @@
 namespace Serfhos\MyUserManagement\Hook;
 
 use Serfhos\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Hook: TCA Manipulation
@@ -15,18 +16,28 @@ class TableConfigurationArrayHook implements \TYPO3\CMS\Core\SingletonInterface
      * Filter configured backend user groups based on Custom Options
      *
      * @param array $parameters
-     * @param \TYPO3\CMS\Backend\Form\DataPreprocessor $reference
      * @return void
      */
-    public function filterConfiguredBackendGroups($parameters, $reference)
+    public function filterConfiguredBackendGroups($parameters)
     {
-        // Only change items when inside form engine & non-admin
-        if (($reference instanceof \TYPO3\CMS\Backend\Form\FormEngine) && $this->getBackendUserAuthentication()->isAdmin() === false) {
+        // Only change items when non-admin
+        if ($this->getBackendUserAuthentication()->isAdmin() === false && !empty($parameters['items'])) {
+            $selectedItems = GeneralUtility::trimExplode(',', $parameters['row'][$parameters['field']], true);
             $items = array();
             foreach ((array) $parameters['items'] as $item) {
                 list(, $uid) = $item;
+                // Is it configured for the user?
                 if ($this->getBackendUserAuthentication()->check('custom_options', BackendUserGroupPermission::KEY . ':' . (int) $uid)) {
                     $items[] = $item;
+                } elseif (in_array($uid, $selectedItems)) {
+                    // If its one of the already selected and we don't have access. We still need to show it or the user
+                    // can unconsciously remove the group.
+                    // @TODO The user can still delete the group. Hook DataHandler should prevent this.
+                    $items[] = array(
+                        '_hidden_ ' . $item[0],
+                        $item[1],
+                        $item[2]
+                    );
                 }
             }
 

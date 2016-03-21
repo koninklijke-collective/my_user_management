@@ -13,6 +13,12 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
 {
 
     /**
+     * @var \Serfhos\MyUserManagement\Domain\Repository\BackendUserGroupRepository
+     * @inject
+     */
+    protected $backendUserGroupRepository;
+
+    /**
      * Set up the view template configuration correctly for BackendTemplateView
      *
      * @param ViewInterface $view

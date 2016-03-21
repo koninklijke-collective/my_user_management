@@ -1,6 +1,8 @@
 <?php
 namespace Serfhos\MyUserManagement\Domain\DataTransferObject;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * DTO: Permission access Backend User Groups
  *
@@ -9,6 +11,9 @@ namespace Serfhos\MyUserManagement\Domain\DataTransferObject;
 class BackendUserGroupPermission implements \ArrayAccess
 {
 
+    /**
+     * @var string
+     */
     const KEY = 'my_user_management_group_permissions';
 
     /**
@@ -96,6 +101,26 @@ class BackendUserGroupPermission implements \ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->data[$offset]);
+    }
+
+    /**
+     * Get configured options based on current backend user
+     *
+     * @return array
+     */
+    public static function configured()
+    {
+        $configured = array();
+        $backendUser = $GLOBALS['BE_USER'];
+        if ($backendUser instanceof \TYPO3\CMS\Core\Authentication\BackendUserAuthentication) {
+            $options = $backendUser->groupData['custom_options'];
+            foreach (GeneralUtility::trimExplode(',', $options, true) as $value) {
+                if (strpos($value, static::KEY) === 0) {
+                    $configured[] = (int) substr($value, strlen(static::KEY) + 1);
+                }
+            }
+        }
+        return $configured;
     }
 
 }
