@@ -1,6 +1,7 @@
 <?php
 namespace Serfhos\MyUserManagement\Controller;
 
+use Serfhos\MyUserManagement\Domain\Repository\FileMountRepository;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -28,6 +29,14 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
      */
     public function indexAction()
     {
+        if ($this->getBackendUserAuthentication()->check('tables_modify', FileMountRepository::TABLE) === false) {
+            $this->addFlashMessage(
+                $this->translate('access_users_table_not_allowed_description', array(FileMountRepository::TABLE)),
+                $this->translate('access_users_table_not_allowed_title'),
+                AbstractMessage::ERROR
+            );
+        }
+
         $this->view->assign(
             'returnUrl',
             rawurlencode(BackendUtility::getModuleUrl('myusermanagement_MyUserManagementFilemountadmin'))
@@ -63,6 +72,14 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
             );
         }
         return ($label) ? $label : $key;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected function getBackendUserAuthentication()
+    {
+        return $GLOBALS['BE_USER'];
     }
 
 }
