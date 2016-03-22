@@ -79,9 +79,13 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
      * @param $query \TYPO3\CMS\Extbase\Persistence\QueryInterface
      * @return \TYPO3\CMS\Extbase\Persistence\QueryInterface
      */
-    protected function applyUserGroupPermission($query)
+    public function applyUserGroupPermission($query)
     {
         if ($this->getBackendUserAuthentication()->isAdmin() === false) {
+            $constraints = array(
+                $query->getConstraint(),
+                $query->logicalNot($query->like('username', '_cli_%')),
+            );
             $allowed = \Serfhos\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::userAllowed();
             if (!empty($allowed)) {
                 $allowedConstraints = array(
@@ -97,11 +101,10 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
                         $query->like('usergroup', '%,' . (int) $id . ',%')
                     ));
                 }
-                $query->matching($query->logicalAnd(array(
-                    $query->getConstraint(),
-                    $query->logicalOr($allowedConstraints)
-                )));
+                $constraints[] = $query->logicalOr($allowedConstraints);
             }
+
+            $query->matching($query->logicalAnd($constraints));
         }
 
         return $query;
