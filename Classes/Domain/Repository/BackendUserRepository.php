@@ -22,6 +22,20 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
     );
 
     /**
+     * Override demanded query for filtering by group access
+     */
+    public function findDemanded(\TYPO3\CMS\Beuser\Domain\Model\Demand $demand)
+    {
+        if ($this->getBackendUserAuthentication()->isAdmin() === false) {
+            $query = parent::findDemanded($demand)->getQuery();
+            $this->applyUserGroupPermission($query);
+            return $query->execute();
+        } else {
+            return parent::findDemanded($demand);
+        }
+    }
+
+    /**
      * Find all active backend users
      *
      * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
@@ -33,6 +47,9 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
             $query->equals('deleted', false),
             $query->equals('disable', false)
         )));
+        if ($this->getBackendUserAuthentication()->isAdmin() === false) {
+            $this->applyUserGroupPermission($query);
+        }
         return $query->execute();
     }
 
@@ -50,6 +67,49 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
             $query->equals('disable', false),
             $query->lessThanOrEqual('lastlogin', $lastLoginSince)
         )));
+        if ($this->getBackendUserAuthentication()->isAdmin() === false) {
+            $this->applyUserGroupPermission($query);
+        }
         return $query->execute();
     }
+
+    /**
+     * Apply allowed usergroups based on current logged in user
+     *
+     * @param $query \TYPO3\CMS\Extbase\Persistence\QueryInterface
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryInterface
+     */
+    protected function applyUserGroupPermission($query)
+    {
+        if ($this->getBackendUserAuthentication()->isAdmin() === false) {
+            $allowed = \Serfhos\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::userAllowed();
+            if (!empty($allowed)) {
+                $allowedConstraints = array();
+                foreach ($allowed as $id) {
+                    // @TODO: Refactor for real n:m relations
+                    $allowedConstraints[] = $query->logicalOr(array(
+                        $query->equals('usergroup', (int) $id),
+                        $query->like('usergroup', (int) $id . ',%'),
+                        $query->like('usergroup', '%,' . (int) $id),
+                        $query->like('usergroup', '%,' . (int) $id . ',%')
+                    ));
+                }
+                $query->matching($query->logicalAnd(array(
+                    $query->getConstraint(),
+                    $query->logicalOr($allowedConstraints)
+                )));
+            }
+        }
+
+        return $query;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     */
+    protected function getBackendUserAuthentication()
+    {
+        return $GLOBALS['BE_USER'];
+    }
+
 }

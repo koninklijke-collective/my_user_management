@@ -52,6 +52,27 @@ class BackendUserGroupPermission implements \ArrayAccess
     }
 
     /**
+     * Get configured options based on current backend user
+     *
+     * @return array
+     */
+    public static function userAllowed()
+    {
+        $configured = array();
+        $backendUser = $GLOBALS['BE_USER'];
+        // Only return allowed users for non-admin
+        if ($backendUser instanceof \TYPO3\CMS\Core\Authentication\BackendUserAuthentication && $backendUser->isAdmin() === false) {
+            $options = $backendUser->groupData['custom_options'];
+            foreach (GeneralUtility::trimExplode(',', $options, true) as $value) {
+                if (strpos($value, static::KEY) === 0) {
+                    $configured[] = (int) substr($value, strlen(static::KEY) + 1);
+                }
+            }
+        }
+        return $configured;
+    }
+
+    /**
      * Whether a offset exists
      *
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php
@@ -101,26 +122,6 @@ class BackendUserGroupPermission implements \ArrayAccess
     public function offsetUnset($offset)
     {
         unset($this->data[$offset]);
-    }
-
-    /**
-     * Get configured options based on current backend user
-     *
-     * @return array
-     */
-    public static function configured()
-    {
-        $configured = array();
-        $backendUser = $GLOBALS['BE_USER'];
-        if ($backendUser instanceof \TYPO3\CMS\Core\Authentication\BackendUserAuthentication) {
-            $options = $backendUser->groupData['custom_options'];
-            foreach (GeneralUtility::trimExplode(',', $options, true) as $value) {
-                if (strpos($value, static::KEY) === 0) {
-                    $configured[] = (int) substr($value, strlen(static::KEY) + 1);
-                }
-            }
-        }
-        return $configured;
     }
 
 }

@@ -35,4 +35,5 @@ class FileMountRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FileMount
         $querySettings->setEnableFieldsToBeIgnored(array('hidden'));
         $this->setDefaultQuerySettings($querySettings);
     }
+
 }

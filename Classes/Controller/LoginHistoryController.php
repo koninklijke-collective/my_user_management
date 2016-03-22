@@ -164,4 +164,5 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
 
         return $hasAccess;
     }
+
 }

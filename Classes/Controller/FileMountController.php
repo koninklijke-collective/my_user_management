@@ -64,4 +64,5 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
         }
         return ($label) ? $label : $key;
     }
+
 }

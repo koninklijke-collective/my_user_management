@@ -76,9 +76,6 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
             'returnUrl',
             rawurlencode(BackendUtility::getModuleUrl('myusermanagement_MyUserManagementUseradmin'))
         );
-        if ($this->getBackendUserAuthentication()->isAdmin() === false) {
-            $this->view->assign('backendUserGroups', array_merge(array(''), $this->backendUserGroupRepository->findAllowed()->toArray()));
-        }
     }
 
     /**
@@ -147,4 +144,5 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
     {
         return $GLOBALS['BE_USER'];
     }
+
 }
