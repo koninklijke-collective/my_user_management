@@ -1,6 +1,7 @@
 <?php
 namespace Serfhos\MyUserManagement\Controller;
 
+use Serfhos\MyUserManagement\Domain\Repository\BackendUserRepository;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Beuser\Domain\Model\Demand;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
@@ -56,6 +57,14 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
      */
     public function indexAction(\TYPO3\CMS\Beuser\Domain\Model\Demand $demand = null)
     {
+        if ($this->getBackendUserAuthentication()->check('tables_modify', BackendUserRepository::TABLE) === false) {
+            $this->addFlashMessage(
+                $this->translate('access_users_table_not_allowed_description', array(BackendUserRepository::TABLE)),
+                $this->translate('access_users_table_not_allowed_title'),
+                AbstractMessage::ERROR
+            );
+        }
+
         if (!$this->getBackendUserAuthentication()->isAdmin()) {
             if ($demand === null) {
                 $demand = $this->moduleData->getDemand();

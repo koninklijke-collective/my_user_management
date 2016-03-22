@@ -168,6 +168,18 @@
             <trans-unit id="backendUserGroupListing">
                 <source>Backend User Group Listing</source>
             </trans-unit>
+            <trans-unit id="backendFileMountOverview_access_users_table_not_allowed_title">
+                <source>Unable to edit!</source>
+            </trans-unit>
+            <trans-unit id="backendFileMountOverview_access_users_table_not_allowed_description">
+                <source>You are not allowed to edit the table "%s".</source>
+            </trans-unit>
+            <trans-unit id="backendUserAdminOverview_access_users_table_not_allowed_title">
+                <source>Unable to edit!</source>
+            </trans-unit>
+            <trans-unit id="backendUserAdminOverview_access_users_table_not_allowed_description">
+                <source>You are not allowed to edit the table "%s".</source>
+            </trans-unit>
             <trans-unit id="backendUserAdminOverview_display_admin_not_allowed_title">
                 <source>Access Denied</source>
             </trans-unit>
