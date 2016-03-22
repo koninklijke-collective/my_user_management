@@ -130,7 +130,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
     {
         if ($user->getIsDisabled() === true) {
             return false;
-        } elseif ($this->getBackendUserAuthentication()->isAdmin() === false && $user->getIsAdministrator()) {
+        } elseif ($this->getBackendUserAuthentication()->isAdmin() === false && $user->getIsAdministrator() === true) {
             // Ignore admins if a non admin is retrieving the information!
             return false;
         } elseif (GeneralUtility::isFirstPartOfStr($user->getUserName(), '_cli_')) {

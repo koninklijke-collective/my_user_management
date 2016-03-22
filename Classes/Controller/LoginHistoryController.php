@@ -52,7 +52,7 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
         $parameters = array(
             'page' => $page,
             'itemsPerPage' => 20,
-            'hide-admin' => ($this->getCurrentBackendUserAuthentication()->isAdmin() === false),
+            'hide-admin' => ($this->getBackendUserAuthentication()->isAdmin() === false),
         );
         $logs = $this->getLogService()->findUserLoginActions($parameters);
         if (empty($logs['items'])) {
@@ -144,7 +144,7 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
     /**
      * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
      */
-    protected function getCurrentBackendUserAuthentication()
+    protected function getBackendUserAuthentication()
     {
         return $GLOBALS['BE_USER'];
     }
@@ -159,9 +159,10 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
     {
         $hasAccess = false;
         if (BackendUtility::isModuleSetInTBE_MODULES($moduleName)) {
-            $hasAccess = $this->getCurrentBackendUserAuthentication()->check('modules', $moduleName);;
+            $hasAccess = $this->getBackendUserAuthentication()->check('modules', $moduleName) && $this->getBackendUserAuthentication()->check('tables_modify', \Serfhos\MyUserManagement\Domain\Repository\BackendUserRepository::TABLE);
         }
 
         return $hasAccess;
     }
+
 }

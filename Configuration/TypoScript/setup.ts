@@ -1,3 +1,28 @@
+# Define classes in default extbase config
+config.tx_extbase.persistence.classes {
+    Serfhos\MyUserManagement\Domain\Model\BackendUser < config.tx_extbase.persistence.classes.TYPO3\CMS\Beuser\Domain\Model\BackendUser
+
+    Serfhos\MyUserManagement\Domain\Model\BackendUserGroup < config.tx_extbase.persistence.classes.TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
+    Serfhos\MyUserManagement\Domain\Model\BackendUserGroup {
+        mapping {
+            columns {
+                db_mountpoints.mapOnProperty = dbMountPoints
+                hidden.mapOnProperty = isDisabled
+            }
+        }
+    }
+
+    Serfhos\MyUserManagement\Domain\Model\FileMount < config.tx_extbase.persistence.classes.TYPO3\CMS\Extbase\Domain\Model\FileMount
+    Serfhos\MyUserManagement\Domain\Model\FileMount {
+        mapping {
+            columns {
+                base.mapOnProperty = storage
+                hidden.mapOnProperty = isDisabled
+            }
+        }
+    }
+}
+
 # Module configuration
 module.tx_myusermanagement {
     view {
@@ -14,33 +39,6 @@ module.tx_myusermanagement {
         layoutRootPaths {
             10 = EXT:beuser/Resources/Private/Layouts
             20 = EXT:my_user_management/Resources/Private/Layouts
-        }
-    }
-
-    persistence {
-        storagePid = 0
-        classes {
-            Serfhos\MyUserManagement\Domain\Model\BackendUser < config.tx_extbase.persistence.classes.TYPO3\CMS\Beuser\Domain\Model\BackendUser
-
-            Serfhos\MyUserManagement\Domain\Model\BackendUserGroup < config.tx_extbase.persistence.classes.TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
-            Serfhos\MyUserManagement\Domain\Model\BackendUserGroup {
-                mapping {
-                    columns {
-                        db_mountpoints.mapOnProperty = dbMountPoints
-                        hidden.mapOnProperty = isDisabled
-                    }
-                }
-            }
-
-            Serfhos\MyUserManagement\Domain\Model\FileMount < config.tx_extbase.persistence.classes.TYPO3\CMS\Extbase\Domain\Model\FileMount
-            Serfhos\MyUserManagement\Domain\Model\FileMount {
-                mapping {
-                    columns {
-                        base.mapOnProperty = storage
-                        hidden.mapOnProperty = isDisabled
-                    }
-                }
-            }
         }
     }
 

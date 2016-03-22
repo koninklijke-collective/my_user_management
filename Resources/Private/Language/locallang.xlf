@@ -3,6 +3,9 @@
     <file t3:id="1415814783" source-language="en" datatype="plaintext" original="messages" date="2012-07-16T10:11:32Z" product-name="beuser">
         <header/>
         <body>
+            <trans-unit id="backendAccessGroupsPerGroup">
+                <source>Backend User Management: Allowed backend groups for maintenance</source>
+            </trans-unit>
             <trans-unit id="activeSessions">
                 <source>Active Sessions</source>
             </trans-unit>
@@ -170,6 +173,12 @@
             </trans-unit>
             <trans-unit id="backendUserAdminOverview_display_admin_not_allowed_description">
                 <source>You are not allowed to display admin users.</source>
+            </trans-unit>
+            <trans-unit id="backendUserAdminOverview_switch_user_not_found_title">
+                <source>No user found</source>
+            </trans-unit>
+            <trans-unit id="backendUserAdminOverview_switch_user_not_found_description">
+                <source>You are trying to do stuff that you are not allowed to do.</source>
             </trans-unit>
             <trans-unit id="backendUserAdminOverview_admin_switch_not_allowed_title">
                 <source>Access Denied</source>

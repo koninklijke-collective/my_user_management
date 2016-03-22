@@ -24,6 +24,12 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
     protected $backendUserRepository;
 
     /**
+     * @var \Serfhos\MyUserManagement\Domain\Repository\BackendUserGroupRepository
+     * @inject
+     */
+    protected $backendUserGroupRepository;
+
+    /**
      * Set up the view template configuration correctly for BackendTemplateView
      *
      * @param ViewInterface $view
@@ -53,7 +59,7 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
         if (!$this->getBackendUserAuthentication()->isAdmin()) {
             if ($demand === null) {
                 $demand = $this->moduleData->getDemand();
-            } elseif ($demand->getUserType() !== DEMAND::USERTYPE_USERONLY) {
+            } elseif ($demand->getUserType() !== Demand::USERTYPE_USERONLY) {
                 $this->addFlashMessage(
                     $this->translate('display_admin_not_allowed_description'),
                     $this->translate('display_admin_not_allowed_title'),
@@ -80,22 +86,34 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
      */
     protected function switchUser($switchUser)
     {
-        $targetUser = BackendUtility::getRecord('be_users', $switchUser);
-        if (is_array($targetUser)) {
-            // Cannot switch to admin user, when current user is not an admin!
-            if ((bool) $targetUser['admin'] === true && !$this->getBackendUserAuthentication()->isAdmin()) {
+        if ($this->getBackendUserAuthentication()->isAdmin()) {
+            parent::switchUser($switchUser);
+        } else {
+            $targetUser = BackendUtility::getRecord('be_users', $switchUser);
+            if (is_array($targetUser)) {
+                // Cannot switch to admin user, when current user is not an admin!
+                if ((bool) $targetUser['admin'] === true) {
+                    $this->addFlashMessage(
+                        $this->translate('admin_switch_not_allowed_description'),
+                        $this->translate('admin_switch_not_allowed_title'),
+                        AbstractMessage::ERROR
+                    );
+
+                    return;
+                }
+
+                // If all is successful, simulate admin functionality
+                $this->getBackendUserAuthentication()->user['admin'] = 1;
+                parent::switchUser($switchUser);
+            } else {
                 $this->addFlashMessage(
-                    $this->translate('admin_switch_not_allowed_description'),
-                    $this->translate('admin_switch_not_allowed_title'),
+                    $this->translate('switch_user_not_found_description'),
+                    $this->translate('switch_user_not_found_title'),
                     AbstractMessage::ERROR
                 );
 
                 return;
             }
-
-            // If all is successful, simulate admin functionality
-            $this->getBackendUserAuthentication()->user['admin'] = 1;
-            parent::switchUser($switchUser);
         }
     }
 
@@ -126,4 +144,5 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
     {
         return $GLOBALS['BE_USER'];
     }
+
 }

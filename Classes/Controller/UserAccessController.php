@@ -70,4 +70,5 @@ class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
         }
         return ($label) ? $label : $key;
     }
+
 }
