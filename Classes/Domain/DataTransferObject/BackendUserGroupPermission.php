@@ -8,7 +8,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package Serfhos\MyUserManagement\Domain\Model\DataTransferObject
  */
-class BackendUserGroupPermission implements \ArrayAccess
+class BackendUserGroupPermission implements \ArrayAccess, \Countable
 {
 
     /**
@@ -124,4 +124,14 @@ class BackendUserGroupPermission implements \ArrayAccess
         unset($this->data[$offset]);
     }
 
+    /**
+     * Count elements of an object
+     *
+     * @link http://php.net/manual/en/countable.count.php
+     * @return integer
+     */
+    public function count()
+    {
+        return count($this->data);
+    }
 }

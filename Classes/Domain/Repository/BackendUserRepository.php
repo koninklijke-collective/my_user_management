@@ -84,7 +84,10 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
         if ($this->getBackendUserAuthentication()->isAdmin() === false) {
             $allowed = \Serfhos\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::userAllowed();
             if (!empty($allowed)) {
-                $allowedConstraints = array();
+                $allowedConstraints = array(
+                    // Always allow current user
+                    $query->equals('uid', $this->getBackendUserAuthentication()->user['uid'])
+                );
                 foreach ($allowed as $id) {
                     // @TODO: Refactor for real n:m relations
                     $allowedConstraints[] = $query->logicalOr(array(
