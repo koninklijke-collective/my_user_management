@@ -4,7 +4,7 @@
 
 ---
 conf.py:
-  copyright: 2013-2015
+  copyright: 2013-2016
   project: MyUserManagement
   version: 2.3.0
   release: 2.3.0

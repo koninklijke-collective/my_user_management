@@ -27,3 +27,9 @@
 .. :border: 0
 .. :name: login-history
 .. :vspace: 50
+
+.. |backend-configuration|      image:: ../Images/backend-configuration.png
+.. :align: center
+.. :border: 0
+.. :name: backend-configuration
+.. :vspace: 50

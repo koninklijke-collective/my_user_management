@@ -11,7 +11,7 @@ Configuration
 
 When the extension is installed you can start configuring the backend.
 
-Configure Backend user
+Configure Backend User
 ^^^^^^^^^^^^^^^^^^^^^^
 
 You need a backend user that have access to the following elements:
@@ -58,3 +58,16 @@ You need a backend user that have access to the following elements:
 |                       | * read_only                                                                   |
 |                       | * base                                                                        |
 +-----------------------+-------------------------------------------------------------------------------+
+
+
+Configure Backend Group
+^^^^^^^^^^^^^^^^^^^^^^^
+
+You can **optionally** define access to specific backend groups.
+
++-------------------------------------------------------------------------------------------------------+
+| Backend User Management: Allowed backend groups for maintenance                                       |
++=======================================================================================================+
+| * Checkbox per group                                                                                  |
+| * A selected group gives the permission to restrict backend groups                                    |
++-------------------------------------------------------------------------------------------------------+

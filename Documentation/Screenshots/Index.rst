@@ -36,11 +36,18 @@ File Mount
 
 |file-mounts|
 
-Adjust filemounts for backend users
+Adjust filemounts for backend users.
 
 Login History
-^^^^^^^^^^
+^^^^^^^^^^^^^
 
 |login-history|
 
-Simple layout for login history per user
+Simple layout for login history per user.
+
+User Group Backend Configuration
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+|backend-configuration|
+
+Configure specific backend group access per group.
