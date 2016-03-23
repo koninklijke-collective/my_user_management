@@ -16,6 +16,10 @@
 
     "version": "2.3.0",
 
+    "require": {
+        "typo3/cms-core": ">=6.2.6,<8.0"
+    },
+
     "autoload": {
         "psr-4": {
             "Serfhos\\MyUserManagement\\": "Classes/"
