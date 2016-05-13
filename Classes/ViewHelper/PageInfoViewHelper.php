@@ -1,10 +1,10 @@
 <?php
-namespace Serfhos\MyUserManagement\ViewHelper;
+namespace KoninklijkeCollective\MyUserManagement\ViewHelper;
 
 /**
  * Retrieve page information
  *
- * @package Serfhos\MyUserManagement\ViewHelpers
+ * @package KoninklijkeCollective\MyUserManagement\ViewHelpers
  */
 class PageInfoViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 {

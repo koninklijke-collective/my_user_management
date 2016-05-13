@@ -1,5 +1,5 @@
 <?php
-namespace Serfhos\MyUserManagement\Controller;
+namespace KoninklijkeCollective\MyUserManagement\Controller;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
@@ -9,18 +9,18 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 /**
  * Controller: LoginHistory
  *
- * @package Serfhos\MyUserManagement\Controller
+ * @package KoninklijkeCollective\MyUserManagement\Controller
  */
 class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
 
     /**
-     * @var \Serfhos\MyUserManagement\Service\LogService
+     * @var \KoninklijkeCollective\MyUserManagement\Service\LogService
      */
     protected $logService;
 
     /**
-     * @var \Serfhos\MyUserManagement\Service\AccessService
+     * @var \KoninklijkeCollective\MyUserManagement\Service\AccessService
      */
     protected $accessService;
 
@@ -84,7 +84,7 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
         }
 
         $user = $this->getAccessService()->findBackendUser($user);
-        if ($user instanceof \Serfhos\MyUserManagement\Domain\Model\BackendUser) {
+        if ($user instanceof \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser) {
             $parameters = array(
                 'user' => $user->getUid(),
             );
@@ -120,23 +120,23 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
     }
 
     /**
-     * @return \Serfhos\MyUserManagement\Service\LogService
+     * @return \KoninklijkeCollective\MyUserManagement\Service\LogService
      */
     protected function getLogService()
     {
         if ($this->logService === null) {
-            $this->logService = $this->objectManager->get('Serfhos\MyUserManagement\Service\LogService');
+            $this->logService = $this->objectManager->get('KoninklijkeCollective\MyUserManagement\Service\LogService');
         }
         return $this->logService;
     }
 
     /**
-     * @return \Serfhos\MyUserManagement\Service\AccessService
+     * @return \KoninklijkeCollective\MyUserManagement\Service\AccessService
      */
     protected function getAccessService()
     {
         if ($this->accessService === null) {
-            $this->accessService = $this->objectManager->get('Serfhos\MyUserManagement\Service\AccessService');
+            $this->accessService = $this->objectManager->get('KoninklijkeCollective\MyUserManagement\Service\AccessService');
         }
         return $this->accessService;
     }
@@ -159,7 +159,7 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
     {
         $hasAccess = false;
         if (BackendUtility::isModuleSetInTBE_MODULES($moduleName)) {
-            $hasAccess = $this->getBackendUserAuthentication()->check('modules', $moduleName) && $this->getBackendUserAuthentication()->check('tables_modify', \Serfhos\MyUserManagement\Domain\Repository\BackendUserRepository::TABLE);
+            $hasAccess = $this->getBackendUserAuthentication()->check('modules', $moduleName) && $this->getBackendUserAuthentication()->check('tables_modify', \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository::TABLE);
         }
 
         return $hasAccess;

@@ -1,7 +1,7 @@
 <?php
-namespace Serfhos\MyUserManagement\Controller;
+namespace KoninklijkeCollective\MyUserManagement\Controller;
 
-use Serfhos\MyUserManagement\Domain\Repository\BackendUserRepository;
+use KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Beuser\Domain\Model\Demand;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
@@ -11,7 +11,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 /**
  * Controller: BackendUser
  *
- * @package Serfhos\MyUserManagement\Controller
+ * @package KoninklijkeCollective\MyUserManagement\Controller
  */
 class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserController
 {
@@ -19,13 +19,13 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
     /**
      * Override generic backend user repository
      *
-     * @var \Serfhos\MyUserManagement\Domain\Repository\BackendUserRepository
+     * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository
      * @inject
      */
     protected $backendUserRepository;
 
     /**
-     * @var \Serfhos\MyUserManagement\Domain\Repository\BackendUserGroupRepository
+     * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository
      * @inject
      */
     protected $backendUserGroupRepository;

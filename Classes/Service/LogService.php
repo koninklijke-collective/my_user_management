@@ -1,10 +1,10 @@
 <?php
-namespace Serfhos\MyUserManagement\Service;
+namespace KoninklijkeCollective\MyUserManagement\Service;
 
 /**
  * Service: Logs
  *
- * @package Serfhos\MyUserManagement\Service
+ * @package KoninklijkeCollective\MyUserManagement\Service
  */
 class LogService implements \TYPO3\CMS\Core\SingletonInterface
 {

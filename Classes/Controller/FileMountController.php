@@ -1,7 +1,7 @@
 <?php
-namespace Serfhos\MyUserManagement\Controller;
+namespace KoninklijkeCollective\MyUserManagement\Controller;
 
-use Serfhos\MyUserManagement\Domain\Repository\FileMountRepository;
+use KoninklijkeCollective\MyUserManagement\Domain\Repository\FileMountRepository;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -9,7 +9,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 /**
  * Controller: FileMount
  *
- * @package Serfhos\MyUserManagement\Controller
+ * @package KoninklijkeCollective\MyUserManagement\Controller
  */
 class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
@@ -17,7 +17,7 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
     /**
      * The fileMountRepository
      *
-     * @var \Serfhos\MyUserManagement\Domain\Repository\FileMountRepository
+     * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\FileMountRepository
      * @inject
      */
     protected $fileMountRepository;

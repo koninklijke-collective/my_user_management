@@ -9,7 +9,7 @@ $GLOBALS['TCA']['be_users']['ctrl']['security']['ignoreRootLevelRestriction'] = 
 $GLOBALS['TCA']['be_users']['ctrl']['security']['ignoreWebMountRestriction'] = 1;
 
 // Make sure user only shows configured groups
-$GLOBALS['TCA']['be_users']['columns']['usergroup']['config']['itemsProcFunc'] = 'Serfhos\\MyUserManagement\\Hook\\TableConfigurationArrayHook->filterConfiguredBackendGroups';
+$GLOBALS['TCA']['be_users']['columns']['usergroup']['config']['itemsProcFunc'] = 'KoninklijkeCollective\\MyUserManagement\\Hook\\TableConfigurationArrayHook->filterConfiguredBackendGroups';
 
 // Make all fields to exclude for users
 foreach ($GLOBALS['TCA']['be_users']['columns'] as $key => &$configuration) {

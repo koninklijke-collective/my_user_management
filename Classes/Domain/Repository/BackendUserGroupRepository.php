@@ -1,12 +1,12 @@
 <?php
-namespace Serfhos\MyUserManagement\Domain\Repository;
+namespace KoninklijkeCollective\MyUserManagement\Domain\Repository;
 
-use Serfhos\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission;
+use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission;
 
 /**
  * Repository: BackendUserGroup
  *
- * @package Serfhos\MyUserManagement\Domain\Repository
+ * @package KoninklijkeCollective\MyUserManagement\Domain\Repository
  */
 class BackendUserGroupRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendUserGroupRepository
 {

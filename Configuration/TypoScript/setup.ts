@@ -1,9 +1,9 @@
 # Define classes in default extbase config
 config.tx_extbase.persistence.classes {
-    Serfhos\MyUserManagement\Domain\Model\BackendUser < config.tx_extbase.persistence.classes.TYPO3\CMS\Beuser\Domain\Model\BackendUser
+    KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser < config.tx_extbase.persistence.classes.TYPO3\CMS\Beuser\Domain\Model\BackendUser
 
-    Serfhos\MyUserManagement\Domain\Model\BackendUserGroup < config.tx_extbase.persistence.classes.TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
-    Serfhos\MyUserManagement\Domain\Model\BackendUserGroup {
+    KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup < config.tx_extbase.persistence.classes.TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
+    KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup {
         mapping {
             columns {
                 db_mountpoints.mapOnProperty = dbMountPoints
@@ -12,8 +12,8 @@ config.tx_extbase.persistence.classes {
         }
     }
 
-    Serfhos\MyUserManagement\Domain\Model\FileMount < config.tx_extbase.persistence.classes.TYPO3\CMS\Extbase\Domain\Model\FileMount
-    Serfhos\MyUserManagement\Domain\Model\FileMount {
+    KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount < config.tx_extbase.persistence.classes.TYPO3\CMS\Extbase\Domain\Model\FileMount
+    KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount {
         mapping {
             columns {
                 base.mapOnProperty = storage

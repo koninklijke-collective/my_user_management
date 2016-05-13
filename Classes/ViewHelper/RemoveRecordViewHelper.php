@@ -1,5 +1,5 @@
 <?php
-namespace Serfhos\MyUserManagement\ViewHelper;
+namespace KoninklijkeCollective\MyUserManagement\ViewHelper;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
