@@ -12,11 +12,6 @@ class BackendUserGroupRepository extends \TYPO3\CMS\Beuser\Domain\Repository\Bac
 {
 
     /**
-     * @var string
-     */
-    const TABLE = 'be_groups';
-
-    /**
      * Returns all allowed objects of this repository
      *
      * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface

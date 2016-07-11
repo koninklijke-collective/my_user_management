@@ -1,7 +1,8 @@
 <?php
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
-use KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository;
+use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
+use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Beuser\Domain\Model\Demand;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
@@ -25,6 +26,11 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
     protected $backendUserRepository;
 
     /**
+     * @var \KoninklijkeCollective\MyUserManagement\Service\AccessService
+     */
+    protected $accessService;
+
+    /**
      * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository
      * @inject
      */
@@ -40,11 +46,28 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
     {
         if (class_exists('\TYPO3\CMS\Backend\View\BackendTemplateView') && ($view instanceof \TYPO3\CMS\Backend\View\BackendTemplateView)) {
             /** @var \TYPO3\CMS\Fluid\View\TemplateView $_view */
-            $_view = $this->objectManager->get('TYPO3\CMS\Fluid\View\TemplateView');
+            $_view = $this->objectManager->get(\TYPO3\CMS\Fluid\View\TemplateView::class);
             $this->setViewConfiguration($_view);
             $view->injectTemplateView($_view);
         } else {
             parent::setViewConfiguration($view);
+        }
+    }
+
+    /**
+     * Override menu generation for non-admin views
+     *
+     * @return void
+     */
+    protected function generateMenu()
+    {
+        if ($this->getAccessService()->generateMenu(
+                $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry(),
+                $this->uriBuilder->reset(),
+                $this->request
+            ) === false
+        ) {
+            parent::generateMenu();
         }
     }
 
@@ -57,9 +80,9 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
      */
     public function indexAction(\TYPO3\CMS\Beuser\Domain\Model\Demand $demand = null)
     {
-        if ($this->getBackendUserAuthentication()->check('tables_modify', BackendUserRepository::TABLE) === false) {
+        if (AccessUtility::beUserHasRightToEditTable(BackendUser::TABLE) === false) {
             $this->addFlashMessage(
-                $this->translate('access_users_table_not_allowed_description', array(BackendUserRepository::TABLE)),
+                $this->translate('access_users_table_not_allowed_description', [BackendUser::TABLE]),
                 $this->translate('access_users_table_not_allowed_title'),
                 AbstractMessage::ERROR
             );
@@ -133,7 +156,7 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
      * @param array $arguments
      * @return string
      */
-    protected function translate($key, $arguments = array())
+    protected function translate($key, $arguments = [])
     {
         $label = null;
         if (!empty($key)) {
@@ -154,4 +177,14 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
         return $GLOBALS['BE_USER'];
     }
 
+    /**
+     * @return \KoninklijkeCollective\MyUserManagement\Service\AccessService
+     */
+    protected function getAccessService()
+    {
+        if ($this->accessService === null) {
+            $this->accessService = $this->objectManager->get(\KoninklijkeCollective\MyUserManagement\Service\AccessService::class);
+        }
+        return $this->accessService;
+    }
 }

@@ -1,8 +1,11 @@
 {namespace um=KoninklijkeCollective\MyUserManagement\ViewHelper}
+{namespace core = TYPO3\CMS\Core\ViewHelpers}
 
 <tr class="db_list_normal">
-    <td class="col-icon">
-        <f:be.buttons.icon title="{log.user_ip}" icon="actions-document-info"/>
+    <td class="col-icon" title="{log.user_ip}">
+        <span title="{log.user_ip}">
+            <core:icon identifier="status-user-backend" overlay="overlay-info"/>
+        </span>
     </td>
     <td class="col-title">
         <strong>{log.user_login}</strong>
@@ -12,11 +15,10 @@
     </td>
     <td class="col-control">
         <div class="btn-group" role="group">
-            <f:be.buttons.icon
-                additionalAttributes="{class: 'btn btn-default'}"
-                uri="{f:uri.action(action: 'detail', arguments: '{user: log.user_id}')}"
-                title="{f:translate(key: 'backendLoginHistory_user_show', arguments: '{0: log.user_login}')}"
-                icon="actions-document-view"/>
+            <f:link.action class="btn btn-default" action="detail" arguments="{user: log.user_id}"
+                title="{f:translate(key: 'backendLoginHistory_user_show', arguments: '{0: log.user_login}')}">
+                <core:icon identifier="actions-document-view"/>
+            </f:link.action>
         </div>
     </td>
 </tr>

@@ -1,9 +1,16 @@
 <?php
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
+use KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount;
 use KoninklijkeCollective\MyUserManagement\Domain\Repository\FileMountRepository;
+use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
+use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Backend\View\BackendTemplateView;
+use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -15,12 +22,58 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
 {
 
     /**
-     * The fileMountRepository
+     * Backend Template Container
      *
+     * @var string
+     */
+    protected $defaultViewObjectName = BackendTemplateView::class;
+
+    /**
      * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\FileMountRepository
-     * @inject
      */
     protected $fileMountRepository;
+
+    /**
+     * Set up the doc header properly here
+     *
+     * @param ViewInterface $view
+     * @return void
+     */
+    protected function initializeView(ViewInterface $view)
+    {
+        if ($view instanceof BackendTemplateView) {
+            $this->registerDocheaderButtons();
+            $view->getModuleTemplate()->setFlashMessageQueue($this->controllerContext->getFlashMessageQueue());
+            $view->getModuleTemplate()->getPageRenderer()->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
+        }
+        parent::initializeView($view);
+    }
+
+    /**
+     * Registers the Icons into the docheader
+     *
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    protected function registerDocheaderButtons()
+    {
+        /** @var ButtonBar $buttonBar */
+        $buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
+        if ($this->request->getControllerName() === 'FileMount') {
+            if ($this->request->getControllerActionName() === 'index') {
+                $returnUrl = rawurlencode(BackendUtility::getModuleUrl('myusermanagement_MyUserManagementFilemountadmin'));
+                $parameters = GeneralUtility::explodeUrl2Array('edit[sys_filemounts][0]=new&returnUrl=' . $returnUrl);
+                $addUserLink = BackendUtility::getModuleUrl('record_edit', $parameters);
+                $title = $this->translate('file_mount_add_new');
+                $icon = $this->view->getModuleTemplate()->getIconFactory()->getIcon('actions-document-new', Icon::SIZE_SMALL);
+                $addUserButton = $buttonBar->makeLinkButton()
+                    ->setHref($addUserLink)
+                    ->setTitle($title)
+                    ->setIcon($icon);
+                $buttonBar->addButton($addUserButton, ButtonBar::BUTTON_POSITION_LEFT);
+            }
+        }
+    }
 
     /**
      * Action: List all file mounts
@@ -29,20 +82,17 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
      */
     public function indexAction()
     {
-        if ($this->getBackendUserAuthentication()->check('tables_modify', FileMountRepository::TABLE) === false) {
+        if (AccessUtility::beUserHasRightToEditTable(FileMount::TABLE) === false) {
             $this->addFlashMessage(
-                $this->translate('access_users_table_not_allowed_description', array(FileMountRepository::TABLE)),
+                $this->translate('access_users_table_not_allowed_description', [FileMount::TABLE]),
                 $this->translate('access_users_table_not_allowed_title'),
                 AbstractMessage::ERROR
             );
         }
 
-        $this->view->assign(
-            'returnUrl',
-            rawurlencode(BackendUtility::getModuleUrl('myusermanagement_MyUserManagementFilemountadmin'))
-        );
+        $this->view->assign('returnUrl', BackendUtility::getModuleUrl('myusermanagement_MyUserManagementFilemountadmin'));
 
-        $fileMounts = $this->fileMountRepository->findAll();
+        $fileMounts = $this->getFileMountRepository()->findAll();
         if (count($fileMounts) === 0) {
             $this->addFlashMessage(
                 $this->translate('empty_description'),
@@ -61,7 +111,7 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
      * @param array $arguments
      * @return string
      */
-    protected function translate($key, $arguments = array())
+    protected function translate($key, $arguments = [])
     {
         $label = null;
         if (!empty($key)) {
@@ -72,6 +122,17 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
             );
         }
         return ($label) ? $label : $key;
+    }
+
+    /**
+     * @return FileMountRepository
+     */
+    protected function getFileMountRepository()
+    {
+        if ($this->fileMountRepository === null) {
+            $this->fileMountRepository = $this->objectManager->get(FileMountRepository::class);
+        }
+        return $this->fileMountRepository;
     }
 
     /**

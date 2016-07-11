@@ -25,14 +25,7 @@ class RemoveRecordViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVi
         $parameters['prErr'] = 1;
         $parameters['uPT'] = 1;
 
-        // Make sure record_edit module is available
-        if (GeneralUtility::compat_version('7.0')) {
-            $url = BackendUtility::getModuleUrl('tce_db', $parameters);
-        } else {
-            $url = 'tce_db.php?' . GeneralUtility::implodeArrayForUrl('', $parameters);
-        }
-
-        return $url . BackendUtility::getUrlToken('tceAction');
+        return BackendUtility::getModuleUrl('tce_db', $parameters);
     }
 
     /**

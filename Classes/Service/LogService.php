@@ -23,7 +23,7 @@ class LogService implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function findUserLoginActions($parameters = null)
     {
-        $whereParts = array(
+        $whereParts = [
             'join' => 'sys_log.`userId` = be_users.uid',
             'enabled' => '(be_users.disable = 0 AND be_users.deleted = 0)',
             'userId' => 'sys_log.`userId` > 0',
@@ -31,7 +31,7 @@ class LogService implements \TYPO3\CMS\Core\SingletonInterface
             'level' => 'sys_log.`level` = 0',
             'type' => 'sys_log.`type` = ' . self::TYPE_LOGGED_IN,
             'action' => 'sys_log.`action` = ' . self::ACTION_LOG_IN,
-        );
+        ];
 
         // Set parameter query parts
         if (!empty($parameters)) {
@@ -44,14 +44,14 @@ class LogService implements \TYPO3\CMS\Core\SingletonInterface
         }
 
         // Set default variables for output
-        $logs = array(
-            'information' => array(
+        $logs = [
+            'information' => [
                 'total' => $this->getDatabaseConnection()->exec_SELECTcountRows('sys_log.uid', 'sys_log, be_users', implode(' AND ', $whereParts)),
                 'itemsPerPage' => null,
                 'page' => 1,
-            ),
-            'items' => array(),
-        );
+            ],
+            'items' => [],
+        ];
         $logs['information']['itemsPerPage'] = $logs['information']['total'];
 
         // Apply pagination
@@ -59,10 +59,10 @@ class LogService implements \TYPO3\CMS\Core\SingletonInterface
         if ((!empty($parameters)) && $parameters['itemsPerPage'] !== null) {
             $logs['information']['itemsPerPage'] = (int) $parameters['itemsPerPage'];
 
-            $limit = array(
+            $limit = [
                 'offset' => 0,
                 'items' => (int) $parameters['itemsPerPage'],
-            );
+            ];
             if ($parameters['page'] !== null) {
                 $logs['information']['page'] = (int) $parameters['page'];
                 $limit['offset'] = $limit['items'] * ((int) $parameters['page'] - 1);
@@ -80,12 +80,12 @@ class LogService implements \TYPO3\CMS\Core\SingletonInterface
         );
         while ($row = $this->getDatabaseConnection()->sql_fetch_assoc($res)) {
             $data = unserialize($row['log_data']);
-            $logs['items'][] = array(
+            $logs['items'][] = [
                 'user_id' => $row['userid'],
                 'user_login' => $data[0],
                 'user_ip' => $row['IP'],
                 'tstamp' => $row['tstamp'],
-            );
+            ];
         }
         return $logs;
     }

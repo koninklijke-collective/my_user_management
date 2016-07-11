@@ -12,14 +12,19 @@ class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
 {
 
     /**
-     * @var array
+     * @var string
      */
-    protected $inheritedMountPoints = array();
+    const TABLE = 'be_users';
 
     /**
      * @var array
      */
-    protected $activeMountPoints = array();
+    protected $inheritedMountPoints = [];
+
+    /**
+     * @var array
+     */
+    protected $activeMountPoints = [];
 
     /**
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup>

@@ -11,6 +11,11 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 {
 
     /**
+     * @var string
+     */
+    const TABLE = 'sys_filemounts';
+
+    /**
      * Title of the file mount.
      *
      * @var string

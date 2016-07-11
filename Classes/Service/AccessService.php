@@ -3,6 +3,7 @@ namespace KoninklijkeCollective\MyUserManagement\Service;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
+use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -30,7 +31,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
     public function findUsersWithPageAccess($page)
     {
         $rootLine = BackendUtility::BEgetRootLine($page);
-        $rootLineIds = array();
+        $rootLineIds = [];
         foreach ($rootLine as $page) {
             $rootLineIds[] = (int) $page['uid'];
         }
@@ -45,7 +46,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function findAllBackendUsers()
     {
-        $returnedUsers = array();
+        $returnedUsers = [];
         $users = $this->backendUserRepository->findAllActive();
 
         foreach ($users as $user) {
@@ -73,7 +74,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function findAllInactiveBackendUsers()
     {
-        $returnedUsers = array();
+        $returnedUsers = [];
         $loginSince = new \DateTime('- 6 months');
         $users = $this->backendUserRepository->findAllInactive($loginSince);
 
@@ -146,7 +147,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
      * @param array $mounts
      * @return array
      */
-    protected function getAllDatabaseMountsFromUserGroup(BackendUserGroup $group, array $mounts = array())
+    protected function getAllDatabaseMountsFromUserGroup(BackendUserGroup $group, array $mounts = [])
     {
         $dbMounts = $group->getDbMountPoints();
         if (is_array($dbMounts)) {
@@ -167,7 +168,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function findAllowedUsersInRootLine($rootLine)
     {
-        $returnedUsers = array();
+        $returnedUsers = [];
         $users = $this->findAllBackendUsers();
         foreach ($users as $user) {
             if ($user instanceof BackendUser) {
@@ -185,10 +186,75 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
     }
 
     /**
+     * Generate menu for non-admin views
+     *
+     * @param \TYPO3\CMS\Backend\Template\Components\MenuRegistry $menuRegistry
+     * @param \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder
+     * @param \TYPO3\CMS\Extbase\Mvc\Request $request
+     * @return bool
+     */
+    public function generateMenu(
+        \TYPO3\CMS\Backend\Template\Components\MenuRegistry $menuRegistry,
+        \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder,
+        \TYPO3\CMS\Extbase\Mvc\Request $request
+    ) {
+        if ($this->getBackendUserAuthentication()->isAdmin() === false) {
+            $menuItems = [];
+            if (AccessUtility::beUserHasRightToEditTable(BackendUser::TABLE)) {
+                $menuItems['index'] = [
+                    'controller' => 'BackendUser',
+                    'action' => 'index',
+                    'label' => $this->getLanguageService()->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:backendUsers')
+                ];
+            }
+
+            if (AccessUtility::beUserHasRightToEditTable(BackendUserGroup::TABLE)) {
+                $menuItems['pages'] = [
+                    'controller' => 'BackendUserGroup',
+                    'action' => 'index',
+                    'label' => $this->getLanguageService()->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:backendUserGroupsMenu')
+                ];
+            }
+            if (!empty($menuItems)) {
+                $uriBuilder->setRequest($request);
+
+                $menu = $menuRegistry->makeMenu();
+                $menu->setIdentifier('BackendUserModuleMenu');
+
+                foreach ($menuItems as $menuItemConfig) {
+                    if ($request->getControllerName() === $menuItemConfig['controller']) {
+                        $isActive = $request->getControllerActionName() === $menuItemConfig['action'] ? true : false;
+                    } else {
+                        $isActive = false;
+                    }
+                    $menuItem = $menu->makeMenuItem()
+                        ->setTitle($menuItemConfig['label'])
+                        ->setHref($uriBuilder->reset()->uriFor($menuItemConfig['action'], [], $menuItemConfig['controller']))
+                        ->setActive($isActive);
+                    $menu->addMenuItem($menuItem);
+                }
+
+                $menuRegistry->addMenu($menu);
+            }
+
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
      */
     protected function getBackendUserAuthentication()
     {
         return $GLOBALS['BE_USER'];
+    }
+
+    /**
+     * @return \TYPO3\CMS\Lang\LanguageService
+     */
+    protected function getLanguageService()
+    {
+        return $GLOBALS['LANG'];
     }
 }

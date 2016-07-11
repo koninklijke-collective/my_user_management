@@ -1,36 +1,44 @@
 {namespace bu = TYPO3\CMS\Beuser\ViewHelpers}
+{namespace core = TYPO3\CMS\Core\ViewHelpers}
 
 <tr class="db_list_normal">
     <td class="col-icon">
         <a href="#" onClick="Clickmenu.show('be_users', '{backendUser.uid}', '1', '', '', ''); return false;" title="id={backendUser.uid}">
-            <bu:spriteIconForRecord table="be_users" object="{backendUser}" />
+            <bu:spriteIconForRecord table="be_users" object="{backendUser}"/>
         </a>
     </td>
     <td class="t3-title-column">
-        <a href="alt_doc.php?edit[be_users][{backendUser.uid}]=edit&returnUrl={returnUrl}">
-            <b>{backendUser.userName}</b><br />
+        <a href="{bu:editRecord(parameters: 'edit[be_users][{backendUser.uid}]=edit&returnUrl={returnUrl -> f:format.urlencode()}')}">
+            <b>{backendUser.userName}</b><br/>
             {backendUser.realName}
         </a>
     </td>
-    <td>
-        <f:be.buttons.icon
-            additionalAttributes="{class: 'btn btn-default'}"
-            uri="{f:uri.action(action: 'detail', arguments: '{user: backendUser.uid}')}"
-            title="{f:translate(key: 'backendLoginHistory_user_show', arguments: '{0: backendUser.username}')}"
-            icon="actions-document-view"/>
+    <td class="col-control">
+        <div class="btn-group" role="group">
+            <f:link.action class="btn btn-default" arguments="{user: backendUser.uid}"
+                title="{f:translate(key: 'backendLoginHistory_user_show', arguments: '{0: backendUser.username}')}">
+                <core:icon identifier="actions-document-view"/>
+            </f:link.action>
 
-        <f:if condition="{userModuleAccess}">
-            <f:if condition="{backendUser.isDisabled} == 1">
-                <f:then>
-                    <a class="btn btn-default" href="<bu:issueCommand parameters="tce_db.php?&data[be_users][{backendUser.uid}][disable]=0&redirect={redirectUrl}" />"><f:be.buttons.icon icon="actions-edit-unhide" title="unhide"/></a>
-                </f:then>
-                <f:else>
-                    <a class="btn btn-default" href="<bu:issueCommand parameters="tce_db.php?&data[be_users][{backendUser.uid}][disable]=1&redirect={redirectUrl}" />"><f:be.buttons.icon icon="actions-edit-hide" title="hide"/></a>
-                </f:else>
+            <f:if condition="{userModuleAccess}">
+                <f:if condition="{backendUser.isDisabled} == 1">
+                    <f:then>
+                        <a class="btn btn-default" href="{bu:issueCommand(parameters: 'data[be_users][{backendUser.uid}][disable]=0', redirectUrl: redirectUrl)}"
+                            title="{f:translate(key:'visibility.unhide')}">
+                            <core:icon identifier="actions-edit-unhide"/>
+                        </a>
+                    </f:then>
+                    <f:else>
+                        <a class="btn btn-default" href="{bu:issueCommand(parameters: 'data[be_users][{backendUser.uid}][disable]=1', redirectUrl: redirectUrl)}"
+                            title="{f:translate(key:'visibility.hide')}">
+                            <core:icon identifier="actions-edit-hide"/>
+                        </a>
+                    </f:else>
+                </f:if>
+
+                <bu:removeUser backendUser="{backendUser}"/>
             </f:if>
-
-            <bu:removeUser backendUser="{backendUser}" />
-        </f:if>
+        </div>
     </td>
     <td>
         <f:if condition="{backendUser.lastLoginDateAndTime}">

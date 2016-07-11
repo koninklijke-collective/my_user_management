@@ -35,17 +35,17 @@ class BackendUserGroupPermission implements \ArrayAccess, \Countable
     protected function initializeData()
     {
         if ($this->data === null) {
-            $this->data = array(
+            $this->data = [
                 'header' => 'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backendAccessGroupsPerGroup',
-                'items' => array(),
-            );
+                'items' => [],
+            ];
             $groups = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecordsByField('be_groups', 'hide_in_lists', 0);
             foreach ((array) $groups as $group) {
-                $this->data['items'][$group['uid']] = array(
+                $this->data['items'][$group['uid']] = [
                     $group['title'],
                     'EXT:my_user_management/Resources/Public/Icons/table-user-group-backend.svg',
                     $group['description'],
-                );
+                ];
             }
         }
         return $this->data;
@@ -58,7 +58,7 @@ class BackendUserGroupPermission implements \ArrayAccess, \Countable
      */
     public static function userAllowed()
     {
-        $configured = array();
+        $configured = [];
         $backendUser = $GLOBALS['BE_USER'];
         // Only return allowed users for non-admin
         if ($backendUser instanceof \TYPO3\CMS\Core\Authentication\BackendUserAuthentication && $backendUser->isAdmin() === false) {
