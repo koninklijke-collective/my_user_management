@@ -1,21 +1,21 @@
 <?php
-namespace Serfhos\MyUserManagement\Service;
+namespace KoninklijkeCollective\MyUserManagement\Service;
 
-use Serfhos\MyUserManagement\Domain\Model\BackendUser;
-use Serfhos\MyUserManagement\Domain\Model\BackendUserGroup;
+use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
+use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Service: Access Look up
  *
- * @package Serfhos\MyUserManagement\Service
+ * @package KoninklijkeCollective\MyUserManagement\Service
  */
 class AccessService implements \TYPO3\CMS\Core\SingletonInterface
 {
 
     /**
-     * @var \Serfhos\MyUserManagement\Domain\Repository\BackendUserRepository
+     * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository
      * @inject
      */
     protected $backendUserRepository;
@@ -142,7 +142,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
     }
 
     /**
-     * @param \Serfhos\MyUserManagement\Domain\Model\BackendUserGroup $group
+     * @param \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup $group
      * @param array $mounts
      * @return array
      */

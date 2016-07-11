@@ -1,13 +1,13 @@
 <?php
-namespace Serfhos\MyUserManagement\Hook;
+namespace KoninklijkeCollective\MyUserManagement\Hook;
 
-use Serfhos\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission;
+use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Hook: TCA Manipulation
  *
- * @package Serfhos\MyUserManagement\Hook
+ * @package KoninklijkeCollective\MyUserManagement\Hook
  */
 class TableConfigurationArrayHook implements \TYPO3\CMS\Core\SingletonInterface
 {

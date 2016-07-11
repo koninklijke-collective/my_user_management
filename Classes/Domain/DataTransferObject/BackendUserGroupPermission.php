@@ -1,12 +1,12 @@
 <?php
-namespace Serfhos\MyUserManagement\Domain\DataTransferObject;
+namespace KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * DTO: Permission access Backend User Groups
  *
- * @package Serfhos\MyUserManagement\Domain\Model\DataTransferObject
+ * @package KoninklijkeCollective\MyUserManagement\Domain\Model\DataTransferObject
  */
 class BackendUserGroupPermission implements \ArrayAccess, \Countable
 {

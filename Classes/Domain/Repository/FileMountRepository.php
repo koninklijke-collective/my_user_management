@@ -1,10 +1,10 @@
 <?php
-namespace Serfhos\MyUserManagement\Domain\Repository;
+namespace KoninklijkeCollective\MyUserManagement\Domain\Repository;
 
 /**
  * Repository: FileMount
  *
- * @package Serfhos\MyUserManagement\Domain\Repository
+ * @package KoninklijkeCollective\MyUserManagement\Domain\Repository
  */
 class FileMountRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FileMountRepository
 {

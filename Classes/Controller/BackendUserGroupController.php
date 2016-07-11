@@ -1,7 +1,7 @@
 <?php
-namespace Serfhos\MyUserManagement\Controller;
+namespace KoninklijkeCollective\MyUserManagement\Controller;
 
-use Serfhos\MyUserManagement\Domain\Repository\BackendUserGroupRepository;
+use KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
@@ -9,13 +9,13 @@ use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 /**
  * Controller: BackendUserGroup
  *
- * @package Serfhos\MyUserManagement\Controller
+ * @package KoninklijkeCollective\MyUserManagement\Controller
  */
 class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUserGroupController
 {
 
     /**
-     * @var \Serfhos\MyUserManagement\Domain\Repository\BackendUserGroupRepository
+     * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository
      * @inject
      */
     protected $backendUserGroupRepository;

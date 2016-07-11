@@ -1,12 +1,12 @@
 <?php
-namespace Serfhos\MyUserManagement\Domain\Model;
+namespace KoninklijkeCollective\MyUserManagement\Domain\Model;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Model for backend user
  *
- * @package Serfhos\MyUserManagement\Domain\Model
+ * @package KoninklijkeCollective\MyUserManagement\Domain\Model
  */
 class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
 {
@@ -22,7 +22,7 @@ class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
     protected $activeMountPoints = array();
 
     /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\Serfhos\MyUserManagement\Domain\Model\BackendUserGroup>
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup>
      */
     protected $backendUserGroups;
 

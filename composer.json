@@ -1,17 +1,19 @@
 {
-    "name": "serfhos/my-user-management",
+    "name": "koninklijke-collective/my-user-management",
     "description": "TYPO3 Extension: A module that makes it possible for editors to maintain backend users.",
     "type": "typo3-cms-extension",
 
     "keywords": [
         "TYPO3",
         "CMS",
+        "Koninklijke Collective",
+        "Collective",
         "Serfhos",
         "Benjamin Serfhos",
         "Extbase",
         "User Management"
     ],
-    "homepage": "https://github.com/bmoex/my_user_management",
+    "homepage": "https://github.com/koninklijke-collective/my_user_management",
     "license": "LGPL-3.0+",
 
     "version": "2.3.0",
@@ -22,7 +24,7 @@
 
     "autoload": {
         "psr-4": {
-            "Serfhos\\MyUserManagement\\": "Classes/"
+            "KoninklijkeCollective\\MyUserManagement\\": "Classes/"
         }
     },
 

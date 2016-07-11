@@ -1,5 +1,5 @@
 <?php
-namespace Serfhos\MyUserManagement\Controller;
+namespace KoninklijkeCollective\MyUserManagement\Controller;
 
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -8,13 +8,13 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 /**
  * Controller: UserAccess
  *
- * @package Serfhos\MyUserManagement\Controller
+ * @package KoninklijkeCollective\MyUserManagement\Controller
  */
 class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
 
     /**
-     * @var \Serfhos\MyUserManagement\Service\AccessService
+     * @var \KoninklijkeCollective\MyUserManagement\Service\AccessService
      * @inject
      */
     protected $accessService;

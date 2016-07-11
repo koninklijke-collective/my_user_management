@@ -1,10 +1,10 @@
 <?php
-namespace Serfhos\MyUserManagement\Domain\Repository;
+namespace KoninklijkeCollective\MyUserManagement\Domain\Repository;
 
 /**
  * Repository: BackendUser
  *
- * @package Serfhos\MyUserManagement\Domain\Repository
+ * @package KoninklijkeCollective\MyUserManagement\Domain\Repository
  */
 class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendUserRepository
 {
@@ -86,7 +86,7 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
                 $query->getConstraint(),
                 $query->logicalNot($query->like('username', '_cli_%')),
             );
-            $allowed = \Serfhos\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::userAllowed();
+            $allowed = \KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::userAllowed();
             if (!empty($allowed)) {
                 $allowedConstraints = array(
                     // Always allow current user

@@ -14,7 +14,7 @@ if (TYPO3_MODE === 'BE') {
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'Serfhos.' . $_EXTKEY,
+        'KoninklijkeCollective.' . $_EXTKEY,
         $mainModule,
         'UserAdmin',
         '',
@@ -30,7 +30,7 @@ if (TYPO3_MODE === 'BE') {
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'Serfhos.' . $_EXTKEY,
+        'KoninklijkeCollective.' . $_EXTKEY,
         $mainModule,
         'UserAccess',
         '',
@@ -46,7 +46,7 @@ if (TYPO3_MODE === 'BE') {
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'Serfhos.' . $_EXTKEY,
+        'KoninklijkeCollective.' . $_EXTKEY,
         $mainModule,
         'FileMountAdmin',
         '',
@@ -61,7 +61,7 @@ if (TYPO3_MODE === 'BE') {
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'Serfhos.' . $_EXTKEY,
+        'KoninklijkeCollective.' . $_EXTKEY,
         $mainModule,
         'LoginHistory',
         '',
@@ -75,5 +75,5 @@ if (TYPO3_MODE === 'BE') {
         )
     );
 
-    $GLOBALS['TYPO3_CONF_VARS']['BE']['customPermOptions'][\Serfhos\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::KEY] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('Serfhos\\MyUserManagement\\Domain\\DataTransferObject\\BackendUserGroupPermission');
+    $GLOBALS['TYPO3_CONF_VARS']['BE']['customPermOptions'][\KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::KEY] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('KoninklijkeCollective\\MyUserManagement\\Domain\\DataTransferObject\\BackendUserGroupPermission');
 }

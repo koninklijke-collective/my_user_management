@@ -1,5 +1,5 @@
 <?php
-namespace Serfhos\MyUserManagement\Domain\Model;
+namespace KoninklijkeCollective\MyUserManagement\Domain\Model;
 
 /**
  * Domain model for file mounts
