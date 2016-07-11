@@ -33,7 +33,7 @@
 
             <um:linkConfirm
                 class="btn btn-default"
-                link="{um:removeRecord(parameters: 'cmd[sys_filemounts][{mount.uid}][delete]=1&redirect={returnUrl}')}"
+                link="{um:removeRecord(parameters: 'cmd[sys_filemounts][{mount.uid}][delete]=1&redirect={returnUrl -> f:format.urlencode()}')}"
                 message="{f:translate(key: 'mount_confirm_delete', arguments: '{0: mount.title, 1: mount.uid}')}"
                 title="{f:translate(key: 'mount_action_delete')}"/>
         </div>

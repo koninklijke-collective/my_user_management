@@ -22,9 +22,9 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
     protected $backendUserGroupRepository;
 
     /**
-     * @var \KoninklijkeCollective\MyUserManagement\Service\AccessService
+     * @var \KoninklijkeCollective\MyUserManagement\Service\OverrideService
      */
-    protected $accessService;
+    protected $overrideService;
 
     /**
      * Override menu generation for non-admin views
@@ -33,14 +33,25 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
      */
     protected function generateMenu()
     {
-        if ($this->getAccessService()->generateMenu(
-                $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry(),
-                $this->uriBuilder->reset(),
-                $this->request
-            ) === false
-        ) {
-            parent::generateMenu();
-        }
+        $this->getOverrideService()->generateMenu(
+            $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry(),
+            $this->uriBuilder->reset(),
+            $this->request
+        );
+    }
+
+    /**
+     * Override button generation for non-admin views
+     *
+     * @return void
+     */
+    protected function registerDocheaderButtons()
+    {
+        $this->getOverrideService()->registerDocheaderButtons(
+            $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar(),
+            $this->request,
+            $this->view->getModuleTemplate()->getIconFactory()
+        );
     }
 
     /**
@@ -118,14 +129,14 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
     }
 
     /**
-     * @return \KoninklijkeCollective\MyUserManagement\Service\AccessService
+     * @return \KoninklijkeCollective\MyUserManagement\Service\OverrideService
      */
-    protected function getAccessService()
+    protected function getOverrideService()
     {
-        if ($this->accessService === null) {
-            $this->accessService = $this->objectManager->get(\KoninklijkeCollective\MyUserManagement\Service\AccessService::class);
+        if ($this->overrideService === null) {
+            $this->overrideService = $this->objectManager->get(\KoninklijkeCollective\MyUserManagement\Service\OverrideService::class);
         }
-        return $this->accessService;
+        return $this->overrideService;
     }
 
 }
