@@ -16,7 +16,7 @@
     "homepage": "https://github.com/koninklijke-collective/my_user_management",
     "license": "LGPL-3.0+",
 
-    "version": "2.3.0",
+    "version": "3.0.0",
 
     "require": {
         "typo3/cms-core": ">=6.2.6,<9.0"

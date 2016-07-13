@@ -6,6 +6,6 @@
 conf.py:
   copyright: 2013-2016
   project: MyUserManagement
-  version: 2.3.0
-  release: 2.3.0
+  version: 3.0.0
+  release: 3.0.0
 ...
