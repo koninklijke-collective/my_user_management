@@ -19,7 +19,7 @@ class BackendUserGroupRepository extends \TYPO3\CMS\Beuser\Domain\Repository\Bac
     public function findAll()
     {
         $query = $this->createQuery();
-        $allowed = BackendUserGroupPermission::userAllowed();
+        $allowed = BackendUserGroupPermission::configured();
         // Only filter when configured
         if (!empty($allowed)) {
             $query->matching($query->in('uid', $allowed));

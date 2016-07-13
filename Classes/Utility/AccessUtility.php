@@ -1,6 +1,7 @@
 <?php
 namespace KoninklijkeCollective\MyUserManagement\Utility;
 
+use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserActionPermission;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
 use TYPO3\CMS\Extbase\Security\Exception;
@@ -55,20 +56,31 @@ class AccessUtility
      */
     public static function beUserHasRightToAddTable($table = 'be_users')
     {
+        if (static::getBackendUserAuthentication()->isAdmin()) {
+            return true;
+        }
+
         $allowed = false;
         if (static::beUserHasRightToEditTable($table)) {
             $allowed = true;
-
             // @todo, should be configurable
             switch ($table) {
                 case BackendUser::TABLE:
+                    if (BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_ADD_USER) === false) {
+                        return false;
+                    }
+
                     $requiredFields = [
                         'username'
                     ];
                     break;
                 case BackendUserGroup::TABLE:
+                    if (BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_ADD_GROUP) === false) {
+                        return false;
+                    }
+
                     $requiredFields = [
-                        ''
+                        'title',
                     ];
                     break;
                 default:
@@ -83,6 +95,27 @@ class AccessUtility
             }
         }
         return $allowed;
+    }
+
+    /**
+     * Check if user can add table
+     *
+     * @param string $table
+     * @return boolean
+     */
+    public static function beUserHasRightToDeleteTable($table = 'be_users')
+    {
+        if (static::getBackendUserAuthentication()->isAdmin()) {
+            return true;
+        }
+
+        switch ($table) {
+            case BackendUser::TABLE:
+                return BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_DELETE_USER);
+            case BackendUserGroup::TABLE:
+                return BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_DELETE_GROUP);
+        }
+        return false;
     }
 
     /**

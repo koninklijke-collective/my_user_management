@@ -17,7 +17,7 @@ call_user_func(function ($extKey, $mainModule) {
             $mainModule,
             '',
             '',
-            null,
+            'EXT:my_user_management/Resources/Private/Modules/Container/',
             [
                 'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/Module.xlf',
                 'iconIdentifier' => 'module-' . $mainModule
@@ -86,6 +86,7 @@ call_user_func(function ($extKey, $mainModule) {
             ]
         );
 
+        $GLOBALS['TYPO3_CONF_VARS']['BE']['customPermOptions'][\KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserActionPermission::KEY] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserActionPermission::class);
         $GLOBALS['TYPO3_CONF_VARS']['BE']['customPermOptions'][\KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::KEY] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::class);
     }
 }, $_EXTKEY, 'myusermanagement');

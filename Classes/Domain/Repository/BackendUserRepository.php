@@ -81,7 +81,7 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
                 $query->getConstraint(),
                 $query->logicalNot($query->like('username', '_cli_%')),
             ];
-            $allowed = \KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::userAllowed();
+            $allowed = \KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::configured();
             if (!empty($allowed)) {
                 $allowedConstraints = [
                     // Always allow current user
