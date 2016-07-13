@@ -43,7 +43,7 @@ class DataHandlerCheckModifyAccessListHook implements DataHandlerCheckModifyAcce
                 }
             } elseif (isset($parent->datamap[$table])) {
                 foreach ($parent->datamap[$table] as $id => $value) {
-                    if (strpos($value, 'NEW') !== false || MathUtility::canBeInterpretedAsInteger($id) === false) {
+                    if (strpos($id, 'NEW') !== false || MathUtility::canBeInterpretedAsInteger($id) === false) {
                         $action = 'insert';
                     } else {
                         $action = 'update';
