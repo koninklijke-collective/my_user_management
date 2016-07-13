@@ -1,8 +1,10 @@
 <?php
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
+use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -14,10 +16,31 @@ class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
 {
 
     /**
+     * Backend Template Container
+     *
+     * @var string
+     */
+    protected $defaultViewObjectName = BackendTemplateView::class;
+
+    /**
      * @var \KoninklijkeCollective\MyUserManagement\Service\AccessService
-     * @inject
      */
     protected $accessService;
+
+    /**
+     * Set up the doc header properly here
+     *
+     * @param ViewInterface $view
+     * @return void
+     */
+    protected function initializeView(ViewInterface $view)
+    {
+        if ($view instanceof BackendTemplateView) {
+            $view->getModuleTemplate()->setFlashMessageQueue($this->controllerContext->getFlashMessageQueue());
+            $view->getModuleTemplate()->getPageRenderer()->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
+        }
+        parent::initializeView($view);
+    }
 
     /**
      * Action: List users
@@ -27,7 +50,7 @@ class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
     public function indexAction()
     {
         $pageId = (int) GeneralUtility::_GP('id');
-        $backendUsers = $this->accessService->findUsersWithPageAccess($pageId);
+        $backendUsers = $this->getAccessService()->findUsersWithPageAccess($pageId);
 
         if ($pageId === 0) {
             $this->addFlashMessage(
@@ -37,17 +60,17 @@ class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
             );
         } elseif (count($backendUsers) === 0) {
             $this->addFlashMessage(
-                $this->translate('empty_description', array($pageId)),
-                $this->translate('empty_title', array($pageId)),
+                $this->translate('empty_description', [$pageId]),
+                $this->translate('empty_title', [$pageId]),
                 AbstractMessage::INFO
             );
         } else {
-            $this->view->assignMultiple(array(
+            $this->view->assignMultiple([
                 'pageId' => $pageId,
                 'backendUsers' => $backendUsers,
                 'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
                 'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
-            ));
+            ]);
         }
     }
 
@@ -58,7 +81,7 @@ class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
      * @param array $arguments
      * @return string
      */
-    protected function translate($key, $arguments = array())
+    protected function translate($key, $arguments = [])
     {
         $label = null;
         if (!empty($key)) {
@@ -69,6 +92,17 @@ class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
             );
         }
         return ($label) ? $label : $key;
+    }
+
+    /**
+     * @return \KoninklijkeCollective\MyUserManagement\Service\AccessService
+     */
+    protected function getAccessService()
+    {
+        if ($this->accessService === null) {
+            $this->accessService = $this->objectManager->get(\KoninklijkeCollective\MyUserManagement\Service\AccessService::class);
+        }
+        return $this->accessService;
     }
 
 }

@@ -1,22 +1,12 @@
-<f:layout name="EmptyBackend"/>
+<f:layout name="Backend"/>
 
-<f:section name="actionMenu"/>
-
-<f:section name="iconButtons">
-    <f:be.buttons.icon
-        additionalAttributes="{class: 'btn btn-default'}"
-        uri="{f:uri.action(action: 'index')}"
-        title="{f:translate(key: 'backendLoginHistory_close')}"
-        icon="actions-document-close"/>
-</f:section>
-
-<f:section name="headline">
+<f:section name="Headline">
     <h1>{user.realName}</h1>
 </f:section>
 
-<f:section name="content">
+<f:section name="Content">
     <f:if condition="{user}">
-        <table class="t3-table">
+        <table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist table table-striped">
             <tbody>
             <tr>
                 <th><strong>Username:</strong></th>

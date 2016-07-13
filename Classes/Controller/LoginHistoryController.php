@@ -1,7 +1,10 @@
 <?php
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
+use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
+use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -15,6 +18,13 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
 {
 
     /**
+     * Backend Template Container
+     *
+     * @var string
+     */
+    protected $defaultViewObjectName = BackendTemplateView::class;
+
+    /**
      * @var \KoninklijkeCollective\MyUserManagement\Service\LogService
      */
     protected $logService;
@@ -25,20 +35,24 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
     protected $accessService;
 
     /**
-     * Initialize generic variables
+     * Set up the doc header properly here
      *
      * @param ViewInterface $view
      * @return void
      */
-    public function initializeView(ViewInterface $view)
+    protected function initializeView(ViewInterface $view)
     {
+        if ($view instanceof BackendTemplateView) {
+            $view->getModuleTemplate()->setFlashMessageQueue($this->controllerContext->getFlashMessageQueue());
+            $view->getModuleTemplate()->getPageRenderer()->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
+        }
+
         parent::initializeView($view);
-        $listUrl = BackendUtility::getModuleUrl('myusermanagement_MyUserManagementLoginhistory');
-        $view->assignMultiple(array(
-            'returnUrl' => rawurlencode($listUrl),
+        $view->assignMultiple([
+            'returnUrl' => BackendUtility::getModuleUrl('myusermanagement_MyUserManagementLoginhistory'),
             'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
             'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
-        ));
+        ]);
     }
 
     /**
@@ -49,11 +63,11 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      */
     public function indexAction($page = 1)
     {
-        $parameters = array(
+        $parameters = [
             'page' => $page,
             'itemsPerPage' => 20,
             'hide-admin' => ($this->getBackendUserAuthentication()->isAdmin() === false),
-        );
+        ];
         $logs = $this->getLogService()->findUserLoginActions($parameters);
         if (empty($logs['items'])) {
             $this->addFlashMessage(
@@ -63,12 +77,12 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
             );
         }
 
-        $this->view->assignMultiple(array(
+        $this->view->assignMultiple([
             'backendUsers' => $this->getAccessService()->findAllBackendUsers(),
             'inactiveUsers' => $this->getAccessService()->findAllInactiveBackendUsers(),
-            'userModuleAccess' => $this->beUserHasRightToSeeModule('myusermanagement_MyUserManagementUseradmin'),
+            'userModuleAccess' => AccessUtility::beUserHasRightToSeeModule('myusermanagement_MyUserManagementUseradmin') && AccessUtility::beUserHasRightToEditTable(BackendUser::TABLE),
             'logs' => $logs,
-        ));
+        ]);
     }
 
     /**
@@ -84,16 +98,16 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
         }
 
         $user = $this->getAccessService()->findBackendUser($user);
-        if ($user instanceof \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser) {
-            $parameters = array(
+        if ($user instanceof BackendUser) {
+            $parameters = [
                 'user' => $user->getUid(),
-            );
+            ];
             $logs = $this->getLogService()->findUserLoginActions($parameters);
 
-            $this->view->assignMultiple(array(
+            $this->view->assignMultiple([
                 'user' => $user,
                 'logs' => $logs,
-            ));
+            ]);
         } else {
             $this->redirect('index');
         }
@@ -106,7 +120,7 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      * @param array $arguments
      * @return string
      */
-    protected function translate($key, $arguments = array())
+    protected function translate($key, $arguments = [])
     {
         $label = null;
         if (!empty($key)) {
@@ -147,22 +161,6 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
     protected function getBackendUserAuthentication()
     {
         return $GLOBALS['BE_USER'];
-    }
-
-    /**
-     * Check if user has access to module
-     *
-     * @param string $moduleName
-     * @return boolean
-     */
-    protected function beUserHasRightToSeeModule($moduleName = 'myusermanagement_module')
-    {
-        $hasAccess = false;
-        if (BackendUtility::isModuleSetInTBE_MODULES($moduleName)) {
-            $hasAccess = $this->getBackendUserAuthentication()->check('modules', $moduleName) && $this->getBackendUserAuthentication()->check('tables_modify', \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository::TABLE);
-        }
-
-        return $hasAccess;
     }
 
 }

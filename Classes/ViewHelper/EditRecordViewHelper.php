@@ -21,12 +21,7 @@ class EditRecordViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractView
      */
     public function render($parameters)
     {
-        // Make sure record_edit module is available
-        if (GeneralUtility::compat_version('7.0')) {
-            $parameters = GeneralUtility::explodeUrl2Array($parameters);
-            return BackendUtility::getModuleUrl('record_edit', $parameters);
-        } else {
-            return 'alt_doc.php?' . $parameters;
-        }
+        $parameters = GeneralUtility::explodeUrl2Array($parameters);
+        return BackendUtility::getModuleUrl('record_edit', $parameters);
     }
 }

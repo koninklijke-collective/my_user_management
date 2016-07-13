@@ -10,16 +10,11 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
 {
 
     /**
-     * @var string
-     */
-    const TABLE = 'be_users';
-
-    /**
      * @var array
      */
-    protected $defaultOrderings = array(
+    protected $defaultOrderings = [
         'username' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
-    );
+    ];
 
     /**
      * Override demanded query for filtering by group access
@@ -43,10 +38,10 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
     public function findAllActive()
     {
         $query = $this->createQuery();
-        $query->matching($query->logicalAnd(array(
+        $query->matching($query->logicalAnd([
             $query->equals('deleted', false),
             $query->equals('disable', false)
-        )));
+        ]));
         if ($this->getBackendUserAuthentication()->isAdmin() === false) {
             $this->applyUserGroupPermission($query);
         }
@@ -62,11 +57,11 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
     public function findAllInactive(\DateTime $lastLoginSince)
     {
         $query = $this->createQuery();
-        $query->matching($query->logicalAnd(array(
+        $query->matching($query->logicalAnd([
             $query->equals('deleted', false),
             $query->equals('disable', false),
             $query->lessThanOrEqual('lastlogin', $lastLoginSince)
-        )));
+        ]));
         if ($this->getBackendUserAuthentication()->isAdmin() === false) {
             $this->applyUserGroupPermission($query);
         }
@@ -82,24 +77,24 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
     public function applyUserGroupPermission($query)
     {
         if ($this->getBackendUserAuthentication()->isAdmin() === false) {
-            $constraints = array(
+            $constraints = [
                 $query->getConstraint(),
                 $query->logicalNot($query->like('username', '_cli_%')),
-            );
-            $allowed = \KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::userAllowed();
+            ];
+            $allowed = \KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::configured();
             if (!empty($allowed)) {
-                $allowedConstraints = array(
+                $allowedConstraints = [
                     // Always allow current user
                     $query->equals('uid', $this->getBackendUserAuthentication()->user['uid'])
-                );
+                ];
                 foreach ($allowed as $id) {
                     // @TODO: Refactor for real n:m relations
-                    $allowedConstraints[] = $query->logicalOr(array(
+                    $allowedConstraints[] = $query->logicalOr([
                         $query->equals('usergroup', (int) $id),
                         $query->like('usergroup', (int) $id . ',%'),
                         $query->like('usergroup', '%,' . (int) $id),
                         $query->like('usergroup', '%,' . (int) $id . ',%')
-                    ));
+                    ]);
                 }
                 $constraints[] = $query->logicalOr($allowedConstraints);
             }

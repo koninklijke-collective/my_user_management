@@ -10,6 +10,11 @@ class PageInfoViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHe
 {
 
     /**
+     * @var boolean
+     */
+    protected $escapeOutput = false;
+
+    /**
      * @var \TYPO3\CMS\Frontend\Page\PageRepository
      * @inject
      */
@@ -24,9 +29,20 @@ class PageInfoViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHe
      */
     public function render($pageId, $as = 'page')
     {
-        $this->templateVariableContainer->add($as, $this->pageRepository->getPage($pageId));
+        $this->templateVariableContainer->add($as, $this->getPageRepository()->getPage($pageId));
         $output = $this->renderChildren();
         $this->templateVariableContainer->remove($as);
         return $output;
+    }
+
+    /**
+     * @return \TYPO3\CMS\Frontend\Page\PageRepository
+     */
+    protected function getPageRepository()
+    {
+        if ($this->pageRepository === null) {
+            $this->objectManager->get(\TYPO3\CMS\Frontend\Page\PageRepository::class);
+        }
+        return $this->pageRepository;
     }
 }

@@ -3,9 +3,6 @@
     <file t3:id="1415814783" source-language="en" datatype="plaintext" original="messages" date="2012-07-16T10:11:32Z" product-name="beuser">
         <header/>
         <body>
-            <trans-unit id="backendAccessGroupsPerGroup">
-                <source>Backend User Management: Allowed backend groups for maintenance</source>
-            </trans-unit>
             <trans-unit id="activeSessions">
                 <source>Active Sessions</source>
             </trans-unit>
@@ -174,6 +171,9 @@
             <trans-unit id="backendFileMountOverview_access_users_table_not_allowed_description">
                 <source>You are not allowed to edit the table "%s".</source>
             </trans-unit>
+            <trans-unit id="backendFileMountOverview_file_mount_add_new">
+                <source>Add new file mount</source>
+            </trans-unit>
             <trans-unit id="backendUserAdminOverview_access_users_table_not_allowed_title">
                 <source>Unable to edit!</source>
             </trans-unit>
@@ -227,6 +227,30 @@
             </trans-unit>
             <trans-unit id="mount_confirm_delete">
                 <source><![CDATA[Are you sure you want to delete this filemount: "%s" (id: %s)]]></source>
+            </trans-unit>
+            <trans-unit id="backend_access_action_permissions">
+                <source>Backend User Management: Allowed actions for maintenance</source>
+            </trans-unit>
+            <trans-unit id="backend_access_action_permissions.action_add_user.title">
+                <source>Add backend user</source>
+            </trans-unit>
+            <trans-unit id="backend_access_action_permissions.action_delete_user.title">
+                <source>Delete backend user</source>
+            </trans-unit>
+            <trans-unit id="backend_access_action_permissions.action_add_group.title">
+                <source>Add backend group</source>
+            </trans-unit>
+            <trans-unit id="backend_access_action_permissions.action_delete_group.title">
+                <source>Delete backend group</source>
+            </trans-unit>
+            <trans-unit id="warning.action.insert.title">
+                <source>Delete backend group</source>
+            </trans-unit>
+            <trans-unit id="warning.action.insert.description">
+                <source>Delete backend group</source>
+            </trans-unit>
+            <trans-unit id="backend_access_group_permissions">
+                <source>Backend User Management: Allowed backend groups for maintenance</source>
             </trans-unit>
             <trans-unit id="backendLoginHistory_inactive_users">
                 <source><![CDATA[Inactive users <small>Last login of 6 months or older</small>]]></source>

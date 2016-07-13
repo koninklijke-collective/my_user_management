@@ -23,7 +23,7 @@ class TableConfigurationArrayHook implements \TYPO3\CMS\Core\SingletonInterface
         // Only change items when non-admin
         if ($this->getBackendUserAuthentication()->isAdmin() === false && !empty($parameters['items'])) {
             $selectedItems = GeneralUtility::trimExplode(',', $parameters['row'][$parameters['field']], true);
-            $items = array();
+            $items = [];
             foreach ((array) $parameters['items'] as $item) {
                 list(, $uid) = $item;
                 // Is it configured for the user?
@@ -33,11 +33,11 @@ class TableConfigurationArrayHook implements \TYPO3\CMS\Core\SingletonInterface
                     // If its one of the already selected and we don't have access. We still need to show it or the user
                     // can unconsciously remove the group.
                     // @TODO The user can still delete the group. Hook DataHandler should prevent this.
-                    $items[] = array(
+                    $items[] = [
                         '_hidden_ ' . $item[0],
                         $item[1],
                         $item[2]
-                    );
+                    ];
                 }
             }
 

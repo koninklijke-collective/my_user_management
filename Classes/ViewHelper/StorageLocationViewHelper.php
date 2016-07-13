@@ -14,7 +14,7 @@ class StorageLocationViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\Abstrac
      *
      * @var array
      */
-    protected $storage = array();
+    protected $storage = [];
 
     /**
      * @var \TYPO3\CMS\Core\Resource\StorageRepository

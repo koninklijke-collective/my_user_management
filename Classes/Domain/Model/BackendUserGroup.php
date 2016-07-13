@@ -12,6 +12,11 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
 {
 
     /**
+     * @var string
+     */
+    const TABLE = 'be_groups';
+
+    /**
      * Flag for record being hidden
      *
      * @var boolean

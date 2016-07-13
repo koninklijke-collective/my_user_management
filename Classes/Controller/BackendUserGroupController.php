@@ -1,7 +1,8 @@
 <?php
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
-use KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository;
+use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
+use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
@@ -21,15 +22,48 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
     protected $backendUserGroupRepository;
 
     /**
+     * @var \KoninklijkeCollective\MyUserManagement\Service\OverrideService
+     */
+    protected $overrideService;
+
+    /**
+     * Override menu generation for non-admin views
+     *
+     * @return void
+     */
+    protected function generateMenu()
+    {
+        $this->getOverrideService()->generateMenu(
+            $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry(),
+            $this->uriBuilder->reset(),
+            $this->request
+        );
+    }
+
+    /**
+     * Override button generation for non-admin views
+     *
+     * @return void
+     */
+    protected function registerDocheaderButtons()
+    {
+        $this->getOverrideService()->registerDocheaderButtons(
+            $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar(),
+            $this->request,
+            $this->view->getModuleTemplate()->getIconFactory()
+        );
+    }
+
+    /**
      * Displays all BackendUserGroups
      *
      * @return void
      */
     public function indexAction()
     {
-        if ($this->getBackendUserAuthentication()->check('tables_modify', BackendUserGroupRepository::TABLE) === false) {
+        if (AccessUtility::beUserHasRightToEditTable(BackendUserGroup::TABLE) === false) {
             $this->addFlashMessage(
-                $this->translate('access_users_table_not_allowed_description', array(BackendUserGroupRepository::TABLE)),
+                $this->translate('access_users_table_not_allowed_description', [BackendUserGroup::TABLE]),
                 $this->translate('access_users_table_not_allowed_title'),
                 AbstractMessage::ERROR
             );
@@ -39,12 +73,12 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
         $this->view->assign(
             'returnUrl',
             rawurlencode(BackendUtility::getModuleUrl('myusermanagement_MyUserManagementUseradmin',
-                array(
-                    'tx_myusermanagement_myusermanagement_myusermanagementuseradmin' => array(
+                [
+                    'tx_myusermanagement_myusermanagement_myusermanagementuseradmin' => [
                         'action' => 'index',
                         'controller' => 'BackendUserGroup'
-                    )
-                )))
+                    ]
+                ]))
         );
     }
 
@@ -73,7 +107,7 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
      * @param array $arguments
      * @return string
      */
-    protected function translate($key, $arguments = array())
+    protected function translate($key, $arguments = [])
     {
         $label = null;
         if (!empty($key)) {
@@ -92,6 +126,17 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
     protected function getBackendUserAuthentication()
     {
         return $GLOBALS['BE_USER'];
+    }
+
+    /**
+     * @return \KoninklijkeCollective\MyUserManagement\Service\OverrideService
+     */
+    protected function getOverrideService()
+    {
+        if ($this->overrideService === null) {
+            $this->overrideService = $this->objectManager->get(\KoninklijkeCollective\MyUserManagement\Service\OverrideService::class);
+        }
+        return $this->overrideService;
     }
 
 }

@@ -1,7 +1,6 @@
 <?php
 namespace KoninklijkeCollective\MyUserManagement\ViewHelper;
 
-use TYPO3\CMS\Backend\Utility\IconUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -11,6 +10,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class LinkConfirmViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 {
+
+    /**
+     * @var boolean
+     */
+    protected $escapeOutput = false;
 
     /**
      * Render confirm link with sprite icon
@@ -25,14 +29,18 @@ class LinkConfirmViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVie
     public function render($link, $message = '', $title = '', $class = '', $icon = 'actions-edit-delete')
     {
         if (!empty($link)) {
-            $attributes = array(
+            /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
+            $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
+            $attributes = [
                 'href' => $link,
-                'onclick' => 'return confirm(' . GeneralUtility::quoteJSvalue($message) . ')',
-                'title' => $title,
-                'class' => $class,
-            );
-            return '<a ' . GeneralUtility::implodeAttributes($attributes, false, true) . '>'
-            . IconUtility::getSpriteIcon($icon)
+                'data-severity' => 'warning',
+                'data-title' => $title,
+                'data-content' => $message,
+                'data-button-close-text' => $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_common.xlf:cancel'),
+                'class' => 'btn btn-default t3js-modal-trigger' . ($class ? ' ' . $class : ''),
+            ];
+            return '<a ' . GeneralUtility::implodeAttributes($attributes, true, true) . '>'
+            . $iconFactory->getIcon($icon, \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL)
             . '</a>';
         }
         return '';

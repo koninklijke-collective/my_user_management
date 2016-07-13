@@ -1,6 +1,6 @@
 <?php
 
-$EM_CONF[$_EXTKEY] = array(
+$EM_CONF[$_EXTKEY] = [
     'title' => 'My Backend User Management',
     'description' => 'A module that makes it possible for editors to maintain backend users.',
     'category' => 'module',
@@ -11,17 +11,17 @@ $EM_CONF[$_EXTKEY] = array(
     'author' => 'Benjamin Serfhos',
     'author_email' => 'benjamin@serfhos.com',
     'author_company' => 'Rotterdam School of Management, Erasmus University',
-    'constraints' => array(
-        'depends' => array(
-            'typo3' => '6.2.0-8.99.99',
-            'beuser' => '6.2.0-8.99.99',
-        ),
-        'conflicts' => array(),
-        'suggests' => array(),
-    ),
-    'autoload' => array(
-        'psr-4' => array(
+    'constraints' => [
+        'depends' => [
+            'typo3' => '7.6.0-8.99.99',
+            'beuser' => '7.6.0-8.99.99',
+        ],
+        'conflicts' => [],
+        'suggests' => [],
+    ],
+    'autoload' => [
+        'psr-4' => [
             'KoninklijkeCollective\\MyUserManagement\\' => 'Classes'
-        )
-    ),
-);
+        ]
+    ],
+];

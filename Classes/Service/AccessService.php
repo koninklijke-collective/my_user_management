@@ -30,7 +30,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
     public function findUsersWithPageAccess($page)
     {
         $rootLine = BackendUtility::BEgetRootLine($page);
-        $rootLineIds = array();
+        $rootLineIds = [];
         foreach ($rootLine as $page) {
             $rootLineIds[] = (int) $page['uid'];
         }
@@ -45,7 +45,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function findAllBackendUsers()
     {
-        $returnedUsers = array();
+        $returnedUsers = [];
         $users = $this->backendUserRepository->findAllActive();
 
         foreach ($users as $user) {
@@ -73,7 +73,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function findAllInactiveBackendUsers()
     {
-        $returnedUsers = array();
+        $returnedUsers = [];
         $loginSince = new \DateTime('- 6 months');
         $users = $this->backendUserRepository->findAllInactive($loginSince);
 
@@ -146,7 +146,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
      * @param array $mounts
      * @return array
      */
-    protected function getAllDatabaseMountsFromUserGroup(BackendUserGroup $group, array $mounts = array())
+    protected function getAllDatabaseMountsFromUserGroup(BackendUserGroup $group, array $mounts = [])
     {
         $dbMounts = $group->getDbMountPoints();
         if (is_array($dbMounts)) {
@@ -167,7 +167,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function findAllowedUsersInRootLine($rootLine)
     {
-        $returnedUsers = array();
+        $returnedUsers = [];
         $users = $this->findAllBackendUsers();
         foreach ($users as $user) {
             if ($user instanceof BackendUser) {

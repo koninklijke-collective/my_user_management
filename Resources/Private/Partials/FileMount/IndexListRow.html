@@ -1,5 +1,6 @@
-{namespace bu=TYPO3\CMS\Beuser\ViewHelpers}
-{namespace um=KoninklijkeCollective\MyUserManagement\ViewHelper}
+{namespace bu = TYPO3\CMS\Beuser\ViewHelpers}
+{namespace um = KoninklijkeCollective\MyUserManagement\ViewHelper}
+{namespace core = TYPO3\CMS\Core\ViewHelpers}
 
 <tr class="db_list_normal">
     <td class="col-icon">
@@ -23,17 +24,16 @@
     </td>
     <td class="col-control">
         <div class="btn-group" role="group">
-            <a class="btn btn-default" href="#" onclick="top.launchView('sys_filemounts', '{mount.uid}'); return false;"><f:be.buttons.icon icon="actions-document-info"/></a>
+            <a class="btn btn-default" href="#" onclick="top.launchView('sys_filemounts', '{mount.uid}'); return false;"><core:icon identifier="actions-document-info"/></a>
 
-            <f:be.buttons.icon
-                additionalAttributes="{class: 'btn btn-default'}"
-                uri="{um:editRecord(parameters: 'edit[sys_filemounts][{mount.uid}]=edit&returnUrl={returnUrl}')}"
-                title="{f:translate(key: 'mount_action_edit')}"
-                icon="actions-document-open"/>
+            <a class="btn btn-default" title="{f:translate(key: 'mount_action_edit')}"
+                href="{um:editRecord(parameters: 'edit[sys_filemounts][{mount.uid}]=edit&returnUrl={returnUrl -> f:format.urlencode()}')}">
+                <core:icon identifier="actions-document-open"/>
+            </a>
 
             <um:linkConfirm
                 class="btn btn-default"
-                link="{um:removeRecord(parameters: 'cmd[sys_filemounts][{mount.uid}][delete]=1&redirect={returnUrl}')}"
+                link="{um:removeRecord(parameters: 'cmd[sys_filemounts][{mount.uid}][delete]=1&redirect={returnUrl -> f:format.urlencode()}')}"
                 message="{f:translate(key: 'mount_confirm_delete', arguments: '{0: mount.title, 1: mount.uid}')}"
                 title="{f:translate(key: 'mount_action_delete')}"/>
         </div>
