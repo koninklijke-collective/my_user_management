@@ -26,7 +26,7 @@ class DataHandlerCheckModifyAccessListHook implements DataHandlerCheckModifyAcce
      */
     public function checkModifyAccessList(&$accessAllowed, $table, \TYPO3\CMS\Core\DataHandling\DataHandler $parent)
     {
-        if (in_array($table, [BackendUser::TABLE, BackendUserGroup::TABLE]) && $accessAllowed === true) {
+        if (in_array($table, [BackendUser::TABLE, BackendUserGroup::TABLE]) && $accessAllowed === true && AccessUtility::beUserHasRightToEditTable($table)) {
             $action = 'unknown';
             if (isset($parent->cmdmap[$table])) {
                 foreach ($parent->cmdmap[$table] as $id => $incomingCmdArray) {
