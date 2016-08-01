@@ -148,13 +148,15 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function getAllDatabaseMountsFromUserGroup(BackendUserGroup $group, array $mounts = [])
     {
+        $mounts = [];
         $dbMounts = $group->getDbMountPoints();
         if (is_array($dbMounts)) {
             $mounts = array_unique(array_merge($mounts, $dbMounts));
         }
-
-        foreach ($group->getSubGroups() as $subGroup) {
-            $mounts = $this->getAllDatabaseMountsFromUserGroup($subGroup, $mounts);
+        if ($group->getSubGroups !== NULL) {
+            foreach ($group->getSubGroups() as $subGroup) {
+                $mounts = $this->getAllDatabaseMountsFromUserGroup($subGroup, $mounts);
+            }
         }
         return $mounts;
     }
