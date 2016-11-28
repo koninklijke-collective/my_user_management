@@ -243,6 +243,9 @@
             <trans-unit id="backend_access_action_permissions.action_delete_group.title">
                 <source>Delete backend group</source>
             </trans-unit>
+            <trans-unit id="backend_access_action_permissions.action_switch_user.title">
+                <source>Switch to different user</source>
+            </trans-unit>
             <trans-unit id="warning.action.insert.title">
                 <source>Delete backend group</source>
             </trans-unit>

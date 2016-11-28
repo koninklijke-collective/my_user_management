@@ -27,6 +27,26 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
     protected $overrideService;
 
     /**
+     * Set up the view template configuration correctly for BackendTemplateView
+     *
+     * @param ViewInterface $view
+     * @return void
+     */
+    protected function setViewConfiguration(ViewInterface $view)
+    {
+        if (class_exists('\TYPO3\CMS\Backend\View\BackendTemplateView') && ($view instanceof \TYPO3\CMS\Backend\View\BackendTemplateView)) {
+            /** @var \TYPO3\CMS\Fluid\View\TemplateView $_view */
+            $_view = $this->objectManager->get('TYPO3\CMS\Fluid\View\TemplateView');
+            $this->setViewConfiguration($_view);
+            $view->injectTemplateView($_view);
+        } else {
+            parent::setViewConfiguration($view);
+        }
+        // Add generic javascript interaction
+        $this->getOverrideService()->insertJavascriptInteraction(BackendUserGroup::TABLE);
+    }
+
+    /**
      * Override menu generation for non-admin views
      *
      * @return void
@@ -80,24 +100,6 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
                     ]
                 ]))
         );
-    }
-
-    /**
-     * Set up the view template configuration correctly for BackendTemplateView
-     *
-     * @param ViewInterface $view
-     * @return void
-     */
-    protected function setViewConfiguration(ViewInterface $view)
-    {
-        if (class_exists('\TYPO3\CMS\Backend\View\BackendTemplateView') && ($view instanceof \TYPO3\CMS\Backend\View\BackendTemplateView)) {
-            /** @var \TYPO3\CMS\Fluid\View\TemplateView $_view */
-            $_view = $this->objectManager->get('TYPO3\CMS\Fluid\View\TemplateView');
-            $this->setViewConfiguration($_view);
-            $view->injectTemplateView($_view);
-        } else {
-            parent::setViewConfiguration($view);
-        }
     }
 
     /**
