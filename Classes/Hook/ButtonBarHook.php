@@ -6,10 +6,17 @@ use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
 use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 
+/**
+ * Hook: ButtonBar retrieval
+ *
+ * @package KoninklijkeCollective\MyUserManagement\Hook
+ */
 class ButtonBarHook
 {
 
     /**
+     * Change button bar when editing BackendUser & BackendUserGroup
+     *
      * @param array $parameters
      * @param ButtonBar $buttonBar
      * @return array

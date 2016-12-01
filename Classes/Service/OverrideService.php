@@ -176,6 +176,9 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
     protected function getHiddenAccessOptions($table)
     {
         $noAccess = [];
+        if ($this->getBackendUserAuthentication()->isAdmin()) {
+            return $noAccess;
+        }
 
         if (AccessUtility::beUserHasRightToEditTable($table) === false) {
             $noAccess[] = 'action-edit';
