@@ -48,6 +48,18 @@ class AccessUtility
     }
 
     /**
+     * Check if user has access to table field
+     *
+     * @param string $table
+     * @param string $field
+     * @return bool
+     */
+    public static function beUserHasRightToEditTableField($table = 'be_users', $field = '')
+    {
+        return static::getBackendUserAuthentication()->check('non_exclude_fields', $table . ':' . $field);
+    }
+
+    /**
      * Check if user can add table
      *
      * @param string $table

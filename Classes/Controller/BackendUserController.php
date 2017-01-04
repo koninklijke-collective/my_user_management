@@ -8,6 +8,7 @@ use TYPO3\CMS\Beuser\Domain\Model\Demand;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Fluid\View\TemplateView;
 
 /**
  * Controller: BackendUser
@@ -45,13 +46,15 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
     protected function setViewConfiguration(ViewInterface $view)
     {
         if (class_exists('\TYPO3\CMS\Backend\View\BackendTemplateView') && ($view instanceof \TYPO3\CMS\Backend\View\BackendTemplateView)) {
-            /** @var \TYPO3\CMS\Fluid\View\TemplateView $_view */
-            $_view = $this->objectManager->get(\TYPO3\CMS\Fluid\View\TemplateView::class);
+            /** @var TemplateView $_view */
+            $_view = $this->objectManager->get(TemplateView::class);
             $this->setViewConfiguration($_view);
             $view->injectTemplateView($_view);
         } else {
             parent::setViewConfiguration($view);
         }
+        // Add generic javascript interaction
+        $this->getOverrideService()->insertJavascriptInteraction(BackendUser::TABLE);
     }
 
     /**
@@ -132,7 +135,7 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
             $targetUser = BackendUtility::getRecord('be_users', $switchUser);
             if (is_array($targetUser)) {
                 // Cannot switch to admin user, when current user is not an admin!
-                if ((bool) $targetUser['admin'] === true) {
+                if ((bool)$targetUser['admin'] === true) {
                     $this->addFlashMessage(
                         $this->translate('admin_switch_not_allowed_description'),
                         $this->translate('admin_switch_not_allowed_title'),

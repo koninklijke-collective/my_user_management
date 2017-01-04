@@ -21,9 +21,10 @@ class BackendUserActionPermission extends AbstractPermission
     const ACTION_DELETE_USER = 2;
     const ACTION_ADD_GROUP = 3;
     const ACTION_DELETE_GROUP = 4;
+    const ACTION_SWITCH_USER = 5;
 
     /**
-     * @return array
+     * @return void
      */
     protected function populateData()
     {
@@ -49,6 +50,11 @@ class BackendUserActionPermission extends AbstractPermission
                     'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions.action_delete_group.title',
                     'EXT:my_user_management/Resources/Public/Icons/permissions-actions-delete.svg',
                     'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions.action_delete_group.description',
+                ],
+                static::ACTION_SWITCH_USER => [
+                    'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions.action_switch_user.title',
+                    'EXT:my_user_management/Resources/Public/Icons/permissions-actions-user-switch.svg',
+                    'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions.action_switch_user.description',
                 ],
             ],
         ];

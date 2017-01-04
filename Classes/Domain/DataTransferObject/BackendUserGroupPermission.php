@@ -17,7 +17,7 @@ class BackendUserGroupPermission extends AbstractPermission
     const KEY = 'my_user_management_group_permissions';
 
     /**
-     * @return array
+     * @return void
      */
     protected function populateData()
     {
