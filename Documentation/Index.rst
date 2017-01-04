@@ -28,7 +28,7 @@ EXT: My User Management
     TYPO3 Backend User Management
 
 :Copyright:
-    2013-2016
+    2013-2017
 
 :Author:
     Benjamin Serfhos
