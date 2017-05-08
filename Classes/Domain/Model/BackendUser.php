@@ -1,4 +1,5 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Domain\Model;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -34,11 +35,16 @@ class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
     /**
      * Returns the Database Mount Points
      *
-     * @return array
+     * @param bool $exploded
+     * @return array|string
      */
-    public function getDbMountPoints()
+    public function getDbMountPoints($exploded = false)
     {
-        return GeneralUtility::intExplode(',', $this->dbMountPoints, true);
+        if ($exploded) {
+            return GeneralUtility::intExplode(',', $this->dbMountPoints, true);
+        } else {
+            return $this->dbMountPoints;
+        }
     }
 
     /**

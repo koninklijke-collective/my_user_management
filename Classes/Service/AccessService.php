@@ -54,7 +54,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
                     continue;
                 }
 
-                $mounts = $user->getDbMountPoints();
+                $mounts = $user->getDbMountPoints(true);
                 foreach ($user->getBackendUserGroups() as $group) {
                     $mounts = $this->getAllDatabaseMountsFromUserGroup($group, $mounts);
                 }
@@ -83,7 +83,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
                     continue;
                 }
 
-                $mounts = $user->getDbMountPoints();
+                $mounts = $user->getDbMountPoints(true);
                 foreach ($user->getBackendUserGroups() as $group) {
                     $mounts = $this->getAllDatabaseMountsFromUserGroup($group, $mounts);
                 }
@@ -110,7 +110,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
                 return null;
             }
 
-            $mounts = $user->getDbMountPoints();
+            $mounts = $user->getDbMountPoints(true);
             foreach ($user->getBackendUserGroups() as $group) {
                 $mounts = $this->getAllDatabaseMountsFromUserGroup($group, $mounts);
             }
