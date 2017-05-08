@@ -10,6 +10,17 @@ use TYPO3\CMS\Backend\Form\Wizard\SuggestWizardDefaultReceiver;
 
 /**
  * Suggest Receiver: Backend Management
+ * Can be used to allow custom suggests wizards;
+ *
+ * == Example: ============================================================================================================
+ * \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser::TABLE => [
+ *   'receiverClass' => 'KoninklijkeCollective\\MyUserManagement\\Backend\\Form\\Wizard\\SuggestBackendManagementReceiver',
+ *   'searchCondition' => 'admin = 0',
+ *   'searchWholePhrase' => true,
+ *   'additionalSearchFields' => 'username,realName,email',
+ *   'orderBy' => 'username',
+ * ],
+ * ========================================================================================================================
  *
  * @package KoninklijkeCollective\MyUserManagement\Backend\Form\Wizard
  */
@@ -25,11 +36,7 @@ class SuggestBackendManagementReceiver extends SuggestWizardDefaultReceiver
      */
     protected function checkRecordAccess($row, $uid)
     {
-        if (in_array($this->table, [
-            BackendUser::TABLE,
-            BackendUserGroup::TABLE,
-            FileMount::TABLE,
-        ])) {
+        if (in_array($this->table, [BackendUser::TABLE, BackendUserGroup::TABLE, FileMount::TABLE])) {
             return AccessUtility::beUserHasRightToSeeTable($this->table);
         }
         return parent::checkRecordAccess($row, $uid);
