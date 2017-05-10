@@ -3,7 +3,7 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-call_user_func(function ($extKey, $mainModule) {
+call_user_func(function ($extension, $mainModule) {
     // Avoid that this block is loaded in the frontend or within the upgrade-wizards
     if (TYPO3_MODE === 'BE' && !(TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_INSTALL)) {
 
@@ -25,7 +25,7 @@ call_user_func(function ($extKey, $mainModule) {
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-            'KoninklijkeCollective.' . $extKey,
+            'KoninklijkeCollective.' . $extension,
             $mainModule,
             'UserAdmin',
             '',
@@ -35,13 +35,13 @@ call_user_func(function ($extKey, $mainModule) {
             ],
             [
                 'access' => 'user,group',
-                'icon' => 'EXT:' . $extKey . '/Resources/Public/Icons/module-user-admin.png',
-                'labels' => 'LLL:EXT:' . $extKey . '/Resources/Private/Language/Backend/UserAdmin.xlf',
+                'icon' => 'EXT:' . $extension . '/Resources/Public/Icons/module-user-admin.png',
+                'labels' => 'LLL:EXT:' . $extension . '/Resources/Private/Language/Backend/UserAdmin.xlf',
             ]
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-            'KoninklijkeCollective.' . $extKey,
+            'KoninklijkeCollective.' . $extension,
             $mainModule,
             'UserAccess',
             '',
@@ -50,14 +50,14 @@ call_user_func(function ($extKey, $mainModule) {
             ],
             [
                 'access' => 'user,group',
-                'icon' => 'EXT:' . $extKey . '/Resources/Public/Icons/module-user-access.png',
-                'labels' => 'LLL:EXT:' . $extKey . '/Resources/Private/Language/Backend/UserAccess.xlf',
+                'icon' => 'EXT:' . $extension . '/Resources/Public/Icons/module-user-access.png',
+                'labels' => 'LLL:EXT:' . $extension . '/Resources/Private/Language/Backend/UserAccess.xlf',
                 'navigationComponentId' => 'typo3-pagetree',
             ]
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-            'KoninklijkeCollective.' . $extKey,
+            'KoninklijkeCollective.' . $extension,
             $mainModule,
             'FileMountAdmin',
             '',
@@ -66,13 +66,13 @@ call_user_func(function ($extKey, $mainModule) {
             ],
             [
                 'access' => 'user,group',
-                'icon' => 'EXT:' . $extKey . '/Resources/Public/Icons/module-file-mounts.png',
-                'labels' => 'LLL:EXT:' . $extKey . '/Resources/Private/Language/Backend/FileMount.xlf',
+                'icon' => 'EXT:' . $extension . '/Resources/Public/Icons/module-file-mounts.png',
+                'labels' => 'LLL:EXT:' . $extension . '/Resources/Private/Language/Backend/FileMount.xlf',
             ]
         );
 
         \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-            'KoninklijkeCollective.' . $extKey,
+            'KoninklijkeCollective.' . $extension,
             $mainModule,
             'LoginHistory',
             '',
@@ -81,8 +81,8 @@ call_user_func(function ($extKey, $mainModule) {
             ],
             [
                 'access' => 'user,group',
-                'icon' => 'EXT:' . $extKey . '/Resources/Public/Icons/module-login-history.png',
-                'labels' => 'LLL:EXT:' . $extKey . '/Resources/Private/Language/Backend/LoginHistory.xlf',
+                'icon' => 'EXT:' . $extension . '/Resources/Public/Icons/module-login-history.png',
+                'labels' => 'LLL:EXT:' . $extension . '/Resources/Private/Language/Backend/LoginHistory.xlf',
             ]
         );
 
