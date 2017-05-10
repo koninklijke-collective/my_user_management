@@ -19,9 +19,13 @@
     "version": "3.1.0",
 
     "require": {
-        "typo3/cms-core": ">=6.2.6,<9.0"
+        "typo3/cms-core": ">=7.6.0 <9.0.0",
+        "typo3/cms-beuser": ">=7.6.0 <9.0.0"
     },
-
+    "replace": {
+        "my_user_management": "self.version",
+        "typo3-ter/my-user-management": "self.version"
+    },
     "autoload": {
         "psr-4": {
             "KoninklijkeCollective\\MyUserManagement\\": "Classes/"
