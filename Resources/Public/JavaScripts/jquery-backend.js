@@ -7,8 +7,8 @@
         // Always remove empty fillers for this view
         $('.icon-state-default.icon-empty-empty').parent('.btn').remove();
 
-        // Always remove "Both" and "Admin only" from select
-        $('select#tx_Beuser_usertype option[value="0"], select#tx_Beuser_usertype option[value="1"]').remove();
+        // Remove user type select
+        $('label[for="tx_Beuser_usertype"]').parent().remove();
 
         // Remove icon per access
         var noAccess = $('meta[property=extension-no-access]').attr('content');
