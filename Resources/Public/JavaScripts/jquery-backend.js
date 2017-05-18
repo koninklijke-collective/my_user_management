@@ -7,6 +7,9 @@
         // Always remove empty fillers for this view
         $('.icon-state-default.icon-empty-empty').parent('.btn').remove();
 
+        // Remove user type select
+        $('label[for="tx_Beuser_usertype"]').parent().remove();
+
         // Remove icon per access
         var noAccess = $('meta[property=extension-no-access]').attr('content');
         if (noAccess && noAccess.length > 0 && noAccess !== 'all') {
