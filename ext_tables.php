@@ -17,10 +17,13 @@ call_user_func(function ($extension, $mainModule) {
             $mainModule,
             '',
             '',
-            'EXT:my_user_management/Resources/Private/Modules/Container/',
+            null,
             [
-                'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/Module.xlf',
-                'iconIdentifier' => 'module-' . $mainModule
+                'name' => 'myusermanagement',
+                'iconIdentifier' => 'module-' . $mainModule,
+                'labels' => [
+                    'll_ref' => 'LLL:EXT:' . $extension . '/Resources/Private/Language/Backend/Module.xlf',
+                ],
             ]
         );
 
