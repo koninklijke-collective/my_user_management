@@ -1,6 +1,12 @@
 <?php
 namespace KoninklijkeCollective\MyUserManagement\ViewHelper;
 
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Type\Bitmask\Permission;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Retrieve page information
  *
@@ -21,18 +27,35 @@ class PageInfoViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHe
     protected $pageRepository;
 
     /**
+     * Initialize arguments
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('pageId', 'integer', 'Arguments', false);
+    }
+
+
+    /**
      * Retrieve page details from given page id
      *
-     * @param integer $pageId
-     * @param string $as
+
      * @return string Rendered string
      */
-    public function render($pageId, $as = 'page')
+    public function render()
     {
-        $this->templateVariableContainer->add($as, $this->getPageRepository()->getPage($pageId));
-        $output = $this->renderChildren();
-        $this->templateVariableContainer->remove($as);
-        return $output;
+        $id = GeneralUtility::_GP('id');
+
+        $pageRecord = BackendUtility::readPageAccess($id, $GLOBALS['BE_USER']->getPagePermsClause(Permission::PAGE_SHOW));
+        // Add icon with context menu, etc:
+        /** @var IconFactory $iconFactory */
+        if ($pageRecord['uid']) {
+            $this->templateVariableContainer->add('page', $this->getPageRepository()->getPage($pageRecord['pageId']));
+            $output = $this->renderChildren();
+            $this->templateVariableContainer->remove('page');
+            return $output;
+        }
+
     }
 
     /**
@@ -40,6 +63,7 @@ class PageInfoViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHe
      */
     protected function getPageRepository()
     {
+
         if ($this->pageRepository === null) {
             $this->objectManager->get(\TYPO3\CMS\Frontend\Page\PageRepository::class);
         }

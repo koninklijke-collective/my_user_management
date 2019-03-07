@@ -180,13 +180,6 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
         return ($label) ? $label : $key;
     }
 
-    /**
-     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
-     */
-    protected function getBackendUserAuthentication()
-    {
-        return $GLOBALS['BE_USER'];
-    }
 
     /**
      * @return \KoninklijkeCollective\MyUserManagement\Service\OverrideService

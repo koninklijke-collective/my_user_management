@@ -17,17 +17,32 @@ class LinkConfirmViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVie
     protected $escapeOutput = false;
 
     /**
+     * Initialize arguments
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('link', 'string', 'Arguments', false);
+        $this->registerArgument('message', 'string', 'Arguments', false);
+        $this->registerArgument('title', 'string', 'Arguments', false);
+        $this->registerArgument('class', 'string', 'Arguments', false);
+        $this->registerArgument('icon', 'string', 'Arguments', false);
+    }
+
+
+    /**
      * Render confirm link with sprite icon
      *
-     * @param string $link
-     * @param string $message
-     * @param string $title
-     * @param string $class
-     * @param string $icon
      * @return string
      */
-    public function render($link, $message = '', $title = '', $class = '', $icon = 'actions-edit-delete')
+    public function render()
     {
+        $icon = 'actions-edit-delete';
+        $link = GeneralUtility::_GP('link');
+        $message = GeneralUtility::_GP('message');
+        $title = GeneralUtility::_GP('title');
+        $class = GeneralUtility::_GP('class');
+
         if (!empty($link)) {
             /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
             $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);

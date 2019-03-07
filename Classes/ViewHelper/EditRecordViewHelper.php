@@ -13,14 +13,24 @@ class EditRecordViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractView
 {
 
     /**
+     * Initialize arguments
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('parameters', 'string', 'Arguments', false);
+    }
+
+
+    /**
      * Returns a URL to link to FormEngine
      *
-     * @param string $parameters Is a set of GET params to send to FormEngine
      * @return string URL to FormEngine module + parameters
      * @see \TYPO3\CMS\Backend\Utility\BackendUtility::getModuleUrl()
      */
-    public function render($parameters)
+    public function render()
     {
+        $parameters = GeneralUtility::_GP('parameters');
         $parameters = GeneralUtility::explodeUrl2Array($parameters);
         return BackendUtility::getModuleUrl('record_edit', $parameters);
     }

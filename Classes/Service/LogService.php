@@ -69,7 +69,17 @@ class LogService implements \TYPO3\CMS\Core\SingletonInterface
             }
         }
 
-        // Render all requested logs
+
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable('be_groups');
+
+        $groups = $queryBuilder
+            ->select('*')
+            ->from('be_groups')
+            ->execute()
+            ->fetchAll();
+
+
         $res = $this->getDatabaseConnection()->exec_SELECTquery(
             'sys_log.*',
             'sys_log, be_users',
@@ -88,13 +98,5 @@ class LogService implements \TYPO3\CMS\Core\SingletonInterface
             ];
         }
         return $logs;
-    }
-
-    /**
-     * @return \TYPO3\CMS\Core\Database\DatabaseConnection
-     */
-    protected function getDatabaseConnection()
-    {
-        return $GLOBALS['TYPO3_DB'];
     }
 }

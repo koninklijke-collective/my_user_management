@@ -1,6 +1,8 @@
 <?php
 namespace KoninklijkeCollective\MyUserManagement\ViewHelper;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * ViewHelper: Storage Location
  *
@@ -22,15 +24,27 @@ class StorageLocationViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\Abstrac
      */
     protected $storageRepository;
 
+
+    /**
+     * Initialize arguments
+     */
+    public function initializeArguments()
+    {
+        parent::initializeArguments();
+        $this->registerArgument('storageId', 'integer', 'Arguments', false);
+        $this->registerArgument('location', 'string', 'Arguments', false);
+    }
+
     /**
      * Retrieve page details from given page id
      *
-     * @param integer $storageId
-     * @param string $location
      * @return string Rendered string
      */
-    public function render($storageId, $location = '/')
+    public function render()
     {
+        $storageId = GeneralUtility::_GP('storageId');
+        $location =  GeneralUtility::_GP('location') ? GeneralUtility::_GP('location'): '/';;
+
         $output = null;
         if (!isset($this->storage[$storageId]) || !($this->storage[$storageId] instanceof \TYPO3\CMS\Core\Resource\ResourceStorage)) {
             try {
