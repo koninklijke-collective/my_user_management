@@ -5,96 +5,78 @@ namespace KoninklijkeCollective\MyUserManagement\Domain\Model;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
- * Model for backend user group
+ * Custom model for backend user group readability
  */
-class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
+final class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
 {
-
-    /**
-     * @var string
-     */
     public const TABLE = 'be_groups';
-
-    /**
-     * Flag for record being hidden
-     *
-     * @var boolean
-     */
-    protected $isDisabled;
 
     /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup> */
     protected $subGroups;
 
     /** @var string */
-    protected $dbMountPoints = '';
+    protected $databaseMountPoints = '';
+    /** @var array exploded from $databaseMountPoints */
+    protected $_databaseMountPoints;
+
+    /** @var string */
+    protected $fileMountPoints = '';
+    /** @var array exploded from $fileMountPoint */
+    protected $_fileMountPoints;
 
     /**
-     * The file mount points
-     *
-     * @var string
-     */
-    protected $fileMountpoints = '';
-
-    /**
-     * Returns the Database Mount Points
-     *
      * @return array
      */
-    public function getDbMountPoints()
+    public function getDatabaseMountPoints(): array
     {
-        return GeneralUtility::intExplode(',', $this->dbMountPoints, true);
+        if ($this->_databaseMountPoints === null) {
+            $this->_databaseMountPoints = GeneralUtility::intExplode(',', $this->databaseMountPoints, true);
+        }
+
+        return $this->_databaseMountPoints;
     }
 
     /**
-     * Sets the Database Mount Points
-     *
-     * @param  string  $dbMountPoints
-     * @return void
+     * @param  string  $databaseMountPoints
+     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup
      */
-    public function setDbMountPoints($dbMountPoints)
+    public function setDatabaseMountPoints(string $databaseMountPoints): BackendUserGroup
     {
-        $this->dbMountPoints = $dbMountPoints;
+        $this->databaseMountPoints = $databaseMountPoints;
+        $this->_databaseMountPoints = GeneralUtility::intExplode(',', $databaseMountPoints, true);
+
+        return $this;
     }
 
     /**
-     * Gets the file mount points
-     *
-     * @return string
+     * @return array
      */
-    public function getFileMountpoints()
+    public function getFileMountPoints(): array
     {
-        return $this->fileMountpoints;
+        if ($this->_fileMountPoints === null) {
+            $this->_fileMountPoints = GeneralUtility::intExplode(',', $this->fileMountPoints, true);
+        }
+
+        return $this->_fileMountPoints;
     }
 
     /**
-     * Sets the file mount points
-     *
      * @param  string  $fileMountPoints
-     * @return void
+     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup
      */
-    public function setFileMountpoints($fileMountPoints)
+    public function setFileMountPoints(string $fileMountPoints): BackendUserGroup
     {
-        $this->fileMountpoints = $fileMountPoints;
+        $this->fileMountPoints = $fileMountPoints;
+        $this->_fileMountPoints = GeneralUtility::intExplode(',', $fileMountPoints, true);
+
+        return $this;
     }
 
     /**
-     * Gets isDisabled
-     *
      * @return boolean
      */
-    public function getIsDisabled()
+    public function isDisabled(): bool
     {
-        return $this->isDisabled;
-    }
-
-    /**
-     * Sets isDisabled
-     *
-     * @param  boolean  $isDisabled
-     * @return void
-     */
-    public function setIsDisabled($isDisabled)
-    {
-        $this->isDisabled = $isDisabled;
+        return $this->hidden === true;
     }
 }

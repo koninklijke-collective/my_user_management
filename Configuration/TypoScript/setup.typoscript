@@ -1,25 +1,19 @@
 # Define classes in default extbase config
 config.tx_extbase.persistence.classes {
     KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser < config.tx_extbase.persistence.classes.TYPO3\CMS\Beuser\Domain\Model\BackendUser
+    KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser.mapping.columns {
+        cruser_id.mapOnProperty = createdBy
+    }
 
     KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup < config.tx_extbase.persistence.classes.TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
-    KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup {
-        mapping {
-            columns {
-                db_mountpoints.mapOnProperty = dbMountPoints
-                hidden.mapOnProperty = isDisabled
-            }
-        }
+    KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup.mapping.columns {
+        db_mountpoints.mapOnProperty = databaseMountPoints
+        file_mountpoints.mapOnProperty = fileMountPoints
     }
 
     KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount < config.tx_extbase.persistence.classes.TYPO3\CMS\Extbase\Domain\Model\FileMount
-    KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount {
-        mapping {
-            columns {
-                base.mapOnProperty = storage
-                hidden.mapOnProperty = isDisabled
-            }
-        }
+    KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount.mapping.columns {
+        base.mapOnProperty = storage
     }
 }
 
@@ -27,18 +21,21 @@ config.tx_extbase.persistence.classes {
 module.tx_myusermanagement {
     view {
         templateRootPaths {
-            10 = EXT:beuser/Resources/Private/Templates
-            20 = EXT:my_user_management/Resources/Private/Templates
+            10 = EXT:my_user_management/Resources/Private/Templates
+            20 = EXT:beuser/Resources/Private/Templates
+            30 = EXT:my_user_management/Resources/Private/Templates/Override
         }
 
         partialRootPaths {
-            10 = EXT:beuser/Resources/Private/Partials
-            20 = EXT:my_user_management/Resources/Private/Partials
+            10 = EXT:my_user_management/Resources/Private/Partials
+            20 = EXT:beuser/Resources/Private/Partials
+            30 = EXT:my_user_management/Resources/Private/Partials/Override
         }
 
         layoutRootPaths {
-            10 = EXT:beuser/Resources/Private/Layouts
-            20 = EXT:my_user_management/Resources/Private/Layouts
+            10 = EXT:my_user_management/Resources/Private/Layouts
+            20 = EXT:beuser/Resources/Private/Layouts
+            30 = EXT:my_user_management/Resources/Private/Layouts/Override
         }
     }
 

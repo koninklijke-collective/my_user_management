@@ -16,7 +16,7 @@ use TYPO3\CMS\Backend\Form\Wizard\SuggestWizardDefaultReceiver;
  * ============================================================================================================
  * \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser::TABLE => [
  *   'receiverClass' =>
- * 'KoninklijkeCollective\\MyUserManagement\\Backend\\Form\\Wizard\\SuggestBackendManagementReceiver',
+ *         'KoninklijkeCollective\\MyUserManagement\\Backend\\Form\\Wizard\\SuggestBackendManagementReceiver',
  *   'searchCondition' => 'admin = 0',
  *   'searchWholePhrase' => true,
  *   'additionalSearchFields' => 'username,realName,email',
@@ -24,19 +24,19 @@ use TYPO3\CMS\Backend\Form\Wizard\SuggestWizardDefaultReceiver;
  * ],
  * ========================================================================================================================
  */
-class SuggestBackendManagementReceiver extends SuggestWizardDefaultReceiver
+final class SuggestBackendManagementReceiver extends SuggestWizardDefaultReceiver
 {
-
     /**
      * Make sure editor can search through backend user
      *
      * @param  array  $row
      * @param  integer  $uid
      * @return boolean
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
      */
-    protected function checkRecordAccess($row, $uid)
+    protected function checkRecordAccess($row, $uid): bool
     {
-        if (in_array($this->table, [BackendUser::TABLE, BackendUserGroup::TABLE, FileMount::TABLE])) {
+        if (in_array($this->table, [BackendUser::TABLE, BackendUserGroup::TABLE, FileMount::TABLE], true)) {
             return AccessUtility::beUserHasRightToSeeTable($this->table);
         }
 

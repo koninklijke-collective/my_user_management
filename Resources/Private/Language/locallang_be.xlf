@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+    <file source-language="en" datatype="plaintext" original="messages">
+        <header/>
+        <body>
+            <trans-unit id="backend_user_no_rights_to_table_title">
+                <source>Unable to edit!</source>
+            </trans-unit>
+            <trans-unit id="backend_user_no_rights_to_table_description">
+                <source>You are not allowed to edit the table "%s".</source>
+            </trans-unit>
+
+            <trans-unit id="filter_on_admin_is_not_allowed_title">
+                <source>Access Denied</source>
+            </trans-unit>
+            <trans-unit id="filter_on_admin_is_not_allowed_description">
+                <source>You are not allowed to display admin users.</source>
+            </trans-unit>
+
+            <trans-unit id="backend_user_not_allowed_title">
+                <source>Access Denied</source>
+            </trans-unit>
+            <trans-unit id="backend_user_not_allowed_description">
+                <source>You are not allowed to display this user.</source>
+            </trans-unit>
+
+            <trans-unit id="switch_user_not_found_title">
+                <source>No user found</source>
+            </trans-unit>
+            <trans-unit id="switch_user_not_found_description">
+                <source>You are trying to do stuff that you are not allowed to do.</source>
+            </trans-unit>
+
+            <trans-unit id="admin_switch_not_allowed_title">
+                <source>Access Denied</source>
+            </trans-unit>
+            <trans-unit id="admin_switch_not_allowed_description">
+                <source>You are not allowed to switch to an admin user.</source>
+            </trans-unit>
+
+            <trans-unit id="backend_access_group_permissions">
+                <source>Backend User Management: Allowed backend groups for maintenance</source>
+            </trans-unit>
+
+            <trans-unit id="backend_access_action_permissions">
+                <source>Backend User Management: Allowed actions for maintenance</source>
+            </trans-unit>
+            <trans-unit id="backend_access_action_permissions.action_add_user.title">
+                <source>Add backend user</source>
+            </trans-unit>
+            <trans-unit id="backend_access_action_permissions.action_delete_user.title">
+                <source>Delete backend user</source>
+            </trans-unit>
+            <trans-unit id="backend_access_action_permissions.action_add_group.title">
+                <source>Add backend group</source>
+            </trans-unit>
+            <trans-unit id="backend_access_action_permissions.action_delete_group.title">
+                <source>Delete backend group</source>
+            </trans-unit>
+            <trans-unit id="backend_access_action_permissions.action_switch_user.title">
+                <source>Switch to different user</source>
+            </trans-unit>
+
+            <trans-unit id="user_access_overview">
+                <source>User Access Overview</source>
+            </trans-unit>
+            <trans-unit id="no_page_selected_title">
+                <source>Action required</source>
+            </trans-unit>
+            <trans-unit id="no_page_selected_description">
+                <source>Please select a page from the page tree.</source>
+            </trans-unit>
+            <trans-unit id="no_users_found_title">
+                <source>No users found</source>
+            </trans-unit>
+            <trans-unit id="no_users_found_description">
+                <source>No backend users found which has configured access to page id: %s.</source>
+            </trans-unit>
+
+            <trans-unit id="inherited_mount_points">
+                <source>Inherited from</source>
+            </trans-unit>
+
+            <trans-unit id="login_history_overview">
+                <source>User Login History</source>
+            </trans-unit>
+
+            <trans-unit id="title">
+                <source>Title</source>
+            </trans-unit>
+            <trans-unit id="path">
+                <source>Path</source>
+            </trans-unit>
+            <trans-unit id="file_mount.plural">
+                <source>File mounts</source>
+            </trans-unit>
+
+            <trans-unit id="label.confirm.delete_record.hover">
+                <source>Delete record (!)</source>
+            </trans-unit>
+            <trans-unit id="label.confirm.delete_record.title">
+                <source>Delete record</source>
+            </trans-unit>
+            <trans-unit id="label.confirm.delete_record.content">
+                <source><![CDATA[Are you sure you want to delete this record: "%s" (id: %s)]]></source>
+            </trans-unit>
+
+            <trans-unit id="inactive_users_header">
+                <source><![CDATA[Inactive users <small>Last login of 6 months or older</small>]]></source>
+            </trans-unit>
+            <trans-unit id="last_known_login_sessions">
+                <source>Latest known login sessions</source>
+            </trans-unit>
+            <trans-unit id="login_sessions">
+                <source>Login sessions</source>
+            </trans-unit>
+            <trans-unit id="date">
+                <source>Date</source>
+            </trans-unit>
+            <trans-unit id="ip_address">
+                <source>IP Address</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

@@ -4,13 +4,14 @@ namespace KoninklijkeCollective\MyUserManagement\Domain\Repository;
 
 use DateTime;
 use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission;
+use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
 use TYPO3\CMS\Beuser\Domain\Model\Demand;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 /**
  * Repository: BackendUser
  */
-class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendUserRepository
+final class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendUserRepository
 {
 
     /** @var array */
@@ -19,24 +20,41 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
     ];
 
     /**
+     * @param  int  $uid
+     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser|null
+     */
+    public function findByUid($uid): ?BackendUser
+    {
+        $query = $this->createQuery();
+
+        return $query->matching($query->equals('uid', $uid))->execute()->getFirst();
+    }
+
+    /**
      * Override demanded query for filtering by group access
+     *
+     * @param  \TYPO3\CMS\Beuser\Domain\Model\Demand  $demand
+     * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult<\TYPO3\CMS\Beuser\Domain\Model\BackendUser>|array
      */
     public function findDemanded(Demand $demand)
     {
-        if ($this->getBackendUserAuthentication()->isAdmin() === false) {
-            $query = parent::findDemanded($demand)->getQuery();
+        $result = parent::findDemanded($demand);
+
+        // Do query again with configured permissions applied
+        if (!$this->getBackendUserAuthentication()->isAdmin()) {
+            $query = $result->getQuery();
             $this->applyUserGroupPermission($query);
 
             return $query->execute();
-        } else {
-            return parent::findDemanded($demand);
         }
+
+        return $result;
     }
 
     /**
      * Find all active backend users
      *
-     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
      */
     public function findAllActive()
     {
@@ -45,9 +63,8 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
             $query->equals('deleted', false),
             $query->equals('disable', false),
         ]));
-        if ($this->getBackendUserAuthentication()->isAdmin() === false) {
-            $this->applyUserGroupPermission($query);
-        }
+
+        $this->applyUserGroupPermission($query);
 
         return $query->execute();
     }
@@ -56,19 +73,17 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
      * Find all inactive users based on last login
      *
      * @param  \DateTime  $lastLoginSince
-     * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
      */
     public function findAllInactive(DateTime $lastLoginSince)
     {
         $query = $this->createQuery();
         $query->matching($query->logicalAnd([
             $query->equals('deleted', false),
-            $query->equals('disable', false),
             $query->lessThanOrEqual('lastlogin', $lastLoginSince),
         ]));
-        if ($this->getBackendUserAuthentication()->isAdmin() === false) {
-            $this->applyUserGroupPermission($query);
-        }
+
+        $query = $this->applyUserGroupPermission($query);
 
         return $query->execute();
     }
@@ -76,23 +91,23 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
     /**
      * Apply allowed usergroups based on current logged in user
      *
-     * @param $query \TYPO3\CMS\Extbase\Persistence\QueryInterface
+     * @param  \TYPO3\CMS\Extbase\Persistence\QueryInterface  $query
      * @return \TYPO3\CMS\Extbase\Persistence\QueryInterface
      */
-    public function applyUserGroupPermission($query)
+    public function applyUserGroupPermission(QueryInterface $query): QueryInterface
     {
-        if ($this->getBackendUserAuthentication()->isAdmin() === false) {
+        if (!$this->getBackendUserAuthentication()->isAdmin()) {
             $constraints = [
                 $query->getConstraint(),
                 $query->logicalNot($query->like('username', '_cli_%')),
             ];
-            $allowed = BackendUserGroupPermission::configured();
-            if (!empty($allowed)) {
+
+            if (BackendUserGroupPermission::hasConfigured()) {
                 $allowedConstraints = [
                     // Always allow current user
                     $query->equals('uid', $this->getBackendUserAuthentication()->user['uid']),
                 ];
-                foreach ($allowed as $id) {
+                foreach (BackendUserGroupPermission::getConfigured() as $id) {
                     // @TODO: Refactor for real n:m relations
                     $allowedConstraints[] = $query->logicalOr([
                         $query->equals('usergroup', (int)$id),
@@ -108,13 +123,5 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
         }
 
         return $query;
-    }
-
-    /**
-     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
-     */
-    protected function getBackendUserAuthentication()
-    {
-        return $GLOBALS['BE_USER'];
     }
 }

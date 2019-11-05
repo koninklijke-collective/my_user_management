@@ -3,86 +3,46 @@
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
-use KoninklijkeCollective\MyUserManagement\Service\OverrideService;
+use KoninklijkeCollective\MyUserManagement\Functions\TranslateTrait;
 use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Beuser\Domain\Model\Demand;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Fluid\View\TemplateView;
 
 /**
- * Controller: BackendUser
+ * Override Controller: BackendUser
+ *
+ * @see \TYPO3\CMS\Beuser\Controller\BackendUserController
  */
-class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserController
+final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserController
 {
+    use TranslateTrait;
 
     /**
      * Override generic backend user repository
      *
      * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository
-     * @Extbase\Inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $backendUserRepository;
 
-    /** @var \KoninklijkeCollective\MyUserManagement\Service\OverrideService */
-    protected $overrideService;
-
     /**
+     * Override generic backend user group repository
+     *
      * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository
-     * @Extbase\Inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $backendUserGroupRepository;
 
     /**
-     * Set up the view template configuration correctly for BackendTemplateView
-     *
      * @param  \TYPO3\CMS\Extbase\Mvc\View\ViewInterface  $view
      * @return void
      */
-    protected function setViewConfiguration(ViewInterface $view)
+    protected function initializeView(ViewInterface $view): void
     {
-        if (class_exists('\TYPO3\CMS\Backend\View\BackendTemplateView') && ($view instanceof BackendTemplateView)) {
-            /** @var \TYPO3\CMS\Fluid\View\TemplateView $_view */
-            $_view = $this->objectManager->get(TemplateView::class);
-            $this->setViewConfiguration($_view);
-            $view->injectTemplateView($_view);
-        } else {
-            parent::setViewConfiguration($view);
-        }
-        // Add generic javascript interaction
-        $this->getOverrideService()->insertJavascriptInteraction(BackendUser::TABLE);
-    }
-
-    /**
-     * Override menu generation for non-admin views
-     *
-     * @return void
-     */
-    protected function generateMenu()
-    {
-        $this->getOverrideService()->generateMenu(
-            $this->view->getModuleTemplate()->getDocHeaderComponent()->getMenuRegistry(),
-            $this->uriBuilder->reset(),
-            $this->request
-        );
-    }
-
-    /**
-     * Override button generation for non-admin views
-     *
-     * @return void
-     */
-    protected function registerDocheaderButtons()
-    {
-        $this->getOverrideService()->registerDocheaderButtons(
-            $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar(),
-            $this->request,
-            $this->view->getModuleTemplate()->getIconFactory()
-        );
+        parent::initializeView($view);
+        // Override shortcut label
+        $view->assign('shortcutLabel', 'myBackendUsers');
     }
 
     /**
@@ -91,13 +51,14 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
      *
      * @param  \TYPO3\CMS\Beuser\Domain\Model\Demand  $demand
      * @return void
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function indexAction(?Demand $demand = null)
+    public function indexAction(?Demand $demand = null): void
     {
         if (AccessUtility::beUserHasRightToEditTable(BackendUser::TABLE) === false) {
             $this->addFlashMessage(
-                $this->translate('access_users_table_not_allowed_description', [BackendUser::TABLE]),
-                $this->translate('access_users_table_not_allowed_title'),
+                static::translate('backend_user_no_rights_to_table_description', [BackendUser::TABLE]),
+                static::translate('backend_user_no_rights_to_table_title'),
                 AbstractMessage::ERROR
             );
         }
@@ -107,8 +68,8 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
                 $demand = $this->moduleData->getDemand();
             } elseif ($demand->getUserType() !== Demand::USERTYPE_USERONLY) {
                 $this->addFlashMessage(
-                    $this->translate('display_admin_not_allowed_description'),
-                    $this->translate('display_admin_not_allowed_title'),
+                    static::translate('filter_on_admin_is_not_allowed_description'),
+                    static::translate('filter_on_admin_is_not_allowed_title'),
                     AbstractMessage::ERROR
                 );
             }
@@ -118,88 +79,48 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
         }
 
         parent::indexAction($demand);
-        $this->view->assign('returnUrl',
-            rawurlencode(BackendUtility::getModuleUrl('myusermanagement_MyUserManagementUseradmin')));
+
+        // Override backend user group key for view
+        $this->view->assign(
+            'backendUserGroups',
+            array_merge([''], $this->backendUserGroupRepository->findAllConfigured()->toArray())
+        );
     }
 
     /**
-     * Switches to a given user (SU-mode) and then redirects to the start page of the backend to refresh the navigation
-     * etc.
-     *
-     * @param  string  $switchUser  BE-user record that will be switched to
+     * @param  int  $switchUser
      * @return void
+     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
      */
-    protected function switchUser($switchUser)
+    public function switchUser($switchUser): void
     {
         if ($this->getBackendUserAuthentication()->isAdmin()) {
             parent::switchUser($switchUser);
-        } else {
-            $targetUser = BackendUtility::getRecord('be_users', $switchUser);
-            if (is_array($targetUser)) {
-                // Cannot switch to admin user, when current user is not an admin!
-                if ((bool)$targetUser['admin'] === true) {
-                    $this->addFlashMessage(
-                        $this->translate('admin_switch_not_allowed_description'),
-                        $this->translate('admin_switch_not_allowed_title'),
-                        AbstractMessage::ERROR
-                    );
-
-                    return;
-                }
-
-                // If all is successful, simulate admin functionality
-                $this->getBackendUserAuthentication()->user['admin'] = 1;
-                parent::switchUser($switchUser);
-            } else {
-                $this->addFlashMessage(
-                    $this->translate('switch_user_not_found_description'),
-                    $this->translate('switch_user_not_found_title'),
-                    AbstractMessage::ERROR
-                );
-
-                return;
-            }
         }
-    }
-
-    /**
-     * Translate label for module
-     *
-     * @param  string  $key
-     * @param  array  $arguments
-     * @return string
-     */
-    protected function translate($key, $arguments = [])
-    {
-        $label = null;
-        if (!empty($key)) {
-            $label = LocalizationUtility::translate(
-                'backendUserAdminOverview_' . $key,
-                'my_user_management',
-                $arguments
+        /** @var \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser $targetUser */
+        $targetUser = $this->backendUserRepository->findByUid($switchUser);
+        if ($targetUser === null) {
+            $this->addFlashMessage(
+                static::translate('switch_user_not_found_description'),
+                static::translate('switch_user_not_found_title'),
+                AbstractMessage::ERROR
             );
+
+            return;
         }
 
-        return ($label) ? $label : $key;
-    }
+        if ($targetUser->getIsAdministrator()) {
+            $this->addFlashMessage(
+                static::translate('admin_switch_not_allowed_description'),
+                static::translate('admin_switch_not_allowed_title'),
+                AbstractMessage::ERROR
+            );
 
-    /**
-     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
-     */
-    protected function getBackendUserAuthentication()
-    {
-        return $GLOBALS['BE_USER'];
-    }
-
-    /**
-     * @return \KoninklijkeCollective\MyUserManagement\Service\OverrideService
-     */
-    protected function getOverrideService()
-    {
-        if ($this->overrideService === null) {
-            $this->overrideService = $this->objectManager->get(OverrideService::class);
+            return;
         }
 
-        return $this->overrideService;
+        // If all is as expected, fake admin functionality before switching user
+        $this->getBackendUserAuthentication()->user['admin'] = 1;
+        parent::switchUser($switchUser);
     }
 }

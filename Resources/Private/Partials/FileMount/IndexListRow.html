@@ -1,41 +1,47 @@
-{namespace bu = TYPO3\CMS\Beuser\ViewHelpers}
-{namespace um = KoninklijkeCollective\MyUserManagement\ViewHelper}
-{namespace core = TYPO3\CMS\Core\ViewHelpers}
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+      xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+      xmlns:bu="http://typo3.org/ns/TYPO3/CMS/Beuser/ViewHelpers"
+      xmlns:um="http://typo3.org/ns/KoninklijkeCollective/MyUserManagement/ViewHelpers"
+      um:preserve="true"
+      data-namespace-typo3-fluid="true">
 
-<tr class="db_list_normal">
+<tr>
     <td class="col-icon">
-        <a href="#" class="t3-js-clickmenutrigger" data-table="sys_filemounts" data-uid="{mount.uid}"
-            data-listframe="1" title="id={mount.uid}">
-            <bu:spriteIconForRecord table="sys_filemounts" object="{mount}"/>
+        <a href="#" class="t3-js-clickmenutrigger" data-table="sys_filemounts" data-uid="{fileMount.uid}"
+           data-listframe="1" title="id={fileMount.uid}">
+            <bu:spriteIconForRecord table="sys_filemounts" object="{fileMount}"/>
         </a>
     </td>
-    <td>
-        {mount.title}
+    <td class="col-title">
+        {fileMount.title}
     </td>
     <td>
-        <f:if condition="{mount.storage} > 0">
+        <f:if condition="{fileMount.storage} > 0">
             <f:then>
-                <um:storageLocation storageId="{mount.storage}" location="{mount.path}" />
+                <um:format.storagePath storageId="{fileMount.storage}" location="{fileMount.path}"/>
             </f:then>
             <f:else>
-                {mount.path} (absolute path)
+                {fileMount.path} (absolute path)
             </f:else>
         </f:if>
     </td>
     <td class="col-control">
         <div class="btn-group" role="group">
-            <a class="btn btn-default" href="#" onclick="top.launchView('sys_filemounts', '{mount.uid}'); return false;"><core:icon identifier="actions-document-info"/></a>
+            <be:link.editRecord class="btn btn-default" table="sys_filemounts" uid="{fileMount.uid}" title="Edit">
+                <core:icon identifier="actions-open"/>
+            </be:link.editRecord>
 
-            <a class="btn btn-default" title="{f:translate(key: 'mount_action_edit')}"
-                href="{um:editRecord(parameters: 'edit[sys_filemounts][{mount.uid}]=edit&returnUrl={returnUrl -> f:format.urlencode()}')}">
-                <core:icon identifier="actions-document-open"/>
+            <a class="btn btn-default t3js-modal-trigger"
+               href="{um:uri.removeRecord(table: 'sys_filemounts', uid: fileMount.uid)}"
+               title="{f:translate(key:'LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:label.confirm.delete_record.hover')}"
+               data-severity="warning"
+               data-title="{f:translate(key:'LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:label.confirm.delete_record.title')}"
+               data-content="{f:translate(key:'LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:label.confirm.delete_record.content', arguments: '{0: fileMount.title, 1: fileMount.uid}')}"
+               data-button-close-text="{f:translate(key:'LLL:EXT:core/Resources/Private/Language/locallang_common.xlf:cancel')}">
+                <core:icon identifier="actions-edit-delete"/>
             </a>
-
-            <um:linkConfirm
-                class="btn btn-default"
-                link="{um:removeRecord(parameters: 'cmd[sys_filemounts][{mount.uid}][delete]=1&redirect={returnUrl -> f:format.urlencode()}')}"
-                message="{f:translate(key: 'mount_confirm_delete', arguments: '{0: mount.title, 1: mount.uid}')}"
-                title="{f:translate(key: 'mount_action_delete')}"/>
         </div>
     </td>
 </tr>
+</html>

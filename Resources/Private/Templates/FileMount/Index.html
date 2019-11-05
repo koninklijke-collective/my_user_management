@@ -1,39 +1,21 @@
-{namespace um=KoninklijkeCollective\MyUserManagement\ViewHelper}
-
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+      data-namespace-typo3-fluid="true">
 <f:layout name="Backend"/>
 
-<f:section name="Headline">
-    <h1>
-        <f:translate key="fileMountListing">File Mount Listing</f:translate>
-    </h1>
+<f:section name="Buttons">
+    <be:moduleLayout.button.linkButton
+            icon="actions-add"
+            title="{f:translate(id: 'LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newRecordGeneral')}"
+            link="{be:uri.newRecord(table: 'sys_filemounts')}"
+    />
 </f:section>
 
 <f:section name="Content">
-    <f:if condition="{fileMounts}">
-        <f:comment>
-            Listing of all file mounts
-        </f:comment>
-
-        <div class="table-fit">
-            <table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist table table-striped table-hover">
-                <thead>
-                <tr class="t3-row-header">
-                    <th class="col-icon"></th>
-                    <th>
-                        <f:translate key="title"/>
-                    </th>
-                    <th>
-                        <f:translate key="path"/>
-                    </th>
-                    <th class="col-control"></th>
-                </tr>
-                </thead>
-                <tbody>
-                <f:for each="{fileMounts}" as="mount">
-                    <f:render partial="FileMount/IndexListRow" arguments="{mount: mount, returnUrl: returnUrl}"/>
-                </f:for>
-                </tbody>
-            </table>
-        </div>
-    </f:if>
+    <h1>
+        <f:translate key="fileMountListing">File Mount Listing</f:translate>
+    </h1>
+    <f:render partial="FileMount/PaginatedListWidget" arguments="{_all}"/>
 </f:section>
+
+</html>

@@ -6,70 +6,48 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /**
  * Domain model for file mounts
- *
- * @author Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
  */
-class FileMount extends AbstractEntity
+final class FileMount extends AbstractEntity
 {
-
-    /**
-     * @var string
-     */
     public const TABLE = 'sys_filemounts';
 
-    /**
-     * Title of the file mount.
-     *
-     * @var string
-     * @validate notEmpty
-     */
+    /** @var string */
     protected $title = '';
 
-    /**
-     * Path of the file mount.
-     *
-     * @var string
-     * @validate notEmpty
-     */
+    /** @var string */
     protected $path = '';
 
     /** @var integer */
     protected $storage;
 
-    /**
-     * Disabled record?
-     *
-     * @var boolean
-     */
+    /** @var boolean */
     protected $isDisabled;
 
     /**
-     * Getter for the title of the file mount.
-     *
-     * @return string
+     * @return string|null
      */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
     /**
-     * Setter for the title of the file mount.
-     *
-     * @param  string  $value
-     * @return void
+     * @param  string|null  $value
+     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount
      */
-    public function setTitle($value)
+    public function setTitle(?string $value): FileMount
     {
         $this->title = $value;
+
+        return $this;
     }
 
     /**
      * Getter for the path of the file mount.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPath()
+    public function getPath(): ?string
     {
         return $this->path;
     }
@@ -77,41 +55,39 @@ class FileMount extends AbstractEntity
     /**
      * Setter for the path of the file mount.
      *
-     * @param  string  $value
-     * @return void
+     * @param  string|null  $value
+     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount
      */
-    public function setPath($value)
+    public function setPath(?string $value): FileMount
     {
         $this->path = $value;
+
+        return $this;
     }
 
     /**
-     * Returns the Storage
-     *
-     * @return int
+     * @return int|null
      */
-    public function getStorage()
+    public function getStorage(): ?int
     {
         return $this->storage;
     }
 
     /**
-     * Sets the Storage
-     *
-     * @param  int  $storage
-     * @return void
+     * @param  int|null  $storage
+     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount
      */
-    public function setStorage($storage)
+    public function setStorage(?int $storage): FileMount
     {
         $this->storage = $storage;
+
+        return $this;
     }
 
     /**
-     * Gets the disabled state
-     *
-     * @return boolean
+     * @return boolean|null
      */
-    public function getIsDisabled()
+    public function getIsDisabled(): ?bool
     {
         return $this->isDisabled;
     }
@@ -119,11 +95,13 @@ class FileMount extends AbstractEntity
     /**
      * Sets the disabled state
      *
-     * @param  boolean  $isDisabled
-     * @return void
+     * @param  boolean|string  $isDisabled
+     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount
      */
-    public function setIsDisabled($isDisabled)
+    public function setIsDisabled($isDisabled): FileMount
     {
-        $this->isDisabled = $isDisabled;
+        $this->isDisabled = filter_var($isDisabled, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+
+        return $this;
     }
 }

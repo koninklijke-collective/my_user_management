@@ -4,22 +4,22 @@ namespace KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject;
 
 use ArrayAccess;
 use Countable;
-use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * DTO: Permission access Backend User Groups
+ *
+ * @usage $GLOBALS['TYPO3_CONF_VARS']['BE']['customPermOptions'][class::KEY]
+ * @see \TYPO3\CMS\Backend\Form\FormDataProvider\AbstractItemProvider::addItemsFromSpecial
  */
 abstract class AbstractPermission implements ArrayAccess, Countable
 {
-
-    /**
-     * Override permission key per class!
-     */
-    public const KEY = 'my_user_management_permissions';
-
     /** @var array */
     protected $data;
+
+    /**
+     * @return void
+     */
+    abstract protected function populateData(): void;
 
     /**
      * Constructor: Abstract invoke of function
@@ -30,40 +30,13 @@ abstract class AbstractPermission implements ArrayAccess, Countable
     }
 
     /**
-     * @return void
-     */
-    abstract protected function populateData();
-
-    /**
-     * Get configured options based on current backend user
-     *
-     * @return array
-     */
-    public static function configured()
-    {
-        $configured = [];
-        $backendUser = $GLOBALS['BE_USER'];
-        // Only return allowed users for non-admin
-        if ($backendUser instanceof BackendUserAuthentication && $backendUser->isAdmin() === false) {
-            $options = $backendUser->groupData['custom_options'];
-            foreach (GeneralUtility::trimExplode(',', $options, true) as $value) {
-                if (strpos($value, static::KEY) === 0) {
-                    $configured[] = (int)substr($value, strlen(static::KEY) + 1);
-                }
-            }
-        }
-
-        return $configured;
-    }
-
-    /**
      * Whether a offset exists
      *
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php
      * @param  mixed  $offset
      * @return boolean
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->data[$offset]);
     }
@@ -77,7 +50,7 @@ abstract class AbstractPermission implements ArrayAccess, Countable
      */
     public function offsetGet($offset)
     {
-        return isset($this->data[$offset]) ? $this->data[$offset] : null;
+        return $this->data[$offset] ?? null;
     }
 
     /**
@@ -87,9 +60,9 @@ abstract class AbstractPermission implements ArrayAccess, Countable
      * @param  mixed  $offset
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
-        if (is_null($offset)) {
+        if ($offset === null) {
             $this->data[] = $value;
         } else {
             $this->data[$offset] = $value;
@@ -103,7 +76,7 @@ abstract class AbstractPermission implements ArrayAccess, Countable
      * @param  mixed  $offset
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->data[$offset]);
     }
@@ -114,7 +87,7 @@ abstract class AbstractPermission implements ArrayAccess, Countable
      * @link http://php.net/manual/en/countable.count.php
      * @return integer
      */
-    public function count()
+    public function count(): int
     {
         return count($this->data);
     }

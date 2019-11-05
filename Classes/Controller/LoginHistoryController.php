@@ -2,163 +2,138 @@
 
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
-use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
-use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Backend\View\BackendTemplateView;
+use KoninklijkeCollective\MyUserManagement\Domain\Repository\LoginHistoryRepository;
+use KoninklijkeCollective\MyUserManagement\Functions\TranslateTrait;
+use KoninklijkeCollective\MyUserManagement\Service\BackendUserService;
+use KoninklijkeCollective\MyUserManagement\Service\OnlineSessionService;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Extbase\Mvc\Web\Request;
 
 /**
- * Controller: LoginHistory
+ * Controller: User Login History
  */
-class LoginHistoryController extends ActionController
+final class LoginHistoryController extends ActionController
 {
+    use TranslateTrait;
 
     /**
-     * Backend Template Container
-     *
-     * @var string
+     * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\LoginHistoryRepository
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
-    protected $defaultViewObjectName = BackendTemplateView::class;
-
-    /** @var \KoninklijkeCollective\MyUserManagement\Service\LogService */
-    protected $logService;
-
-    /** @var \KoninklijkeCollective\MyUserManagement\Service\AccessService */
-    protected $accessService;
+    protected $loginHistoryRepository;
 
     /**
-     * Set up the doc header properly here
-     *
+     * @var \KoninklijkeCollective\MyUserManagement\Service\BackendUserService
+     * @TYPO3\CMS\Extbase\Annotation\Inject
+     */
+    protected $backendUserService;
+
+    /**
+     * @var \KoninklijkeCollective\MyUserManagement\Service\OnlineSessionService
+     * @TYPO3\CMS\Extbase\Annotation\Inject
+     */
+    protected $onlineSessionService;
+
+    /**
      * @param  \TYPO3\CMS\Extbase\Mvc\View\ViewInterface  $view
      * @return void
      */
-    protected function initializeView(ViewInterface $view)
+    protected function initializeView(ViewInterface $view): void
     {
-        if ($view instanceof BackendTemplateView) {
-            $view->getModuleTemplate()->setFlashMessageQueue($this->controllerContext->getFlashMessageQueue());
-            $view->getModuleTemplate()->getPageRenderer()->loadRequireJsModule('TYPO3/CMS/Backend/Modal');
-        }
-
-        parent::initializeView($view);
         $view->assignMultiple([
-            'returnUrl' => BackendUtility::getModuleUrl('myusermanagement_MyUserManagementLoginhistory'),
+            'shortcutLabel' => 'MyLoginHistory',
             'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
             'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
         ]);
     }
 
     /**
-     * Action: List all users
-     *
-     * @param  integer  $page
      * @return void
+     * @throws \Exception when \DateTime cannot be created through settings
      */
-    public function indexAction($page = 1)
+    public function indexAction(): void
     {
-        $parameters = [
-            'page' => $page,
-            'itemsPerPage' => 20,
-            'hide-admin' => ($this->getBackendUserAuthentication()->isAdmin() === false),
-        ];
-        $logs = $this->getLogService()->findUserLoginActions($parameters);
-        if (empty($logs['items'])) {
-            $this->addFlashMessage(
-                $this->translate('empty_description'),
-                $this->translate('empty_title'),
-                AbstractMessage::INFO
-            );
-        }
+        $loginSince = new \DateTime($this->settings['since'] ?? '- 6 months');
 
         $this->view->assignMultiple([
-            'backendUsers' => $this->getAccessService()->findAllBackendUsers(),
-            'inactiveUsers' => $this->getAccessService()->findAllInactiveBackendUsers(),
-            'userModuleAccess' => AccessUtility::beUserHasRightToSeeModule('myusermanagement_MyUserManagementUseradmin') && AccessUtility::beUserHasRightToEditTable(BackendUser::TABLE),
-            'logs' => $logs,
+            'onlineBackendUsers' => $this->getOnlineSessionService()->getSessions(),
+            'backendUsers' => $this->getBackendUserService()->findAllBackendUsersForDropdown(),
+            'loginHistory' => $this->getLoginHistoryRepository()->lastLoggedInUsers(),
+            'inactiveUsers' => $this->getBackendUserService()->findAllInactiveBackendUsers($loginSince),
         ]);
     }
 
     /**
      * Action: Get login overview
      *
-     * @param  integer  $user
+     * @param  int |null  $user
      * @return void
      */
-    public function detailAction($user = null)
+    public function detailAction(?int $user = null): void
     {
+        // Forward POST request to GET for correct workflow
+        if ($this->request instanceof Request && $this->request->getMethod() === 'POST') {
+            $this->redirect('detail', null, null, ['user' => $user]);
+        }
+
         if ($user === null) {
             $this->redirect('index');
+
+            return;
         }
 
-        $user = $this->getAccessService()->findBackendUser($user);
-        if ($user instanceof BackendUser) {
-            $parameters = [
-                'user' => $user->getUid(),
-            ];
-            $logs = $this->getLogService()->findUserLoginActions($parameters);
-
-            $this->view->assignMultiple([
-                'user' => $user,
-                'logs' => $logs,
-            ]);
-        } else {
-            $this->redirect('index');
-        }
-    }
-
-    /**
-     * Translate label for module
-     *
-     * @param  string  $key
-     * @param  array  $arguments
-     * @return string
-     */
-    protected function translate($key, $arguments = [])
-    {
-        $label = null;
-        if (!empty($key)) {
-            $label = LocalizationUtility::translate(
-                'backendLoginHistory_' . $key,
-                'my_user_management',
-                $arguments
+        $backendUser = $this->getBackendUserService()->findBackendUser($user);
+        if ($backendUser === null) {
+            $this->addFlashMessage(
+                static::translate('backend_user_not_allowed_description', [$user]),
+                static::translate('backend_user_not_allowed_title'),
+                AbstractMessage::ERROR
             );
+
+            return;
         }
 
-        return ($label) ? $label : $key;
+        $this->view->assignMultiple([
+            'user' => $backendUser,
+            'loginSessions' => $this->getLoginHistoryRepository()->findUserLoginActions($backendUser),
+        ]);
     }
 
     /**
-     * @return \KoninklijkeCollective\MyUserManagement\Service\LogService
+     * @return \KoninklijkeCollective\MyUserManagement\Domain\Repository\LoginHistoryRepository
      */
-    protected function getLogService()
+    protected function getLoginHistoryRepository(): LoginHistoryRepository
     {
-        if ($this->logService === null) {
-            $this->logService = $this->objectManager->get('KoninklijkeCollective\MyUserManagement\Service\LogService');
+        if ($this->loginHistoryRepository === null) {
+            $this->loginHistoryRepository = $this->objectManager->get(LoginHistoryRepository::class);
         }
 
-        return $this->logService;
+        return $this->loginHistoryRepository;
     }
 
     /**
-     * @return \KoninklijkeCollective\MyUserManagement\Service\AccessService
+     * @return \KoninklijkeCollective\MyUserManagement\Service\BackendUserService
      */
-    protected function getAccessService()
+    protected function getBackendUserService(): BackendUserService
     {
-        if ($this->accessService === null) {
-            $this->accessService = $this->objectManager->get('KoninklijkeCollective\MyUserManagement\Service\AccessService');
+        if ($this->backendUserService === null) {
+            $this->backendUserService = $this->objectManager->get(BackendUserService::class);
         }
 
-        return $this->accessService;
+        return $this->backendUserService;
     }
 
     /**
-     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
+     * @return \KoninklijkeCollective\MyUserManagement\Service\OnlineSessionService
      */
-    protected function getBackendUserAuthentication()
+    protected function getOnlineSessionService(): OnlineSessionService
     {
-        return $GLOBALS['BE_USER'];
+        if ($this->onlineSessionService === null) {
+            $this->onlineSessionService = $this->objectManager->get(OnlineSessionService::class);
+        }
+
+        return $this->onlineSessionService;
     }
 }

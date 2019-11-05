@@ -1,100 +1,19 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
 <f:layout name="Backend"/>
 
-<f:section name="Headline">
-    <h1>
-        <f:translate key="loginHistoryOverview">User Login History</f:translate>
-    </h1>
-</f:section>
-
 <f:section name="Content">
+    <h1>
+        <f:translate
+                key="LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:login_history_overview"/>
+    </h1>
 
-    <f:if condition="{backendUsers}">
-        <div class="user-selection">
-            <h2>
-                <f:translate key="loginHistoryUser">User</f:translate>
-            </h2>
-            <div class="selection">
-                <f:form action="detail">
-                    <div class="user-selection">
-                        <label for="tx_myusermanagement_backendUser">User</label>
-                        <f:form.select name="user" id="tx_myusermanagement_backendUser" options="{backendUsers}" optionValueField="uid" optionLabelField="username"
-                            prependOptionLabel="All"/>
-                    </div>
-                    <f:form.button>View</f:form.button>
-                </f:form>
-            </div>
-        </div>
-    </f:if>
+    <f:render partial="Filters/LoginHistory" arguments="{_all}"/>
 
-    <f:if condition="{logs.items}">
-        <hr/>
-        <div class="global-overview">
-            <h2>
-                <f:translate key="backendLoginHistory_last_known_records"/>
-            </h2>
-
-            <div class="table-fit">
-                <table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist table table-striped table-hover">
-                    <thead>
-                    <tr class="t3-row-header">
-                        <th class="col-icon"></th>
-                        <th class="col-title">
-                            <strong>
-                                <f:translate key="userName"/>
-                            </strong>
-                        </th>
-                        <th class="col-date">
-                            <f:translate key="date"/>
-                        </th>
-                        <th class="col-control"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <f:for each="{logs.items}" as="log">
-                        <f:render partial="LoginHistory/LogListRow" arguments="{_all}"/>
-                    </f:for>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </f:if>
-
-    <f:if condition="{inactiveUsers}">
-        <div class="inactive-users-overview">
-            <hr/>
-            <h2>
-                <f:format.raw><f:translate key="backendLoginHistory_inactive_users"/></f:format.raw>
-            </h2>
-            <table border="0" cellpadding="0" cellspacing="0" class="typo3-dblist table table-striped table-hover">
-                <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th>
-                        <f:translate key="userName">Username</f:translate>
-                        /
-                        <f:translate key="realName">Real name</f:translate>
-                    </th>
-                    <th>&nbsp;</th>
-                    <th>
-                        <f:translate key="lastLogin">Last login</f:translate>
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <f:for each="{inactiveUsers}" as="backendUser">
-                    <f:render partial="LoginHistory/UserListRow" arguments="{_all}"/>
-                </f:for>
-                <f:comment>
-                    Footer row: no officially defined style yet
-                </f:comment>
-                <tr>
-                    <td colspan="4">
-                        <f:count subject="{inactiveUsers}"/>
-                        <f:translate key="users">Users</f:translate>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </f:if>
+    <f:render partial="LoginHistory/LatestLogins" arguments="{_all}"/>
+    <f:render partial="LoginHistory/InactiveUsers" arguments="{_all}"/>
 </f:section>
+
+</html>
+

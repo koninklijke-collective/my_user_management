@@ -7,22 +7,23 @@ use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUser
 /**
  * Repository: BackendUserGroup
  */
-class BackendUserGroupRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendUserGroupRepository
+final class BackendUserGroupRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendUserGroupRepository
 {
-
     /**
-     * Returns all allowed objects of this repository
-     *
      * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function findAll()
+    public function findAllConfigured()
     {
-        $query = $this->createQuery();
-        $allowed = BackendUserGroupPermission::configured();
-        // Only filter when configured
-        if (!empty($allowed)) {
-            $query->matching($query->in('uid', $allowed));
+        if (!BackendUserGroupPermission::hasConfigured()) {
+            return $this->findAll();
         }
+
+        $query = $this->createQuery();
+        $query->matching($query->logicalAnd([
+            $query->in('uid', BackendUserGroupPermission::getConfigured()),
+            $query->equals('hideInLists', false),
+        ]));
 
         return $query->execute();
     }

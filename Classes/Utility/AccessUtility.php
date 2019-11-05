@@ -5,11 +5,15 @@ namespace KoninklijkeCollective\MyUserManagement\Utility;
 use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserActionPermission;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
+use KoninklijkeCollective\MyUserManagement\Functions\BackendUserAuthenticationTrait;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Extbase\Security\Exception;
 
-class AccessUtility
+/**
+ * Utility: Access Permissions for Backend User Authentication
+ */
+final class AccessUtility
 {
+    use BackendUserAuthenticationTrait;
 
     /**
      * Check if user has access to module
@@ -17,8 +21,12 @@ class AccessUtility
      * @param  string  $moduleName
      * @return boolean
      */
-    public static function beUserHasRightToSeeModule($moduleName = 'myusermanagement_module')
+    public static function beUserHasRightToSeeModule(string $moduleName = 'myusermanagement_module'): bool
     {
+        if (static::getBackendUserAuthentication()->isAdmin()) {
+            return true;
+        }
+
         $hasAccess = false;
         if (BackendUtility::isModuleSetInTBE_MODULES($moduleName)) {
             $hasAccess = static::getBackendUserAuthentication()->check('modules', $moduleName);
@@ -33,8 +41,12 @@ class AccessUtility
      * @param  string  $table
      * @return boolean
      */
-    public static function beUserHasRightToSeeTable($table = 'be_users')
+    public static function beUserHasRightToSeeTable(string $table): bool
     {
+        if (static::getBackendUserAuthentication()->isAdmin()) {
+            return true;
+        }
+
         return static::getBackendUserAuthentication()->check('tables_select', $table);
     }
 
@@ -44,9 +56,26 @@ class AccessUtility
      * @param  string  $table
      * @return boolean
      */
-    public static function beUserHasRightToEditTable($table = 'be_users')
+    public static function beUserHasRightToEditTable(string $table): bool
     {
-        return static::getBackendUserAuthentication()->check('tables_modify', $table);
+        if (static::getBackendUserAuthentication()->isAdmin()) {
+            return true;
+        }
+
+        if (!static::getBackendUserAuthentication()->check('tables_modify', $table)) {
+            return false;
+        }
+
+        // Check minimal required field for tables
+        switch ($table) {
+            case BackendUser::TABLE:
+                return static::beUserHasRightToEditTableField($table, 'username');
+
+            case BackendUserGroup::TABLE:
+                return static::beUserHasRightToEditTableField($table, 'title');
+        }
+
+        return true;
     }
 
     /**
@@ -56,8 +85,12 @@ class AccessUtility
      * @param  string  $field
      * @return bool
      */
-    public static function beUserHasRightToEditTableField($table = 'be_users', $field = '')
+    public static function beUserHasRightToEditTableField(string $table, string $field): bool
     {
+        if (static::getBackendUserAuthentication()->isAdmin()) {
+            return true;
+        }
+
         return static::getBackendUserAuthentication()->check('non_exclude_fields', $table . ':' . $field);
     }
 
@@ -66,51 +99,31 @@ class AccessUtility
      *
      * @param  string  $table
      * @return boolean
-     * @throws \TYPO3\CMS\Extbase\Security\Exception
      */
-    public static function beUserHasRightToAddTable($table = 'be_users')
+    public static function beUserHasRightToAddTable(string $table): bool
     {
         if (static::getBackendUserAuthentication()->isAdmin()) {
             return true;
         }
 
-        $allowed = false;
         if (static::beUserHasRightToEditTable($table)) {
-            $allowed = true;
-            // @todo, should be configurable
             switch ($table) {
                 case BackendUser::TABLE:
-                    if (BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_ADD_USER) === false) {
+                    if (!BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_ADD_USER)) {
                         return false;
                     }
 
-                    $requiredFields = [
-                        'username',
-                    ];
-                    break;
+                    return true;
                 case BackendUserGroup::TABLE:
-                    if (BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_ADD_GROUP) === false) {
+                    if (!BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_ADD_GROUP)) {
                         return false;
                     }
 
-                    $requiredFields = [
-                        'title',
-                    ];
-                    break;
-                default:
-                    throw new Exception('Unknown lookup for rights');
-            }
-
-            foreach ($requiredFields as $field) {
-                if (static::getBackendUserAuthentication()
-                        ->check('non_exclude_fields', $table . ':' . $field) === false) {
-                    $allowed = false;
-                    break;
-                }
+                    return true;
             }
         }
 
-        return $allowed;
+        return false;
     }
 
     /**
@@ -119,7 +132,7 @@ class AccessUtility
      * @param  string  $table
      * @return boolean
      */
-    public static function beUserHasRightToDeleteTable($table = 'be_users')
+    public static function beUserHasRightToDeleteTable(string $table): bool
     {
         if (static::getBackendUserAuthentication()->isAdmin()) {
             return true;
@@ -133,13 +146,5 @@ class AccessUtility
         }
 
         return false;
-    }
-
-    /**
-     * @return \TYPO3\CMS\Core\Authentication\BackendUserAuthentication
-     */
-    protected static function getBackendUserAuthentication()
-    {
-        return $GLOBALS['BE_USER'];
     }
 }

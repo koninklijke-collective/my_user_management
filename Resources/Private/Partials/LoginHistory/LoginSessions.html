@@ -1,0 +1,67 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+      xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+      data-namespace-typo3-fluid="true">
+
+<div class="login-sessions-overview">
+    <h2>
+        <f:format.raw>
+            <f:translate
+                    key="LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:login_sessions"/>
+        </f:format.raw>
+    </h2>
+
+    <f:if condition="{loginSessions}">
+        <f:then>
+            <div class="table-fit">
+                <table id="typo3-user-access-list" class="table table-striped table-hover">
+                    <thead>
+                    <tr>
+                        <th class="col-icon"></th>
+                        <th class="col-title"><f:translate
+                                key="LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:date"/></th>
+                        <th>
+                            <f:translate
+                                    key="LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:ip_address"/>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <f:for each="{loginSessions}" as="log">
+                        <f:render section="login_row" arguments="{_all}"/>
+                    </f:for>
+                    <f:comment>
+                        Footer row: no officially defined style yet
+                    </f:comment>
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="5">{f:count(subject: loginSessions)} Sessions</td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </f:then>
+        <f:else>
+            <f:be.infobox title="There are no known login sessions for this user!" state="1">
+                No login attempts in logs.
+            </f:be.infobox>
+        </f:else>
+    </f:if>
+</div>
+
+<f:section name="login_row">
+    <tr>
+        <td>
+            <core:icon identifier="status-user-backend"/>
+        </td>
+        <td class="col-title">
+            <f:then>{log.login_date -> f:format.date(format: '{dateFormat} {timeFormat}')}</f:then>
+        </td>
+        <td>
+            {log.login_ip}
+        </td>
+    </tr>
+</f:section>
+</html>
+

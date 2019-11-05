@@ -5,8 +5,9 @@ namespace KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject;
 /**
  * DTO: Permission access Backend User Actions
  */
-class BackendUserActionPermission extends AbstractPermission
+final class BackendUserActionPermission extends AbstractPermission
 {
+    use PermissionTrait;
 
     /**
      * @var string
@@ -23,50 +24,84 @@ class BackendUserActionPermission extends AbstractPermission
     public const ACTION_SWITCH_USER = 5;
 
     /**
-     * @return void
+     * @return array
      */
-    protected function populateData()
+    public static function getItems(): array
     {
-        $this->data = [
-            'header' => 'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions',
-            'items' => [
-                static::ACTION_ADD_USER => [
-                    'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions.action_add_user.title',
-                    'EXT:my_user_management/Resources/Public/Icons/permissions-actions-add.svg',
-                    'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions.action_add_user.description',
-                ],
-                static::ACTION_DELETE_USER => [
-                    'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions.action_delete_user.title',
-                    'EXT:my_user_management/Resources/Public/Icons/permissions-actions-delete.svg',
-                    'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions.action_delete_user.description',
-                ],
-                static::ACTION_ADD_GROUP => [
-                    'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions.action_add_group.title',
-                    'EXT:my_user_management/Resources/Public/Icons/permissions-actions-add.svg',
-                    'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions.action_add_group.description',
-                ],
-                static::ACTION_DELETE_GROUP => [
-                    'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions.action_delete_group.title',
-                    'EXT:my_user_management/Resources/Public/Icons/permissions-actions-delete.svg',
-                    'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions.action_delete_group.description',
-                ],
-                static::ACTION_SWITCH_USER => [
-                    'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions.action_switch_user.title',
-                    'EXT:my_user_management/Resources/Public/Icons/permissions-actions-user-switch.svg',
-                    'LLL:EXT:my_user_management/Resources/Private/Language/locallang.xlf:backend_access_action_permissions.action_switch_user.description',
-                ],
+        return [
+            self::ACTION_ADD_USER => [
+                'LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:backend_access_action_permissions.action_add_user.title',
+                'my_user_management-permissions-actions-add',
+            ],
+            self::ACTION_DELETE_USER => [
+                'LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:backend_access_action_permissions.action_delete_user.title',
+                'my_user_management-permissions-actions-delete',
+            ],
+            self::ACTION_ADD_GROUP => [
+                'LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:backend_access_action_permissions.action_add_group.title',
+                'my_user_management-permissions-actions-add',
+            ],
+            self::ACTION_DELETE_GROUP => [
+                'LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:backend_access_action_permissions.action_delete_group.title',
+                'my_user_management-permissions-actions-delete',
+            ],
+            self::ACTION_SWITCH_USER => [
+                'LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:backend_access_action_permissions.action_switch_user.title',
+                'my_user_management-permissions-actions-user_switch',
             ],
         ];
     }
 
     /**
-     * Quickly check if user has access
-     *
-     * @param  integer  $action
-     * @return boolean
+     * @return void
      */
-    public static function isConfigured($action)
+    protected function populateData(): void
     {
-        return in_array($action, static::configured());
+        $this->data = [
+            'header' => 'LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:backend_access_action_permissions',
+            'items' => self::getItems(),
+        ];
+    }
+
+    /** Helper classes for readability */
+
+    /**
+     * @return bool
+     */
+    public static function userCreationAllowed(): bool
+    {
+        return static::isConfigured(self::ACTION_ADD_USER);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function userDeletionAllowed(): bool
+    {
+        return static::isConfigured(self::ACTION_DELETE_USER);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function groupCreationAllowed(): bool
+    {
+        return static::isConfigured(self::ACTION_ADD_GROUP);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function groupDeletionAllowed(): bool
+    {
+        return static::isConfigured(self::ACTION_DELETE_GROUP);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function switchUserAllowed(): bool
+    {
+        return static::isConfigured(self::ACTION_SWITCH_USER);
     }
 }

@@ -2,12 +2,13 @@
 
 namespace KoninklijkeCollective\MyUserManagement\Domain\Repository;
 
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
 /**
  * Repository: FileMount
  */
-class FileMountRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FileMountRepository
+final class FileMountRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FileMountRepository
 {
 
     /** @var array */
@@ -21,10 +22,9 @@ class FileMountRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FileMount
      *
      * @return void
      */
-    public function initializeObject()
+    public function initializeObject(): void
     {
-        /** @var $querySettings \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings */
-        $querySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
+        $querySettings = $this->objectManager->get(Typo3QuerySettings::class);
         $querySettings->setIgnoreEnableFields(true);
         $querySettings->setEnableFieldsToBeIgnored(['hidden']);
         $this->setDefaultQuerySettings($querySettings);
