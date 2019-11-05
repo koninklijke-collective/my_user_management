@@ -2,15 +2,17 @@
 
 namespace KoninklijkeCollective\MyUserManagement\Service;
 
+use DateTime;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Service: Access Look up
  */
-class AccessService implements \TYPO3\CMS\Core\SingletonInterface
+class AccessService implements SingletonInterface
 {
 
     /**
@@ -23,7 +25,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
      * Find users which has access to given page id
      * Checks db mounts
      *
-     * @param integer $page
+     * @param  integer  $page
      * @return array
      */
     public function findUsersWithPageAccess($page)
@@ -31,9 +33,10 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
         $rootLine = BackendUtility::BEgetRootLine($page);
         $rootLineIds = [];
         foreach ($rootLine as $page) {
-            $rootLineIds[] = (int) $page['uid'];
+            $rootLineIds[] = (int)$page['uid'];
         }
         $users = $this->findAllowedUsersInRootLine($rootLineIds);
+
         return $users;
     }
 
@@ -62,6 +65,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
                 $returnedUsers[] = $user;
             }
         }
+
         return $returnedUsers;
     }
 
@@ -73,7 +77,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
     public function findAllInactiveBackendUsers()
     {
         $returnedUsers = [];
-        $loginSince = new \DateTime('- 6 months');
+        $loginSince = new DateTime('- 6 months');
         $users = $this->backendUserRepository->findAllInactive($loginSince);
 
         foreach ($users as $user) {
@@ -91,18 +95,19 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
                 $returnedUsers[] = $user;
             }
         }
+
         return $returnedUsers;
     }
 
     /**
      * Find backend user
      *
-     * @param integer $userId
+     * @param  integer  $userId
      * @return array
      */
     public function findBackendUser($userId)
     {
-        $user = $this->backendUserRepository->findByUid((int) $userId);
+        $user = $this->backendUserRepository->findByUid((int)$userId);
 
         if ($user instanceof BackendUser) {
             if ($this->isAllowedUser($user) === false) {
@@ -122,7 +127,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Check if given user is allowed for current logged in user
      *
-     * @param \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser $user
+     * @param  \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser  $user
      * @return boolean
      */
     protected function isAllowedUser(BackendUser $user)
@@ -141,8 +146,8 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
     }
 
     /**
-     * @param \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup $group
-     * @param array $mounts
+     * @param  \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup  $group
+     * @param  array  $mounts
      * @return array
      */
     protected function getAllDatabaseMountsFromUserGroup(BackendUserGroup $group, array $mounts = [])
@@ -157,13 +162,14 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
                 $mounts = $this->getAllDatabaseMountsFromUserGroup($subGroup, $mounts);
             }
         }
+
         return $mounts;
     }
 
     /**
      * Find users that has access in rootline
      *
-     * @param array $rootLine
+     * @param  array  $rootLine
      * @return array
      */
     protected function findAllowedUsersInRootLine($rootLine)
@@ -182,6 +188,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
                 }
             }
         }
+
         return $returnedUsers;
     }
 

@@ -3,10 +3,13 @@
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
+use KoninklijkeCollective\MyUserManagement\Service\OverrideService;
 use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Beuser\Domain\Model\Demand;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Fluid\View\TemplateView;
@@ -21,7 +24,7 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
      * Override generic backend user repository
      *
      * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository
-     * @inject
+     * @Extbase\Inject
      */
     protected $backendUserRepository;
 
@@ -30,19 +33,19 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
 
     /**
      * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository
-     * @inject
+     * @Extbase\Inject
      */
     protected $backendUserGroupRepository;
 
     /**
      * Set up the view template configuration correctly for BackendTemplateView
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
+     * @param  \TYPO3\CMS\Extbase\Mvc\View\ViewInterface  $view
      * @return void
      */
     protected function setViewConfiguration(ViewInterface $view)
     {
-        if (class_exists('\TYPO3\CMS\Backend\View\BackendTemplateView') && ($view instanceof \TYPO3\CMS\Backend\View\BackendTemplateView)) {
+        if (class_exists('\TYPO3\CMS\Backend\View\BackendTemplateView') && ($view instanceof BackendTemplateView)) {
             /** @var \TYPO3\CMS\Fluid\View\TemplateView $_view */
             $_view = $this->objectManager->get(TemplateView::class);
             $this->setViewConfiguration($_view);
@@ -86,10 +89,10 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
      * Displays all BackendUsers
      * - Switch session to different user
      *
-     * @param \TYPO3\CMS\Beuser\Domain\Model\Demand $demand
+     * @param  \TYPO3\CMS\Beuser\Domain\Model\Demand  $demand
      * @return void
      */
-    public function indexAction(?\TYPO3\CMS\Beuser\Domain\Model\Demand $demand = null)
+    public function indexAction(?Demand $demand = null)
     {
         if (AccessUtility::beUserHasRightToEditTable(BackendUser::TABLE) === false) {
             $this->addFlashMessage(
@@ -115,13 +118,15 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
         }
 
         parent::indexAction($demand);
-        $this->view->assign('returnUrl', rawurlencode(BackendUtility::getModuleUrl('myusermanagement_MyUserManagementUseradmin')));
+        $this->view->assign('returnUrl',
+            rawurlencode(BackendUtility::getModuleUrl('myusermanagement_MyUserManagementUseradmin')));
     }
 
     /**
-     * Switches to a given user (SU-mode) and then redirects to the start page of the backend to refresh the navigation etc.
+     * Switches to a given user (SU-mode) and then redirects to the start page of the backend to refresh the navigation
+     * etc.
      *
-     * @param string $switchUser BE-user record that will be switched to
+     * @param  string  $switchUser  BE-user record that will be switched to
      * @return void
      */
     protected function switchUser($switchUser)
@@ -160,8 +165,8 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
     /**
      * Translate label for module
      *
-     * @param string $key
-     * @param array $arguments
+     * @param  string  $key
+     * @param  array  $arguments
      * @return string
      */
     protected function translate($key, $arguments = [])
@@ -174,6 +179,7 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
                 $arguments
             );
         }
+
         return ($label) ? $label : $key;
     }
 
@@ -191,8 +197,9 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
     protected function getOverrideService()
     {
         if ($this->overrideService === null) {
-            $this->overrideService = $this->objectManager->get(\KoninklijkeCollective\MyUserManagement\Service\OverrideService::class);
+            $this->overrideService = $this->objectManager->get(OverrideService::class);
         }
+
         return $this->overrideService;
     }
 }

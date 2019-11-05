@@ -11,16 +11,16 @@ class BackendUserActionPermission extends AbstractPermission
     /**
      * @var string
      */
-    const KEY = 'my_user_management_action_permissions';
+    public const KEY = 'my_user_management_action_permissions';
 
     /**
      * Disabled actions
      */
-    const ACTION_ADD_USER = 1;
-    const ACTION_DELETE_USER = 2;
-    const ACTION_ADD_GROUP = 3;
-    const ACTION_DELETE_GROUP = 4;
-    const ACTION_SWITCH_USER = 5;
+    public const ACTION_ADD_USER = 1;
+    public const ACTION_DELETE_USER = 2;
+    public const ACTION_ADD_GROUP = 3;
+    public const ACTION_DELETE_GROUP = 4;
+    public const ACTION_SWITCH_USER = 5;
 
     /**
      * @return void
@@ -62,7 +62,7 @@ class BackendUserActionPermission extends AbstractPermission
     /**
      * Quickly check if user has access
      *
-     * @param integer $action
+     * @param  integer  $action
      * @return boolean
      */
     public static function isConfigured($action)

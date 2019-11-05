@@ -2,10 +2,13 @@
 
 namespace KoninklijkeCollective\MyUserManagement\ViewHelper;
 
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
+use TYPO3\CMS\Frontend\Page\PageRepository;
+
 /**
  * Retrieve page information
  */
-class PageInfoViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class PageInfoViewHelper extends AbstractViewHelper
 {
 
     /** @var boolean */
@@ -20,8 +23,8 @@ class PageInfoViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHe
     /**
      * Retrieve page details from given page id
      *
-     * @param integer $pageId
-     * @param string $as
+     * @param  integer  $pageId
+     * @param  string  $as
      * @return string Rendered string
      */
     public function render($pageId, $as = 'page')
@@ -29,6 +32,7 @@ class PageInfoViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHe
         $this->templateVariableContainer->add($as, $this->getPageRepository()->getPage($pageId));
         $output = $this->renderChildren();
         $this->templateVariableContainer->remove($as);
+
         return $output;
     }
 
@@ -38,8 +42,9 @@ class PageInfoViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHe
     protected function getPageRepository()
     {
         if ($this->pageRepository === null) {
-            $this->objectManager->get(\TYPO3\CMS\Frontend\Page\PageRepository::class);
+            $this->objectManager->get(PageRepository::class);
         }
+
         return $this->pageRepository;
     }
 }

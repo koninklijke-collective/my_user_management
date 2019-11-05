@@ -2,22 +2,24 @@
 
 namespace KoninklijkeCollective\MyUserManagement\Service;
 
+use TYPO3\CMS\Core\SingletonInterface;
+
 /**
  * Service: Logs
  */
-class LogService implements \TYPO3\CMS\Core\SingletonInterface
+class LogService implements SingletonInterface
 {
 
     /**
      * Default static values for readability
      */
-    const TYPE_LOGGED_IN = 255;
-    const ACTION_LOG_IN = 1;
+    public const TYPE_LOGGED_IN = 255;
+    public const ACTION_LOG_IN = 1;
 
     /**
      * Find login actions from sys_log
      *
-     * @param array $parameters
+     * @param  array  $parameters
      * @return array
      */
     public function findUserLoginActions($parameters = null)
@@ -35,9 +37,9 @@ class LogService implements \TYPO3\CMS\Core\SingletonInterface
         // Set parameter query parts
         if (!empty($parameters)) {
             if ($parameters['user'] !== null) {
-                $whereParts['userId'] = 'sys_log.`userId` = ' . (int) $parameters['user'];
+                $whereParts['userId'] = 'sys_log.`userId` = ' . (int)$parameters['user'];
             }
-            if ((bool) $parameters['hide-admin'] === true) {
+            if ((bool)$parameters['hide-admin'] === true) {
                 $whereParts['hide-admin'] = 'be_users.admin = 0';
             }
         }
@@ -45,7 +47,8 @@ class LogService implements \TYPO3\CMS\Core\SingletonInterface
         // Set default variables for output
         $logs = [
             'information' => [
-                'total' => $this->getDatabaseConnection()->exec_SELECTcountRows('sys_log.uid', 'sys_log, be_users', implode(' AND ', $whereParts)),
+                'total' => $this->getDatabaseConnection()
+                    ->exec_SELECTcountRows('sys_log.uid', 'sys_log, be_users', implode(' AND ', $whereParts)),
                 'itemsPerPage' => null,
                 'page' => 1,
             ],
@@ -56,15 +59,15 @@ class LogService implements \TYPO3\CMS\Core\SingletonInterface
         // Apply pagination
         $limit = null;
         if ((!empty($parameters)) && $parameters['itemsPerPage'] !== null) {
-            $logs['information']['itemsPerPage'] = (int) $parameters['itemsPerPage'];
+            $logs['information']['itemsPerPage'] = (int)$parameters['itemsPerPage'];
 
             $limit = [
                 'offset' => 0,
-                'items' => (int) $parameters['itemsPerPage'],
+                'items' => (int)$parameters['itemsPerPage'],
             ];
             if ($parameters['page'] !== null) {
-                $logs['information']['page'] = (int) $parameters['page'];
-                $limit['offset'] = $limit['items'] * ((int) $parameters['page'] - 1);
+                $logs['information']['page'] = (int)$parameters['page'];
+                $limit['offset'] = $limit['items'] * ((int)$parameters['page'] - 1);
             }
         }
 
@@ -86,6 +89,7 @@ class LogService implements \TYPO3\CMS\Core\SingletonInterface
                 'tstamp' => $row['tstamp'],
             ];
         }
+
         return $logs;
     }
 

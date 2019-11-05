@@ -7,13 +7,14 @@ use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Controller: LoginHistory
  */
-class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class LoginHistoryController extends ActionController
 {
 
     /**
@@ -32,7 +33,7 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
     /**
      * Set up the doc header properly here
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
+     * @param  \TYPO3\CMS\Extbase\Mvc\View\ViewInterface  $view
      * @return void
      */
     protected function initializeView(ViewInterface $view)
@@ -53,7 +54,7 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
     /**
      * Action: List all users
      *
-     * @param integer $page
+     * @param  integer  $page
      * @return void
      */
     public function indexAction($page = 1)
@@ -83,7 +84,7 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
     /**
      * Action: Get login overview
      *
-     * @param integer $user
+     * @param  integer  $user
      * @return void
      */
     public function detailAction($user = null)
@@ -111,8 +112,8 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
     /**
      * Translate label for module
      *
-     * @param string $key
-     * @param array $arguments
+     * @param  string  $key
+     * @param  array  $arguments
      * @return string
      */
     protected function translate($key, $arguments = [])
@@ -125,6 +126,7 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
                 $arguments
             );
         }
+
         return ($label) ? $label : $key;
     }
 
@@ -136,6 +138,7 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
         if ($this->logService === null) {
             $this->logService = $this->objectManager->get('KoninklijkeCollective\MyUserManagement\Service\LogService');
         }
+
         return $this->logService;
     }
 
@@ -147,6 +150,7 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
         if ($this->accessService === null) {
             $this->accessService = $this->objectManager->get('KoninklijkeCollective\MyUserManagement\Service\AccessService');
         }
+
         return $this->accessService;
     }
 

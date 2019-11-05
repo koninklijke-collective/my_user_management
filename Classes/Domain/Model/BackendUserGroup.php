@@ -13,7 +13,7 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
     /**
      * @var string
      */
-    const TABLE = 'be_groups';
+    public const TABLE = 'be_groups';
 
     /**
      * Flag for record being hidden
@@ -48,7 +48,7 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
     /**
      * Sets the Database Mount Points
      *
-     * @param string $dbMountPoints
+     * @param  string  $dbMountPoints
      * @return void
      */
     public function setDbMountPoints($dbMountPoints)
@@ -69,7 +69,7 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
     /**
      * Sets the file mount points
      *
-     * @param string $fileMountPoints
+     * @param  string  $fileMountPoints
      * @return void
      */
     public function setFileMountpoints($fileMountPoints)
@@ -90,7 +90,7 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
     /**
      * Sets isDisabled
      *
-     * @param boolean $isDisabled
+     * @param  boolean  $isDisabled
      * @return void
      */
     public function setIsDisabled($isDisabled)

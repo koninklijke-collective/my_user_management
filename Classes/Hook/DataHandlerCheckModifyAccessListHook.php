@@ -5,6 +5,7 @@ namespace KoninklijkeCollective\MyUserManagement\Hook;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
 use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\DataHandling\DataHandlerCheckModifyAccessListHookInterface;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Extbase\Security\Exception;
@@ -18,14 +19,16 @@ class DataHandlerCheckModifyAccessListHook implements DataHandlerCheckModifyAcce
     /**
      * Hook that determines whether a user has access to modify a table.
      *
-     * @param bool &$accessAllowed Whether the user has access to modify a table
-     * @param string $table The name of the table to be modified
-     * @param \TYPO3\CMS\Core\DataHandling\DataHandler $parent The calling parent object
+     * @param  bool &$accessAllowed  Whether the user has access to modify a table
+     * @param  string  $table  The name of the table to be modified
+     * @param  \TYPO3\CMS\Core\DataHandling\DataHandler  $parent  The calling parent object
      * @throws \TYPO3\CMS\Extbase\Security\Exception
      */
-    public function checkModifyAccessList(&$accessAllowed, $table, \TYPO3\CMS\Core\DataHandling\DataHandler $parent)
+    public function checkModifyAccessList(&$accessAllowed, $table, DataHandler $parent)
     {
-        if (in_array($table, [BackendUser::TABLE, BackendUserGroup::TABLE]) && $accessAllowed === true && AccessUtility::beUserHasRightToEditTable($table)) {
+        if (in_array($table, [BackendUser::TABLE, BackendUserGroup::TABLE])
+            && $accessAllowed === true
+            && AccessUtility::beUserHasRightToEditTable($table)) {
             $action = 'unknown';
             if (isset($parent->cmdmap[$table])) {
                 foreach ($parent->cmdmap[$table] as $id => $incomingCmdArray) {

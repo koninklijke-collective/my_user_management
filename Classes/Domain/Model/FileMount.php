@@ -2,18 +2,20 @@
 
 namespace KoninklijkeCollective\MyUserManagement\Domain\Model;
 
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+
 /**
  * Domain model for file mounts
  *
  * @author Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
  */
-class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+class FileMount extends AbstractEntity
 {
 
     /**
      * @var string
      */
-    const TABLE = 'sys_filemounts';
+    public const TABLE = 'sys_filemounts';
 
     /**
      * Title of the file mount.
@@ -54,7 +56,7 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Setter for the title of the file mount.
      *
-     * @param string $value
+     * @param  string  $value
      * @return void
      */
     public function setTitle($value)
@@ -75,7 +77,7 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Setter for the path of the file mount.
      *
-     * @param string $value
+     * @param  string  $value
      * @return void
      */
     public function setPath($value)
@@ -96,7 +98,7 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the Storage
      *
-     * @param int $storage
+     * @param  int  $storage
      * @return void
      */
     public function setStorage($storage)
@@ -117,7 +119,7 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
     /**
      * Sets the disabled state
      *
-     * @param boolean $isDisabled
+     * @param  boolean  $isDisabled
      * @return void
      */
     public function setIsDisabled($isDisabled)

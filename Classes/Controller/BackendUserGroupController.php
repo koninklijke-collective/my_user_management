@@ -3,10 +3,13 @@
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
+use KoninklijkeCollective\MyUserManagement\Service\OverrideService;
 use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Controller: BackendUserGroup
@@ -26,12 +29,12 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
     /**
      * Set up the view template configuration correctly for BackendTemplateView
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
+     * @param  \TYPO3\CMS\Extbase\Mvc\View\ViewInterface  $view
      * @return void
      */
     protected function setViewConfiguration(ViewInterface $view)
     {
-        if (class_exists('\TYPO3\CMS\Backend\View\BackendTemplateView') && ($view instanceof \TYPO3\CMS\Backend\View\BackendTemplateView)) {
+        if (class_exists('\TYPO3\CMS\Backend\View\BackendTemplateView') && ($view instanceof BackendTemplateView)) {
             /** @var \TYPO3\CMS\Fluid\View\TemplateView $_view */
             $_view = $this->objectManager->get('TYPO3\CMS\Fluid\View\TemplateView');
             $this->setViewConfiguration($_view);
@@ -104,20 +107,21 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
     /**
      * Translate label for module
      *
-     * @param string $key
-     * @param array $arguments
+     * @param  string  $key
+     * @param  array  $arguments
      * @return string
      */
     protected function translate($key, $arguments = [])
     {
         $label = null;
         if (!empty($key)) {
-            $label = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
+            $label = LocalizationUtility::translate(
                 'backendUserAdminOverview_' . $key,
                 'my_user_management',
                 $arguments
             );
         }
+
         return ($label) ? $label : $key;
     }
 
@@ -135,8 +139,9 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
     protected function getOverrideService()
     {
         if ($this->overrideService === null) {
-            $this->overrideService = $this->objectManager->get(\KoninklijkeCollective\MyUserManagement\Service\OverrideService::class);
+            $this->overrideService = $this->objectManager->get(OverrideService::class);
         }
+
         return $this->overrideService;
     }
 }

@@ -5,6 +5,7 @@ namespace KoninklijkeCollective\MyUserManagement\Hook;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
 use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
+use TYPO3\CMS\Backend\Controller\EditDocumentController;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 
 /**
@@ -16,8 +17,8 @@ class ButtonBarHook
     /**
      * Change button bar when editing BackendUser & BackendUserGroup
      *
-     * @param array $parameters
-     * @param \TYPO3\CMS\Backend\Template\Components\ButtonBar $buttonBar
+     * @param  array  $parameters
+     * @param  \TYPO3\CMS\Backend\Template\Components\ButtonBar  $buttonBar
      * @return array
      */
     public function getButtons($parameters, ButtonBar $buttonBar)
@@ -29,7 +30,8 @@ class ButtonBarHook
                     /** @var \TYPO3\CMS\Backend\Template\Components\Buttons\AbstractButton $button */
                     foreach ($buttonGroup as $index => $button) {
                         // Remove history button when editing be_users
-                        if ($button->getIcon() && $button->getIcon()->getIdentifier() === 'actions-document-history-open') {
+                        if ($button->getIcon() && $button->getIcon()
+                                ->getIdentifier() === 'actions-document-history-open') {
                             unset($parameters['buttons'][ButtonBar::BUTTON_POSITION_LEFT][$key][$index]);
                         }
 
@@ -54,6 +56,7 @@ class ButtonBarHook
     {
         /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser */
         $backendUser = $GLOBALS['BE_USER'];
+
         return $backendUser->isAdmin();
     }
 
@@ -62,7 +65,7 @@ class ButtonBarHook
      */
     protected function isEditRecord()
     {
-        return ($GLOBALS['SOBE'] instanceof \TYPO3\CMS\Backend\Controller\EditDocumentController);
+        return ($GLOBALS['SOBE'] instanceof EditDocumentController);
     }
 
     /**

@@ -2,16 +2,21 @@
 
 namespace KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject;
 
+use ArrayAccess;
+use Countable;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * DTO: Permission access Backend User Groups
  */
-abstract class AbstractPermission implements \ArrayAccess, \Countable
+abstract class AbstractPermission implements ArrayAccess, Countable
 {
 
     /**
      * Override permission key per class!
      */
-    const KEY = 'my_user_management_permissions';
+    public const KEY = 'my_user_management_permissions';
 
     /** @var array */
     protected $data;
@@ -39,14 +44,15 @@ abstract class AbstractPermission implements \ArrayAccess, \Countable
         $configured = [];
         $backendUser = $GLOBALS['BE_USER'];
         // Only return allowed users for non-admin
-        if ($backendUser instanceof \TYPO3\CMS\Core\Authentication\BackendUserAuthentication && $backendUser->isAdmin() === false) {
+        if ($backendUser instanceof BackendUserAuthentication && $backendUser->isAdmin() === false) {
             $options = $backendUser->groupData['custom_options'];
-            foreach (\TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $options, true) as $value) {
+            foreach (GeneralUtility::trimExplode(',', $options, true) as $value) {
                 if (strpos($value, static::KEY) === 0) {
-                    $configured[] = (int) substr($value, strlen(static::KEY) + 1);
+                    $configured[] = (int)substr($value, strlen(static::KEY) + 1);
                 }
             }
         }
+
         return $configured;
     }
 
@@ -54,7 +60,7 @@ abstract class AbstractPermission implements \ArrayAccess, \Countable
      * Whether a offset exists
      *
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php
-     * @param mixed $offset
+     * @param  mixed  $offset
      * @return boolean
      */
     public function offsetExists($offset)
@@ -66,7 +72,7 @@ abstract class AbstractPermission implements \ArrayAccess, \Countable
      * Offset to retrieve
      *
      * @link http://php.net/manual/en/arrayaccess.offsetget.php
-     * @param mixed $offset
+     * @param  mixed  $offset
      * @return mixed
      */
     public function offsetGet($offset)
@@ -78,7 +84,7 @@ abstract class AbstractPermission implements \ArrayAccess, \Countable
      * Offset to set
      *
      * @link http://php.net/manual/en/arrayaccess.offsetset.php
-     * @param mixed $offset
+     * @param  mixed  $offset
      * @return void
      */
     public function offsetSet($offset, $value)
@@ -94,7 +100,7 @@ abstract class AbstractPermission implements \ArrayAccess, \Countable
      * Offset to unset
      *
      * @link http://php.net/manual/en/arrayaccess.offsetunset.php
-     * @param mixed $offset
+     * @param  mixed  $offset
      * @return void
      */
     public function offsetUnset($offset)

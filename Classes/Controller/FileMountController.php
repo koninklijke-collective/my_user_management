@@ -11,13 +11,14 @@ use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Controller: FileMount
  */
-class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class FileMountController extends ActionController
 {
 
     /**
@@ -33,7 +34,7 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
     /**
      * Set up the doc header properly here
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
+     * @param  \TYPO3\CMS\Extbase\Mvc\View\ViewInterface  $view
      * @return void
      */
     protected function initializeView(ViewInterface $view)
@@ -62,7 +63,9 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
                 $parameters = GeneralUtility::explodeUrl2Array('edit[sys_filemounts][0]=new&returnUrl=' . $returnUrl);
                 $addUserLink = BackendUtility::getModuleUrl('record_edit', $parameters);
                 $title = $this->translate('file_mount_add_new');
-                $icon = $this->view->getModuleTemplate()->getIconFactory()->getIcon('actions-document-new', Icon::SIZE_SMALL);
+                $icon = $this->view->getModuleTemplate()
+                    ->getIconFactory()
+                    ->getIcon('actions-document-new', Icon::SIZE_SMALL);
                 $addUserButton = $buttonBar->makeLinkButton()
                     ->setHref($addUserLink)
                     ->setTitle($title)
@@ -87,7 +90,8 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
             );
         }
 
-        $this->view->assign('returnUrl', BackendUtility::getModuleUrl('myusermanagement_MyUserManagementFilemountadmin'));
+        $this->view->assign('returnUrl',
+            BackendUtility::getModuleUrl('myusermanagement_MyUserManagementFilemountadmin'));
 
         $fileMounts = $this->getFileMountRepository()->findAll();
         if (count($fileMounts) === 0) {
@@ -104,8 +108,8 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
     /**
      * Translate label for module
      *
-     * @param string $key
-     * @param array $arguments
+     * @param  string  $key
+     * @param  array  $arguments
      * @return string
      */
     protected function translate($key, $arguments = [])
@@ -118,6 +122,7 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
                 $arguments
             );
         }
+
         return ($label) ? $label : $key;
     }
 
@@ -129,6 +134,7 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
         if ($this->fileMountRepository === null) {
             $this->fileMountRepository = $this->objectManager->get(FileMountRepository::class);
         }
+
         return $this->fileMountRepository;
     }
 

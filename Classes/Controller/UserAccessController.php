@@ -2,16 +2,18 @@
 
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
+use KoninklijkeCollective\MyUserManagement\Service\AccessService;
 use TYPO3\CMS\Backend\View\BackendTemplateView;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Controller: UserAccess
  */
-class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class UserAccessController extends ActionController
 {
 
     /**
@@ -27,7 +29,7 @@ class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
     /**
      * Set up the doc header properly here
      *
-     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
+     * @param  \TYPO3\CMS\Extbase\Mvc\View\ViewInterface  $view
      * @return void
      */
     protected function initializeView(ViewInterface $view)
@@ -46,7 +48,7 @@ class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
      */
     public function indexAction()
     {
-        $pageId = (int) GeneralUtility::_GP('id');
+        $pageId = (int)GeneralUtility::_GP('id');
         $backendUsers = $this->getAccessService()->findUsersWithPageAccess($pageId);
 
         if ($pageId === 0) {
@@ -74,8 +76,8 @@ class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
     /**
      * Translate label for module
      *
-     * @param string $key
-     * @param array $arguments
+     * @param  string  $key
+     * @param  array  $arguments
      * @return string
      */
     protected function translate($key, $arguments = [])
@@ -88,6 +90,7 @@ class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
                 $arguments
             );
         }
+
         return ($label) ? $label : $key;
     }
 
@@ -97,8 +100,9 @@ class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
     protected function getAccessService()
     {
         if ($this->accessService === null) {
-            $this->accessService = $this->objectManager->get(\KoninklijkeCollective\MyUserManagement\Service\AccessService::class);
+            $this->accessService = $this->objectManager->get(AccessService::class);
         }
+
         return $this->accessService;
     }
 }

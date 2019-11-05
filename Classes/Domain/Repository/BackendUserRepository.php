@@ -2,6 +2,11 @@
 
 namespace KoninklijkeCollective\MyUserManagement\Domain\Repository;
 
+use DateTime;
+use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission;
+use TYPO3\CMS\Beuser\Domain\Model\Demand;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+
 /**
  * Repository: BackendUser
  */
@@ -10,17 +15,18 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
 
     /** @var array */
     protected $defaultOrderings = [
-        'username' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
+        'username' => QueryInterface::ORDER_ASCENDING,
     ];
 
     /**
      * Override demanded query for filtering by group access
      */
-    public function findDemanded(\TYPO3\CMS\Beuser\Domain\Model\Demand $demand)
+    public function findDemanded(Demand $demand)
     {
         if ($this->getBackendUserAuthentication()->isAdmin() === false) {
             $query = parent::findDemanded($demand)->getQuery();
             $this->applyUserGroupPermission($query);
+
             return $query->execute();
         } else {
             return parent::findDemanded($demand);
@@ -42,16 +48,17 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
         if ($this->getBackendUserAuthentication()->isAdmin() === false) {
             $this->applyUserGroupPermission($query);
         }
+
         return $query->execute();
     }
 
     /**
      * Find all inactive users based on last login
      *
-     * @param \DateTime $lastLoginSince
+     * @param  \DateTime  $lastLoginSince
      * @return array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      */
-    public function findAllInactive(\DateTime $lastLoginSince)
+    public function findAllInactive(DateTime $lastLoginSince)
     {
         $query = $this->createQuery();
         $query->matching($query->logicalAnd([
@@ -62,6 +69,7 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
         if ($this->getBackendUserAuthentication()->isAdmin() === false) {
             $this->applyUserGroupPermission($query);
         }
+
         return $query->execute();
     }
 
@@ -78,7 +86,7 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
                 $query->getConstraint(),
                 $query->logicalNot($query->like('username', '_cli_%')),
             ];
-            $allowed = \KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::configured();
+            $allowed = BackendUserGroupPermission::configured();
             if (!empty($allowed)) {
                 $allowedConstraints = [
                     // Always allow current user
@@ -87,10 +95,10 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
                 foreach ($allowed as $id) {
                     // @TODO: Refactor for real n:m relations
                     $allowedConstraints[] = $query->logicalOr([
-                        $query->equals('usergroup', (int) $id),
-                        $query->like('usergroup', (int) $id . ',%'),
-                        $query->like('usergroup', '%,' . (int) $id),
-                        $query->like('usergroup', '%,' . (int) $id . ',%'),
+                        $query->equals('usergroup', (int)$id),
+                        $query->like('usergroup', (int)$id . ',%'),
+                        $query->like('usergroup', '%,' . (int)$id),
+                        $query->like('usergroup', '%,' . (int)$id . ',%'),
                     ]);
                 }
                 $constraints[] = $query->logicalOr($allowedConstraints);

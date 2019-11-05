@@ -13,7 +13,7 @@ class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
     /**
      * @var string
      */
-    const TABLE = 'be_users';
+    public const TABLE = 'be_users';
 
     /** @var array */
     protected $inheritedMountPoints = [];
@@ -27,7 +27,7 @@ class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
     /**
      * Returns the Database Mount Points
      *
-     * @param bool $exploded
+     * @param  bool  $exploded
      * @return array|string
      */
     public function getDbMountPoints($exploded = false)
@@ -52,7 +52,7 @@ class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
     /**
      * Sets all inherited Mount Points
      *
-     * @param array $allInheritedMountPoints
+     * @param  array  $allInheritedMountPoints
      * @return void
      */
     public function setInheritedMountPoints(array $allInheritedMountPoints)
@@ -73,7 +73,7 @@ class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
     /**
      * Sets the ActivePageMount
      *
-     * @param array $activePageMount
+     * @param  array  $activePageMount
      * @return void
      */
     public function setActiveMountPoints(array $activePageMount)

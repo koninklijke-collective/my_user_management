@@ -2,12 +2,15 @@
 
 namespace KoninklijkeCollective\MyUserManagement\ViewHelper;
 
+use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper;
 
 /**
  * Displays link with sprite icon with confirm message
  */
-class LinkConfirmViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
+class LinkConfirmViewHelper extends AbstractViewHelper
 {
 
     /** @var boolean */
@@ -16,18 +19,18 @@ class LinkConfirmViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVie
     /**
      * Render confirm link with sprite icon
      *
-     * @param string $link
-     * @param string $message
-     * @param string $title
-     * @param string $class
-     * @param string $icon
+     * @param  string  $link
+     * @param  string  $message
+     * @param  string  $title
+     * @param  string  $class
+     * @param  string  $icon
      * @return string
      */
     public function render($link, $message = '', $title = '', $class = '', $icon = 'actions-edit-delete')
     {
         if (!empty($link)) {
             /** @var \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory */
-            $iconFactory = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconFactory::class);
+            $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
             $attributes = [
                 'href' => $link,
                 'data-severity' => 'warning',
@@ -36,10 +39,12 @@ class LinkConfirmViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractVie
                 'data-button-close-text' => $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_common.xlf:cancel'),
                 'class' => 'btn btn-default t3js-modal-trigger' . ($class ? ' ' . $class : ''),
             ];
+
             return '<a ' . GeneralUtility::implodeAttributes($attributes, true, true) . '>'
-            . $iconFactory->getIcon($icon, \TYPO3\CMS\Core\Imaging\Icon::SIZE_SMALL)
-            . '</a>';
+                . $iconFactory->getIcon($icon, Icon::SIZE_SMALL)
+                . '</a>';
         }
+
         return '';
     }
 }

@@ -2,6 +2,7 @@
 
 namespace KoninklijkeCollective\MyUserManagement\Service;
 
+use Exception;
 use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserActionPermission;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
@@ -11,21 +12,24 @@ use TYPO3\CMS\Backend\Template\Components\MenuRegistry;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\PathUtility;
 use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
+use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 /**
  * Service: Override Default Functionality
  */
-class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
+class OverrideService implements SingletonInterface
 {
 
     /**
-     * @param \TYPO3\CMS\Backend\Template\Components\ButtonBar $buttonBar
-     * @param \TYPO3\CMS\Extbase\Mvc\Request $request
-     * @param \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory
+     * @param  \TYPO3\CMS\Backend\Template\Components\ButtonBar  $buttonBar
+     * @param  \TYPO3\CMS\Extbase\Mvc\Request  $request
+     * @param  \TYPO3\CMS\Core\Imaging\IconFactory  $iconFactory
      * @return void
      */
     public function registerDocheaderButtons(ButtonBar $buttonBar, Request $request, IconFactory $iconFactory)
@@ -38,13 +42,15 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
             $modulePrefix = strtolower('tx_' . $extensionName . '_' . $moduleName);
             $getVars = ['id', 'M', $modulePrefix];
         }
-        $shortcutName = $this->getLanguageService()->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:backendUsers');
+        $shortcutName = $this->getLanguageService()
+            ->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:backendUsers');
         if ($request->getControllerName() === 'BackendUser') {
             if ($request->getControllerActionName() === 'index' && AccessUtility::beUserHasRightToAddTable(BackendUser::TABLE)) {
                 $returnUrl = rawurlencode(BackendUtility::getModuleUrl($moduleName));
                 $parameters = GeneralUtility::explodeUrl2Array('edit[be_users][0]=new&returnUrl=' . $returnUrl);
                 $addUserLink = BackendUtility::getModuleUrl('record_edit', $parameters);
-                $title = $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newRecordGeneral');
+                $title = $this->getLanguageService()
+                    ->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newRecordGeneral');
                 $icon = $iconFactory->getIcon('actions-document-new', Icon::SIZE_SMALL);
                 $addUserButton = $buttonBar->makeLinkButton()
                     ->setHref($addUserLink)
@@ -63,11 +69,13 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
                 $buttonBar->addButton($addUserButton, ButtonBar::BUTTON_POSITION_LEFT);
             }
             if ($request->getControllerActionName() === 'online') {
-                $shortcutName = $this->getLanguageService()->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:onlineUsers');
+                $shortcutName = $this->getLanguageService()
+                    ->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:onlineUsers');
             }
         }
         if ($request->getControllerName() === 'BackendUserGroup' && AccessUtility::beUserHasRightToAddTable(BackendUserGroup::TABLE)) {
-            $shortcutName = $this->getLanguageService()->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:backendUserGroupsMenu');
+            $shortcutName = $this->getLanguageService()
+                ->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:backendUserGroupsMenu');
             $returnUrl = rawurlencode(BackendUtility::getModuleUrl($moduleName, [
                 'tx_myusermanagement_myusermanagement_myusermanagementuseradmin' => [
                     'action' => 'index',
@@ -76,7 +84,8 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
             ]));
             $parameters = GeneralUtility::explodeUrl2Array('edit[be_groups][0]=new&returnUrl=' . $returnUrl);
             $addUserLink = BackendUtility::getModuleUrl('record_edit', $parameters);
-            $title = $this->getLanguageService()->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newRecordGeneral');
+            $title = $this->getLanguageService()
+                ->sL('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newRecordGeneral');
             $icon = $iconFactory->getIcon('actions-document-new', Icon::SIZE_SMALL);
             $addUserGroupButton = $buttonBar->makeLinkButton()
                 ->setHref($addUserLink)
@@ -94,9 +103,9 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Generate menu for non-admin views
      *
-     * @param \TYPO3\CMS\Backend\Template\Components\MenuRegistry $menuRegistry
-     * @param \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder
-     * @param \TYPO3\CMS\Extbase\Mvc\Request $request
+     * @param  \TYPO3\CMS\Backend\Template\Components\MenuRegistry  $menuRegistry
+     * @param  \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder  $uriBuilder
+     * @param  \TYPO3\CMS\Extbase\Mvc\Request  $request
      * @return void
      */
     public function generateMenu(MenuRegistry $menuRegistry, UriBuilder $uriBuilder, Request $request)
@@ -106,7 +115,8 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
             $menuItems['index'] = [
                 'controller' => 'BackendUser',
                 'action' => 'index',
-                'label' => $this->getLanguageService()->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:backendUsers'),
+                'label' => $this->getLanguageService()
+                    ->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:backendUsers'),
             ];
         }
 
@@ -114,7 +124,8 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
             $menuItems['pages'] = [
                 'controller' => 'BackendUserGroup',
                 'action' => 'index',
-                'label' => $this->getLanguageService()->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:backendUserGroupsMenu'),
+                'label' => $this->getLanguageService()
+                    ->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:backendUserGroupsMenu'),
             ];
         }
 
@@ -132,7 +143,8 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
                 }
                 $menuItem = $menu->makeMenuItem()
                     ->setTitle($menuItemConfig['label'])
-                    ->setHref($uriBuilder->reset()->uriFor($menuItemConfig['action'], [], $menuItemConfig['controller']))
+                    ->setHref($uriBuilder->reset()
+                        ->uriFor($menuItemConfig['action'], [], $menuItemConfig['controller']))
                     ->setActive($isActive);
                 $menu->addMenuItem($menuItem);
             }
@@ -145,20 +157,21 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
      * Insert generic Javascript interaction
      * Make sure that the allowed actions are displayed
      *
-     * @param string $table
+     * @param  string  $table
      * @return void
      */
     public function insertJavascriptInteraction($table = BackendUser::TABLE)
     {
         $pageRenderer = $this->getPageRenderer();
-        if ($pageRenderer instanceof \TYPO3\CMS\Core\Page\PageRenderer) {
+        if ($pageRenderer instanceof PageRenderer) {
             // Use same logic as PageRenderer
             $jsFile = GeneralUtility::getFileAbsFileName('EXT:my_user_management/Resources/Public/JavaScripts/jquery-backend.js');
             $jsFile = PathUtility::getRelativePath(PATH_typo3, $jsFile);
             $jsFile = rtrim($jsFile, '/');
 
             if ($noAccess = $this->getHiddenAccessOptions($table)) {
-                $pageRenderer->addMetaTag('<meta property="extension-no-access" content="' . implode(',', $noAccess) . '" />');
+                $pageRenderer->addMetaTag('<meta property="extension-no-access" content="' . implode(',',
+                        $noAccess) . '" />');
             }
 
             $pageRenderer->addJsFile($jsFile);
@@ -168,7 +181,7 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Get non-configured access rights which should be disabled for core workflow
      *
-     * @param string $table
+     * @param  string  $table
      * @return array
      * @throws \Exception
      */
@@ -207,7 +220,7 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
                 break;
 
             default:
-                throw new \Exception('Given table not supported (' . $table . ')', 1479913799515);
+                throw new Exception('Given table not supported (' . $table . ')', 1479913799515);
         }
 
         return $noAccess;
@@ -218,7 +231,7 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function getPageRenderer()
     {
-        return $this->getObjectManager()->get(\TYPO3\CMS\Core\Page\PageRenderer::class);
+        return $this->getObjectManager()->get(PageRenderer::class);
     }
 
     /**
@@ -226,7 +239,7 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function getObjectManager()
     {
-        return GeneralUtility::makeInstance(\TYPO3\CMS\Extbase\Object\ObjectManager::class);
+        return GeneralUtility::makeInstance(ObjectManager::class);
     }
 
     /**

@@ -2,6 +2,8 @@
 
 namespace KoninklijkeCollective\MyUserManagement\Domain\Repository;
 
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+
 /**
  * Repository: FileMount
  */
@@ -10,8 +12,8 @@ class FileMountRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FileMount
 
     /** @var array */
     protected $defaultOrderings = [
-        'title' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
-        'path' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
+        'title' => QueryInterface::ORDER_ASCENDING,
+        'path' => QueryInterface::ORDER_ASCENDING,
     ];
 
     /**

@@ -3,14 +3,16 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-call_user_func(function ($extension, $mainModule) {
+call_user_func(function ($extension, $mainModule): void {
     // Avoid that this block is loaded in the frontend or within the upgrade-wizards
     if (TYPO3_MODE === 'BE' && !(TYPO3_REQUESTTYPE & TYPO3_REQUESTTYPE_INSTALL)) {
         // Register main module icon
         $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
-        $iconRegistry->registerIcon('module-' . $mainModule, \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class, [
-            'name' => 'user-secret',
-        ]);
+        $iconRegistry->registerIcon(
+            'module-' . $mainModule,
+            \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
+            ['name' => 'user-secret']
+        );
 
         \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule(
             $mainModule,

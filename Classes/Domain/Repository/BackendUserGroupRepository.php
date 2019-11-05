@@ -23,6 +23,7 @@ class BackendUserGroupRepository extends \TYPO3\CMS\Beuser\Domain\Repository\Bac
         if (!empty($allowed)) {
             $query->matching($query->in('uid', $allowed));
         }
+
         return $query->execute();
     }
 }
