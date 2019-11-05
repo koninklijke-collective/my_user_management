@@ -1,10 +1,10 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Domain\Model;
 
 /**
  * Domain model for file mounts
  *
- * @package my_user_management
  * @author Sebastiaan de Jonge <office@sebastiaandejonge.com>, SebastiaanDeJonge.com
  */
 class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
@@ -31,9 +31,7 @@ class FileMount extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
      */
     protected $path = '';
 
-    /**
-     * @var integer
-     */
+    /** @var integer */
     protected $storage;
 
     /**

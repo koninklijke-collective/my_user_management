@@ -1,4 +1,5 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Hook;
 
 use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission;
@@ -6,8 +7,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Hook: TCA Manipulation
- *
- * @package KoninklijkeCollective\MyUserManagement\Hook
  */
 class TableConfigurationArrayHook implements \TYPO3\CMS\Core\SingletonInterface
 {
@@ -25,7 +24,7 @@ class TableConfigurationArrayHook implements \TYPO3\CMS\Core\SingletonInterface
             $selectedItems = GeneralUtility::trimExplode(',', $parameters['row'][$parameters['field']], true);
             $items = [];
             foreach ((array) $parameters['items'] as $item) {
-                list(, $uid) = $item;
+                [, $uid] = $item;
                 // Is it configured for the user?
                 if ($this->getBackendUserAuthentication()->check('custom_options', BackendUserGroupPermission::KEY . ':' . (int) $uid)) {
                     $items[] = $item;
@@ -36,7 +35,7 @@ class TableConfigurationArrayHook implements \TYPO3\CMS\Core\SingletonInterface
                     $items[] = [
                         '_hidden_ ' . $item[0],
                         $item[1],
-                        $item[2]
+                        $item[2],
                     ];
                 }
             }
@@ -55,5 +54,4 @@ class TableConfigurationArrayHook implements \TYPO3\CMS\Core\SingletonInterface
     {
         return $GLOBALS['BE_USER'];
     }
-
 }

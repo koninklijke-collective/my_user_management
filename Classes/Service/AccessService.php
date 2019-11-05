@@ -1,4 +1,5 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Service;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
@@ -8,8 +9,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Service: Access Look up
- *
- * @package KoninklijkeCollective\MyUserManagement\Service
  */
 class AccessService implements \TYPO3\CMS\Core\SingletonInterface
 {
@@ -123,7 +122,7 @@ class AccessService implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Check if given user is allowed for current logged in user
      *
-     * @param BackendUser $user
+     * @param \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser $user
      * @return boolean
      */
     protected function isAllowedUser(BackendUser $user)

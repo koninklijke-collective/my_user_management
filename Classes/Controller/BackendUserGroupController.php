@@ -1,4 +1,5 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
@@ -9,8 +10,6 @@ use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
 /**
  * Controller: BackendUserGroup
- *
- * @package KoninklijkeCollective\MyUserManagement\Controller
  */
 class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUserGroupController
 {
@@ -21,15 +20,13 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
      */
     protected $backendUserGroupRepository;
 
-    /**
-     * @var \KoninklijkeCollective\MyUserManagement\Service\OverrideService
-     */
+    /** @var \KoninklijkeCollective\MyUserManagement\Service\OverrideService */
     protected $overrideService;
 
     /**
      * Set up the view template configuration correctly for BackendTemplateView
      *
-     * @param ViewInterface $view
+     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
      * @return void
      */
     protected function setViewConfiguration(ViewInterface $view)
@@ -92,13 +89,15 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
         parent::indexAction();
         $this->view->assign(
             'returnUrl',
-            rawurlencode(BackendUtility::getModuleUrl('myusermanagement_MyUserManagementUseradmin',
+            rawurlencode(BackendUtility::getModuleUrl(
+                'myusermanagement_MyUserManagementUseradmin',
                 [
                     'tx_myusermanagement_myusermanagement_myusermanagementuseradmin' => [
                         'action' => 'index',
-                        'controller' => 'BackendUserGroup'
-                    ]
-                ]))
+                        'controller' => 'BackendUserGroup',
+                    ],
+                ]
+            ))
         );
     }
 
@@ -140,5 +139,4 @@ class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\BackendUse
         }
         return $this->overrideService;
     }
-
 }

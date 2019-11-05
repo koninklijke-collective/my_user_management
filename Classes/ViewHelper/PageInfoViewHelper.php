@@ -1,17 +1,14 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\ViewHelper;
 
 /**
  * Retrieve page information
- *
- * @package KoninklijkeCollective\MyUserManagement\ViewHelpers
  */
 class PageInfoViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 {
 
-    /**
-     * @var boolean
-     */
+    /** @var boolean */
     protected $escapeOutput = false;
 
     /**

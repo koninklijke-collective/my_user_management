@@ -1,17 +1,14 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Domain\Repository;
 
 /**
  * Repository: BackendUser
- *
- * @package KoninklijkeCollective\MyUserManagement\Domain\Repository
  */
 class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendUserRepository
 {
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $defaultOrderings = [
         'username' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
     ];
@@ -40,7 +37,7 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
         $query = $this->createQuery();
         $query->matching($query->logicalAnd([
             $query->equals('deleted', false),
-            $query->equals('disable', false)
+            $query->equals('disable', false),
         ]));
         if ($this->getBackendUserAuthentication()->isAdmin() === false) {
             $this->applyUserGroupPermission($query);
@@ -60,7 +57,7 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
         $query->matching($query->logicalAnd([
             $query->equals('deleted', false),
             $query->equals('disable', false),
-            $query->lessThanOrEqual('lastlogin', $lastLoginSince)
+            $query->lessThanOrEqual('lastlogin', $lastLoginSince),
         ]));
         if ($this->getBackendUserAuthentication()->isAdmin() === false) {
             $this->applyUserGroupPermission($query);
@@ -85,7 +82,7 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
             if (!empty($allowed)) {
                 $allowedConstraints = [
                     // Always allow current user
-                    $query->equals('uid', $this->getBackendUserAuthentication()->user['uid'])
+                    $query->equals('uid', $this->getBackendUserAuthentication()->user['uid']),
                 ];
                 foreach ($allowed as $id) {
                     // @TODO: Refactor for real n:m relations
@@ -93,7 +90,7 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
                         $query->equals('usergroup', (int) $id),
                         $query->like('usergroup', (int) $id . ',%'),
                         $query->like('usergroup', '%,' . (int) $id),
-                        $query->like('usergroup', '%,' . (int) $id . ',%')
+                        $query->like('usergroup', '%,' . (int) $id . ',%'),
                     ]);
                 }
                 $constraints[] = $query->logicalOr($allowedConstraints);
@@ -112,5 +109,4 @@ class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendU
     {
         return $GLOBALS['BE_USER'];
     }
-
 }

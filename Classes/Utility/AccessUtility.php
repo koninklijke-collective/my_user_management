@@ -1,4 +1,5 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Utility;
 
 use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserActionPermission;
@@ -64,7 +65,7 @@ class AccessUtility
      *
      * @param string $table
      * @return boolean
-     * @throws Exception
+     * @throws \TYPO3\CMS\Extbase\Security\Exception
      */
     public static function beUserHasRightToAddTable($table = 'be_users')
     {
@@ -83,7 +84,7 @@ class AccessUtility
                     }
 
                     $requiredFields = [
-                        'username'
+                        'username',
                     ];
                     break;
                 case BackendUserGroup::TABLE:

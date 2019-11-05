@@ -1,4 +1,5 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
@@ -12,8 +13,6 @@ use TYPO3\CMS\Fluid\View\TemplateView;
 
 /**
  * Controller: BackendUser
- *
- * @package KoninklijkeCollective\MyUserManagement\Controller
  */
 class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserController
 {
@@ -26,9 +25,7 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
      */
     protected $backendUserRepository;
 
-    /**
-     * @var \KoninklijkeCollective\MyUserManagement\Service\OverrideService
-     */
+    /** @var \KoninklijkeCollective\MyUserManagement\Service\OverrideService */
     protected $overrideService;
 
     /**
@@ -40,13 +37,13 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
     /**
      * Set up the view template configuration correctly for BackendTemplateView
      *
-     * @param ViewInterface $view
+     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
      * @return void
      */
     protected function setViewConfiguration(ViewInterface $view)
     {
         if (class_exists('\TYPO3\CMS\Backend\View\BackendTemplateView') && ($view instanceof \TYPO3\CMS\Backend\View\BackendTemplateView)) {
-            /** @var TemplateView $_view */
+            /** @var \TYPO3\CMS\Fluid\View\TemplateView $_view */
             $_view = $this->objectManager->get(TemplateView::class);
             $this->setViewConfiguration($_view);
             $view->injectTemplateView($_view);
@@ -92,7 +89,7 @@ class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserCont
      * @param \TYPO3\CMS\Beuser\Domain\Model\Demand $demand
      * @return void
      */
-    public function indexAction(\TYPO3\CMS\Beuser\Domain\Model\Demand $demand = null)
+    public function indexAction(?\TYPO3\CMS\Beuser\Domain\Model\Demand $demand = null)
     {
         if (AccessUtility::beUserHasRightToEditTable(BackendUser::TABLE) === false) {
             $this->addFlashMessage(

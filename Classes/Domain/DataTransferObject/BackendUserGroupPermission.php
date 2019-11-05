@@ -1,12 +1,9 @@
 <?php
-namespace KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject;
 
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+namespace KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject;
 
 /**
  * DTO: Permission access Backend User Groups
- *
- * @package KoninklijkeCollective\MyUserManagement\Domain\Model\DataTransferObject
  */
 class BackendUserGroupPermission extends AbstractPermission
 {
@@ -34,5 +31,4 @@ class BackendUserGroupPermission extends AbstractPermission
             ];
         }
     }
-
 }

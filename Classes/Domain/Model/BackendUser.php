@@ -6,8 +6,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Model for backend user
- *
- * @package KoninklijkeCollective\MyUserManagement\Domain\Model
  */
 class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
 {
@@ -17,19 +15,13 @@ class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
      */
     const TABLE = 'be_users';
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $inheritedMountPoints = [];
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $activeMountPoints = [];
 
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup>
-     */
+    /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup> */
     protected $backendUserGroups;
 
     /**

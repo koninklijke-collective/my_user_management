@@ -1,12 +1,11 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Domain\Model;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Model for backend user group
- *
- * @package KoninklijkeCollective\MyUserManagement\Domain\Model
  */
 class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
 {
@@ -23,14 +22,10 @@ class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserGroup
      */
     protected $isDisabled;
 
-    /**
-     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup>
-     */
+    /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup> */
     protected $subGroups;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $dbMountPoints = '';
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
@@ -11,8 +12,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Controller: LoginHistory
- *
- * @package KoninklijkeCollective\MyUserManagement\Controller
  */
 class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
@@ -24,20 +23,16 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
      */
     protected $defaultViewObjectName = BackendTemplateView::class;
 
-    /**
-     * @var \KoninklijkeCollective\MyUserManagement\Service\LogService
-     */
+    /** @var \KoninklijkeCollective\MyUserManagement\Service\LogService */
     protected $logService;
 
-    /**
-     * @var \KoninklijkeCollective\MyUserManagement\Service\AccessService
-     */
+    /** @var \KoninklijkeCollective\MyUserManagement\Service\AccessService */
     protected $accessService;
 
     /**
      * Set up the doc header properly here
      *
-     * @param ViewInterface $view
+     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
      * @return void
      */
     protected function initializeView(ViewInterface $view)
@@ -162,5 +157,4 @@ class LoginHistoryController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCon
     {
         return $GLOBALS['BE_USER'];
     }
-
 }

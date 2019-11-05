@@ -1,10 +1,9 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\ViewHelper;
 
 /**
  * ViewHelper: Storage Location
- *
- * @package KoninklijkeCollective\MyUserManagement\ViewHelpers
  */
 class StorageLocationViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper implements \TYPO3\CMS\Core\SingletonInterface
 {

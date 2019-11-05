@@ -1,4 +1,5 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
 use TYPO3\CMS\Backend\View\BackendTemplateView;
@@ -9,8 +10,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Controller: UserAccess
- *
- * @package KoninklijkeCollective\MyUserManagement\Controller
  */
 class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
@@ -22,15 +21,13 @@ class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
      */
     protected $defaultViewObjectName = BackendTemplateView::class;
 
-    /**
-     * @var \KoninklijkeCollective\MyUserManagement\Service\AccessService
-     */
+    /** @var \KoninklijkeCollective\MyUserManagement\Service\AccessService */
     protected $accessService;
 
     /**
      * Set up the doc header properly here
      *
-     * @param ViewInterface $view
+     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
      * @return void
      */
     protected function initializeView(ViewInterface $view)
@@ -104,5 +101,4 @@ class UserAccessController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContr
         }
         return $this->accessService;
     }
-
 }

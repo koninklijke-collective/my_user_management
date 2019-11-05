@@ -1,17 +1,14 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Domain\Repository;
 
 /**
  * Repository: FileMount
- *
- * @package KoninklijkeCollective\MyUserManagement\Domain\Repository
  */
 class FileMountRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FileMountRepository
 {
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $defaultOrderings = [
         'title' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
         'path' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING,
@@ -30,5 +27,4 @@ class FileMountRepository extends \TYPO3\CMS\Extbase\Domain\Repository\FileMount
         $querySettings->setEnableFieldsToBeIgnored(['hidden']);
         $this->setDefaultQuerySettings($querySettings);
     }
-
 }

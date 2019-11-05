@@ -1,4 +1,5 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Hook;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
@@ -8,8 +9,6 @@ use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 
 /**
  * Hook: ButtonBar retrieval
- *
- * @package KoninklijkeCollective\MyUserManagement\Hook
  */
 class ButtonBarHook
 {
@@ -18,7 +17,7 @@ class ButtonBarHook
      * Change button bar when editing BackendUser & BackendUserGroup
      *
      * @param array $parameters
-     * @param ButtonBar $buttonBar
+     * @param \TYPO3\CMS\Backend\Template\Components\ButtonBar $buttonBar
      * @return array
      */
     public function getButtons($parameters, ButtonBar $buttonBar)

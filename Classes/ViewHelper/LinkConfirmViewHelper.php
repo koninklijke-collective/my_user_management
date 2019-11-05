@@ -1,19 +1,16 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\ViewHelper;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Displays link with sprite icon with confirm message
- *
- * @package KoninklijkeCollective\MyRedirects\ViewHelpers
  */
 class LinkConfirmViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper
 {
 
-    /**
-     * @var boolean
-     */
+    /** @var boolean */
     protected $escapeOutput = false;
 
     /**

@@ -1,4 +1,5 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Service;
 
 use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserActionPermission;
@@ -17,16 +18,14 @@ use TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder;
 
 /**
  * Service: Override Default Functionality
- *
- * @package KoninklijkeCollective\MyUserManagement\Service
  */
 class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
 {
 
     /**
-     * @param ButtonBar $buttonBar
-     * @param Request $request
-     * @param IconFactory $iconFactory
+     * @param \TYPO3\CMS\Backend\Template\Components\ButtonBar $buttonBar
+     * @param \TYPO3\CMS\Extbase\Mvc\Request $request
+     * @param \TYPO3\CMS\Core\Imaging\IconFactory $iconFactory
      * @return void
      */
     public function registerDocheaderButtons(ButtonBar $buttonBar, Request $request, IconFactory $iconFactory)
@@ -72,8 +71,8 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
             $returnUrl = rawurlencode(BackendUtility::getModuleUrl($moduleName, [
                 'tx_myusermanagement_myusermanagement_myusermanagementuseradmin' => [
                     'action' => 'index',
-                    'controller' => 'BackendUserGroup'
-                ]
+                    'controller' => 'BackendUserGroup',
+                ],
             ]));
             $parameters = GeneralUtility::explodeUrl2Array('edit[be_groups][0]=new&returnUrl=' . $returnUrl);
             $addUserLink = BackendUtility::getModuleUrl('record_edit', $parameters);
@@ -95,9 +94,9 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * Generate menu for non-admin views
      *
-     * @param MenuRegistry $menuRegistry
-     * @param UriBuilder $uriBuilder
-     * @param Request $request
+     * @param \TYPO3\CMS\Backend\Template\Components\MenuRegistry $menuRegistry
+     * @param \TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder $uriBuilder
+     * @param \TYPO3\CMS\Extbase\Mvc\Request $request
      * @return void
      */
     public function generateMenu(MenuRegistry $menuRegistry, UriBuilder $uriBuilder, Request $request)
@@ -107,7 +106,7 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
             $menuItems['index'] = [
                 'controller' => 'BackendUser',
                 'action' => 'index',
-                'label' => $this->getLanguageService()->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:backendUsers')
+                'label' => $this->getLanguageService()->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:backendUsers'),
             ];
         }
 
@@ -115,7 +114,7 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
             $menuItems['pages'] = [
                 'controller' => 'BackendUserGroup',
                 'action' => 'index',
-                'label' => $this->getLanguageService()->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:backendUserGroupsMenu')
+                'label' => $this->getLanguageService()->sL('LLL:EXT:beuser/Resources/Private/Language/locallang.xml:backendUserGroupsMenu'),
             ];
         }
 
@@ -184,7 +183,8 @@ class OverrideService implements \TYPO3\CMS\Core\SingletonInterface
             $noAccess[] = 'action-edit';
         }
 
-        if (AccessUtility::beUserHasRightToEditTableField($table, 'disable') === false
+        if (
+            AccessUtility::beUserHasRightToEditTableField($table, 'disable') === false
             && AccessUtility::beUserHasRightToEditTableField($table, 'hidden') === false
         ) {
             $noAccess[] = 'action-hide';

@@ -1,10 +1,9 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject;
 
 /**
  * DTO: Permission access Backend User Groups
- *
- * @package KoninklijkeCollective\MyUserManagement\Domain\Model\DataTransferObject
  */
 abstract class AbstractPermission implements \ArrayAccess, \Countable
 {
@@ -14,9 +13,7 @@ abstract class AbstractPermission implements \ArrayAccess, \Countable
      */
     const KEY = 'my_user_management_permissions';
 
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $data;
 
     /**

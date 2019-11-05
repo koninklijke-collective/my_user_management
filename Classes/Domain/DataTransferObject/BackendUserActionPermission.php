@@ -1,10 +1,9 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject;
 
 /**
  * DTO: Permission access Backend User Actions
- *
- * @package KoninklijkeCollective\MyUserManagement\Domain\Model\DataTransferObject
  */
 class BackendUserActionPermission extends AbstractPermission
 {
@@ -70,5 +69,4 @@ class BackendUserActionPermission extends AbstractPermission
     {
         return in_array($action, static::configured());
     }
-
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\ViewHelper;
 
 use TYPO3\CMS\Backend\Utility\BackendUtility;

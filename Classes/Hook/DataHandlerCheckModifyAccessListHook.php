@@ -1,4 +1,5 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Hook;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
@@ -10,8 +11,6 @@ use TYPO3\CMS\Extbase\Security\Exception;
 
 /**
  * Hook: TCA Manipulation
- *
- * @package KoninklijkeCollective\MyUserManagement\Hook
  */
 class DataHandlerCheckModifyAccessListHook implements DataHandlerCheckModifyAccessListHookInterface
 {
@@ -22,7 +21,7 @@ class DataHandlerCheckModifyAccessListHook implements DataHandlerCheckModifyAcce
      * @param bool &$accessAllowed Whether the user has access to modify a table
      * @param string $table The name of the table to be modified
      * @param \TYPO3\CMS\Core\DataHandling\DataHandler $parent The calling parent object
-     * @throws Exception
+     * @throws \TYPO3\CMS\Extbase\Security\Exception
      */
     public function checkModifyAccessList(&$accessAllowed, $table, \TYPO3\CMS\Core\DataHandling\DataHandler $parent)
     {

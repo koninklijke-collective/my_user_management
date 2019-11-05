@@ -1,12 +1,11 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Domain\Repository;
 
 use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission;
 
 /**
  * Repository: BackendUserGroup
- *
- * @package KoninklijkeCollective\MyUserManagement\Domain\Repository
  */
 class BackendUserGroupRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendUserGroupRepository
 {
@@ -26,5 +25,4 @@ class BackendUserGroupRepository extends \TYPO3\CMS\Beuser\Domain\Repository\Bac
         }
         return $query->execute();
     }
-
 }

@@ -21,8 +21,6 @@ use TYPO3\CMS\Backend\Form\Wizard\SuggestWizardDefaultReceiver;
  *   'orderBy' => 'username',
  * ],
  * ========================================================================================================================
- *
- * @package KoninklijkeCollective\MyUserManagement\Backend\Form\Wizard
  */
 class SuggestBackendManagementReceiver extends SuggestWizardDefaultReceiver
 {

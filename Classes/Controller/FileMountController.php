@@ -1,4 +1,5 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount;
@@ -15,8 +16,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Controller: FileMount
- *
- * @package KoninklijkeCollective\MyUserManagement\Controller
  */
 class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
@@ -28,15 +27,13 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
      */
     protected $defaultViewObjectName = BackendTemplateView::class;
 
-    /**
-     * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\FileMountRepository
-     */
+    /** @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\FileMountRepository */
     protected $fileMountRepository;
 
     /**
      * Set up the doc header properly here
      *
-     * @param ViewInterface $view
+     * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
      * @return void
      */
     protected function initializeView(ViewInterface $view)
@@ -57,7 +54,7 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
      */
     protected function registerDocheaderButtons()
     {
-        /** @var ButtonBar $buttonBar */
+        /** @var \TYPO3\CMS\Backend\Template\Components\ButtonBar $buttonBar */
         $buttonBar = $this->view->getModuleTemplate()->getDocHeaderComponent()->getButtonBar();
         if ($this->request->getControllerName() === 'FileMount') {
             if ($this->request->getControllerActionName() === 'index') {
@@ -125,7 +122,7 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
     }
 
     /**
-     * @return FileMountRepository
+     * @return \KoninklijkeCollective\MyUserManagement\Domain\Repository\FileMountRepository
      */
     protected function getFileMountRepository()
     {
@@ -142,5 +139,4 @@ class FileMountController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionContro
     {
         return $GLOBALS['BE_USER'];
     }
-
 }

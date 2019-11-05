@@ -1,10 +1,9 @@
 <?php
+
 namespace KoninklijkeCollective\MyUserManagement\Service;
 
 /**
  * Service: Logs
- *
- * @package KoninklijkeCollective\MyUserManagement\Service
  */
 class LogService implements \TYPO3\CMS\Core\SingletonInterface
 {
