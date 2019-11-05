@@ -26,7 +26,6 @@
         "bin-dir": ".Build/bin"
     },
     "replace": {
-        "my_user_management": "self.version",
         "typo3-ter/my-user-management": "self.version"
     },
     "autoload": {
