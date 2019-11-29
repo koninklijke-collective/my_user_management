@@ -68,7 +68,6 @@ final class TableConfigurationArrayHook implements SingletonInterface
 
         $query = $queryBuilder->select('uid', 'title')
             ->from('be_groups')
-            ->where($queryBuilder->expr()->eq('hide_in_lists', 0))
             ->orderBy('title');
 
         $result = $query->execute();

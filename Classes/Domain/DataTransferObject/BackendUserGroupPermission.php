@@ -45,8 +45,7 @@ final class BackendUserGroupPermission extends AbstractPermission
     {
         $queryBuilder = $this->getQueryBuilderForTable('be_groups');
         $query = $queryBuilder->select('uid', 'title', 'description')
-            ->from('be_groups')
-            ->where($queryBuilder->expr()->eq('hide_in_lists', 0));
+            ->from('be_groups');
 
         return $query->execute()->fetchAll();
     }
