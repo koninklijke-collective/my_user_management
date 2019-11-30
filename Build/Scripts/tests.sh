@@ -173,11 +173,11 @@ DOCKER_PHP_IMAGE=`echo "php${PHP_VERSION}" | sed -e 's/\.//'`
 # Set $1 to first mass argument, this is the optional test file or test directory to execute
 shift $((OPTIND - 1))
 if [ -n "${1}" ]; then
-    TEST_FILE="Web/typo3conf/ext/my_user_managemet/${1}"
+    TEST_FILE="Web/typo3conf/ext/my_user_management/${1}"
 else
     case ${TEST_SUITE} in
         unit)
-            TEST_FILE="Web/typo3conf/ext/my_user_managemet/Tests/Unit"
+            TEST_FILE="Web/typo3conf/ext/my_user_management/Tests/Unit"
             ;;
     esac
 fi
