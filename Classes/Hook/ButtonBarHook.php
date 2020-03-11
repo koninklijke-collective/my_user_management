@@ -38,7 +38,7 @@ final class ButtonBarHook
         }
 
         $table = $this->getEditedTable();
-        if ($table && !in_array($this->getEditedTable(), [BackendUser::TABLE, BackendUserGroup::TABLE], true)) {
+        if ($table === null || !in_array($table, [BackendUser::TABLE, BackendUserGroup::TABLE], true)) {
             return $buttons;
         }
 
