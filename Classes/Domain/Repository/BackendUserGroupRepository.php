@@ -21,8 +21,7 @@ final class BackendUserGroupRepository extends \TYPO3\CMS\Beuser\Domain\Reposito
 
         $query = $this->createQuery();
         $query->matching($query->logicalAnd([
-            $query->in('uid', BackendUserGroupPermission::getConfigured()),
-            $query->equals('hideInLists', false),
+            $query->in('uid', BackendUserGroupPermission::getConfigured())
         ]));
 
         return $query->execute();
