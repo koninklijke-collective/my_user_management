@@ -60,6 +60,12 @@
             <trans-unit id="backend_access_action_permissions.action_switch_user.title">
                 <source>Switch to different user</source>
             </trans-unit>
+            <trans-unit id="backend_access_action_permissions.action_add_sys_filemounts.title">
+                <source>Add Sys Filemounts</source>
+            </trans-unit>
+            <trans-unit id="backend_access_action_permissions.action_delete_sys_filemounts.title">
+                <source>Delete Sys Filemounts</source>
+            </trans-unit>
 
             <trans-unit id="user_access_overview">
                 <source>User Access Overview</source>

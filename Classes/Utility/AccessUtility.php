@@ -5,6 +5,7 @@ namespace KoninklijkeCollective\MyUserManagement\Utility;
 use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserActionPermission;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
+use KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount;
 use KoninklijkeCollective\MyUserManagement\Functions\BackendUserAuthenticationTrait;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 
@@ -120,6 +121,12 @@ final class AccessUtility
                     }
 
                     return true;
+                case FileMount::TABLE:
+                    if (!BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_ADD_SYS_FILEMOUNTS)) {
+                        return false;
+                    }
+
+                    return true;
             }
         }
 
@@ -143,6 +150,8 @@ final class AccessUtility
                 return BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_DELETE_USER);
             case BackendUserGroup::TABLE:
                 return BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_DELETE_GROUP);
+            case FileMount::TABLE:
+                return BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_DELETE_SYS_FILEMOUNTS);
         }
 
         return false;
