@@ -20,11 +20,11 @@ final class DataHandlerCheckModifyAccessListHook implements DataHandlerCheckModi
     /**
      * Hook that determines whether a user has access to modify a table.
      *
+     * @inheritDoc
      * @param  bool &$accessAllowed  Whether the user has access to modify a table
      * @param  string  $table  The name of the table to be modified
      * @param  \TYPO3\CMS\Core\DataHandling\DataHandler  $parent  The calling parent object
      * @throws \TYPO3\CMS\Extbase\Security\Exception
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration
      */
     public function checkModifyAccessList(&$accessAllowed, $table, DataHandler $parent)
     {

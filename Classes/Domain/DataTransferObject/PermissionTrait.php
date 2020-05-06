@@ -98,8 +98,8 @@ trait PermissionTrait
     /**
      * Check if identifier is configured by backend user
      *
-     * @param  integer  $identifier
-     * @return boolean
+     * @param  int  $identifier
+     * @return bool
      */
     public static function isConfigured(int $identifier): bool
     {

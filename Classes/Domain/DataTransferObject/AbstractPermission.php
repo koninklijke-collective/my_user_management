@@ -34,7 +34,7 @@ abstract class AbstractPermission implements ArrayAccess, Countable
      *
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php
      * @param  mixed  $offset
-     * @return boolean
+     * @return bool
      */
     public function offsetExists($offset): bool
     {
@@ -58,6 +58,7 @@ abstract class AbstractPermission implements ArrayAccess, Countable
      *
      * @link http://php.net/manual/en/arrayaccess.offsetset.php
      * @param  mixed  $offset
+     * @param  mixed  $value
      * @return void
      */
     public function offsetSet($offset, $value): void
@@ -85,7 +86,7 @@ abstract class AbstractPermission implements ArrayAccess, Countable
      * Count elements of an object
      *
      * @link http://php.net/manual/en/countable.count.php
-     * @return integer
+     * @return int
      */
     public function count(): int
     {

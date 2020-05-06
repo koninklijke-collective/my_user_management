@@ -90,7 +90,7 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
     /**
      * @param  int  $switchUser
      * @return void
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+     * @inheritDoc
      */
     public function switchUser($switchUser): void
     {

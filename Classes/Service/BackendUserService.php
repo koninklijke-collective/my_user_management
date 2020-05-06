@@ -27,7 +27,7 @@ final class BackendUserService implements SingletonInterface
      * Find users which has access to given page id
      * Checks db mounts
      *
-     * @param  integer  $pageId
+     * @param  int  $pageId
      * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser[]
      */
     public function findUsersWithPageAccess(int $pageId): array
@@ -80,7 +80,7 @@ final class BackendUserService implements SingletonInterface
     /**
      * Find backend user
      *
-     * @param  integer  $userId
+     * @param  int  $userId
      * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser|null
      */
     public function findBackendUser(int $userId): ?BackendUser
@@ -128,7 +128,7 @@ final class BackendUserService implements SingletonInterface
      * Check if given user is allowed for current logged in user
      *
      * @param  \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser  $user
-     * @return boolean
+     * @return bool
      */
     public function isAllowedUser(BackendUser $user): bool
     {

@@ -17,10 +17,10 @@ final class FileMount extends AbstractEntity
     /** @var string */
     protected $path = '';
 
-    /** @var integer */
+    /** @var int */
     protected $storage;
 
-    /** @var boolean */
+    /** @var bool */
     protected $isDisabled;
 
     /**
@@ -85,7 +85,7 @@ final class FileMount extends AbstractEntity
     }
 
     /**
-     * @return boolean|null
+     * @return bool|null
      */
     public function getIsDisabled(): ?bool
     {
@@ -95,7 +95,7 @@ final class FileMount extends AbstractEntity
     /**
      * Sets the disabled state
      *
-     * @param  boolean|string  $isDisabled
+     * @param  bool|string  $isDisabled
      * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount
      */
     public function setIsDisabled($isDisabled): FileMount

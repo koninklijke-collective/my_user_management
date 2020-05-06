@@ -39,7 +39,7 @@ class OnlineSessionService implements SingletonInterface
     }
 
     /**
-     * @return SessionBackendInterface
+     * @return \TYPO3\CMS\Core\Session\Backend\SessionBackendInterface
      */
     protected function getSessionBackend(): SessionBackendInterface
     {

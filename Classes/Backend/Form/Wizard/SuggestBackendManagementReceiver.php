@@ -29,10 +29,10 @@ final class SuggestBackendManagementReceiver extends SuggestWizardDefaultReceive
     /**
      * Make sure editor can search through backend user
      *
+     * @inheritDoc
      * @param  array  $row
-     * @param  integer  $uid
-     * @return boolean
-     * @phpcsSuppress SlevomatCodingStandard.TypeHints.TypeHintDeclaration.MissingParameterTypeHint
+     * @param  int  $uid
+     * @return bool
      */
     protected function checkRecordAccess($row, $uid): bool
     {

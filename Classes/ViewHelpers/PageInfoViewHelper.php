@@ -2,20 +2,22 @@
 
 namespace KoninklijkeCollective\MyUserManagement\ViewHelpers;
 
+use Closure;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Frontend\Page\PageRepository;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * Retrieve page information for given id
  */
-final class PageInfoViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
+final class PageInfoViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
 
-    /** @var boolean */
+    /** @var bool */
     protected $escapeOutput = false;
 
     /**
@@ -35,7 +37,7 @@ final class PageInfoViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abstrac
      */
     public static function renderStatic(
         array $arguments,
-        \Closure $renderChildrenClosure,
+        Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): string {
         $variableProvider = $renderingContext->getVariableProvider();

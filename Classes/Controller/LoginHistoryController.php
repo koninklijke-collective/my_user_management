@@ -2,6 +2,7 @@
 
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
+use DateTime;
 use KoninklijkeCollective\MyUserManagement\Domain\Repository\LoginHistoryRepository;
 use KoninklijkeCollective\MyUserManagement\Functions\TranslateTrait;
 use KoninklijkeCollective\MyUserManagement\Service\BackendUserService;
@@ -55,7 +56,7 @@ final class LoginHistoryController extends ActionController
      */
     public function indexAction(): void
     {
-        $loginSince = new \DateTime($this->settings['since'] ?? '- 6 months');
+        $loginSince = new DateTime($this->settings['since'] ?? '- 6 months');
 
         $this->view->assignMultiple([
             'onlineBackendUsers' => $this->getOnlineSessionService()->getSessions(),

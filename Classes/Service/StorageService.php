@@ -2,6 +2,7 @@
 
 namespace KoninklijkeCollective\MyUserManagement\Service;
 
+use Exception;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -28,7 +29,7 @@ final class StorageService implements SingletonInterface
      * @param  string  $location
      * @return string
      */
-    public function path($value, $location = '/'): string
+    public function path($value, string $location = '/'): string
     {
         $storage = $this->getStorage($value);
         if ($storage === null) {
@@ -39,7 +40,7 @@ final class StorageService implements SingletonInterface
         try {
             $folder = $storage
                 ->getFolder($location);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
 
         if ($folder === null) {

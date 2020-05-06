@@ -73,7 +73,7 @@ final class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserG
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function isDisabled(): bool
     {

@@ -13,13 +13,11 @@ use TYPO3\CMS\Extbase\Persistence\QueryInterface;
  */
 final class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendUserRepository
 {
-
     /** @var array */
-    protected $defaultOrderings = [
-        'username' => QueryInterface::ORDER_ASCENDING,
-    ];
+    protected $defaultOrderings = ['username' => QueryInterface::ORDER_ASCENDING];
 
     /**
+     * @inheritDoc
      * @param  int  $uid
      * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser|null
      */

@@ -3,6 +3,7 @@
 namespace KoninklijkeCollective\MyUserManagement\ViewHelpers\Uri;
 
 use Closure;
+use InvalidArgumentException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
@@ -41,7 +42,7 @@ final class RemoveRecordViewHelper extends AbstractViewHelper
         RenderingContextInterface $renderingContext
     ): string {
         if ($arguments['uid'] < 1) {
-            throw new \InvalidArgumentException(
+            throw new InvalidArgumentException(
                 'Uid must be a positive integer, ' . $arguments['uid'] . ' given.',
                 1574000004
             );

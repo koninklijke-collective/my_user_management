@@ -2,15 +2,17 @@
 
 namespace KoninklijkeCollective\MyUserManagement\ViewHelpers\Format;
 
+use Closure;
 use KoninklijkeCollective\MyUserManagement\Service\StorageService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
+use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
 
 /**
  * ViewHelper: Format Storage Location
  */
-final class StoragePathViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper
+final class StoragePathViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
 
@@ -34,7 +36,7 @@ final class StoragePathViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\Abst
      */
     public static function renderStatic(
         array $arguments,
-        \Closure $renderChildrenClosure,
+        Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): string {
         return static::getStorageService()->path(

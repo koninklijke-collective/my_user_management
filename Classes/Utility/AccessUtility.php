@@ -19,7 +19,7 @@ final class AccessUtility
      * Check if user has access to module
      *
      * @param  string  $moduleName
-     * @return boolean
+     * @return bool
      */
     public static function beUserHasRightToSeeModule(string $moduleName = 'myusermanagement_module'): bool
     {
@@ -39,7 +39,7 @@ final class AccessUtility
      * Check if user has access to table
      *
      * @param  string  $table
-     * @return boolean
+     * @return bool
      */
     public static function beUserHasRightToSeeTable(string $table): bool
     {
@@ -54,7 +54,7 @@ final class AccessUtility
      * Check if user has access to table
      *
      * @param  string  $table
-     * @return boolean
+     * @return bool
      */
     public static function beUserHasRightToEditTable(string $table): bool
     {
@@ -98,7 +98,7 @@ final class AccessUtility
      * Check if user can add table
      *
      * @param  string  $table
-     * @return boolean
+     * @return bool
      */
     public static function beUserHasRightToAddTable(string $table): bool
     {
@@ -130,7 +130,7 @@ final class AccessUtility
      * Check if user can add table
      *
      * @param  string  $table
-     * @return boolean
+     * @return bool
      */
     public static function beUserHasRightToDeleteTable(string $table): bool
     {

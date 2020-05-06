@@ -87,7 +87,7 @@ final class ButtonBarHook
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     protected function isEditRecord(): bool
     {
