@@ -10,10 +10,8 @@ call_user_func(function (string $extension): void {
         null,
         [
             'name' => 'myusermanagement',
-            'iconIdentifier' => 'module-' . 'myusermanagement',
-            'labels' => [
-                'll_ref' => 'LLL:EXT:' . $extension . '/Resources/Private/Language/Backend/Module.xlf',
-            ],
+            'iconIdentifier' => 'module-myusermanagement',
+            'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/Module.xlf',
         ]
     );
 
@@ -28,8 +26,8 @@ call_user_func(function (string $extension): void {
         ],
         [
             'access' => 'user,group',
-            'icon' => 'EXT:' . $extension . '/Resources/Public/Icons/module-user-admin.png',
-            'labels' => 'LLL:EXT:' . $extension . '/Resources/Private/Language/Backend/UserAdmin.xlf',
+            'icon' => 'EXT:my_user_management/Resources/Public/Icons/module-user-admin.png',
+            'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/UserAdmin.xlf',
         ]
     );
 
@@ -41,9 +39,9 @@ call_user_func(function (string $extension): void {
         ['UserAccess' => 'index'],
         [
             'access' => 'user,group',
-            'icon' => 'EXT:' . $extension . '/Resources/Public/Icons/module-user-access.png',
-            'labels' => 'LLL:EXT:' . $extension . '/Resources/Private/Language/Backend/UserAccess.xlf',
-            'navigationComponentId' => 'typo3-pagetree',
+            'icon' => 'EXT:my_user_management/Resources/Public/Icons/module-user-access.png',
+            'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/UserAccess.xlf',
+            'navigationComponentId' => 'TYPO3/CMS/Backend/PageTree/PageTreeElement',
         ]
     );
 
@@ -55,8 +53,8 @@ call_user_func(function (string $extension): void {
         ['FileMount' => 'index'],
         [
             'access' => 'user,group',
-            'icon' => 'EXT:' . $extension . '/Resources/Public/Icons/module-file-mounts.png',
-            'labels' => 'LLL:EXT:' . $extension . '/Resources/Private/Language/Backend/FileMount.xlf',
+            'icon' => 'EXT:my_user_management/Resources/Public/Icons/module-file-mounts.png',
+            'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/FileMount.xlf',
         ]
     );
 
@@ -68,8 +66,8 @@ call_user_func(function (string $extension): void {
         ['LoginHistory' => 'index, detail'],
         [
             'access' => 'user,group',
-            'icon' => 'EXT:' . $extension . '/Resources/Public/Icons/module-login-history.png',
-            'labels' => 'LLL:EXT:' . $extension . '/Resources/Private/Language/Backend/LoginHistory.xlf',
+            'icon' => 'EXT:my_user_management/Resources/Public/Icons/module-login-history.png',
+            'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/LoginHistory.xlf',
         ]
     );
 
@@ -81,4 +79,4 @@ call_user_func(function (string $extension): void {
         \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
             \KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission::class
         );
-}, $_EXTKEY);
+}, 'my_user_management');
