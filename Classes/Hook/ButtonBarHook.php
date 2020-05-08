@@ -6,9 +6,9 @@ use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
 use KoninklijkeCollective\MyUserManagement\Functions\BackendUserAuthenticationTrait;
 use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
-use TYPO3\CMS\Backend\Controller\EditDocumentController;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\Components\Buttons\AbstractButton;
+use TYPO3\CMS\Core\Http\ServerRequest;
 
 /**
  * Hook: ButtonBar retrieval
@@ -16,6 +16,17 @@ use TYPO3\CMS\Backend\Template\Components\Buttons\AbstractButton;
 final class ButtonBarHook
 {
     use BackendUserAuthenticationTrait;
+
+    /** @var \TYPO3\CMS\Core\Http\ServerRequest */
+    protected $request;
+
+    /**
+     * @param  \TYPO3\CMS\Core\Http\ServerRequest  $request
+     */
+    public function __construct(?ServerRequest $request = null)
+    {
+        $this->request = $request ?? $GLOBALS['TYPO3_REQUEST'];
+    }
 
     /**
      * Change button bar when editing BackendUser & BackendUserGroup
@@ -49,7 +60,6 @@ final class ButtonBarHook
      * @param  array  $buttons
      * @param  string  $currentTable
      * @return array
-     * @throws \TYPO3\CMS\Extbase\Security\Exception
      */
     protected function filterButtonsForCurrentUser(array $buttons, string $currentTable): array
     {
@@ -91,7 +101,9 @@ final class ButtonBarHook
      */
     protected function isEditRecord(): bool
     {
-        return ($GLOBALS['SOBE'] instanceof EditDocumentController);
+        $route = $this->request->getQueryParams()['route'] ?? 'unknown';
+
+        return $route === '/record/edit';
     }
 
     /**
@@ -99,6 +111,12 @@ final class ButtonBarHook
      */
     protected function getEditedTable(): ?string
     {
-        return $GLOBALS['SOBE']->firstEl['table'] ?? null;
+        $table = array_key_first($this->request->getQueryParams()['edit'] ?? []);
+        if (!is_string($table) || empty($table)) {
+            return null;
+        }
+
+        return $table;
     }
+
 }
