@@ -10,7 +10,7 @@ call_user_func(function (string $extension): void {
         null,
         [
             'name' => 'myusermanagement',
-            'iconIdentifier' => 'module-myusermanagement',
+            'iconIdentifier' => 'module-my_user_management',
             'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/Module.xlf',
         ]
     );
@@ -26,7 +26,7 @@ call_user_func(function (string $extension): void {
         ],
         [
             'access' => 'user,group',
-            'icon' => 'EXT:my_user_management/Resources/Public/Icons/module-user-admin.png',
+            'iconIdentifier' => 'module-my_user_management-user-admin',
             'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/UserAdmin.xlf',
         ]
     );
@@ -39,7 +39,7 @@ call_user_func(function (string $extension): void {
         ['UserAccess' => 'index'],
         [
             'access' => 'user,group',
-            'icon' => 'EXT:my_user_management/Resources/Public/Icons/module-user-access.png',
+            'iconIdentifier' => 'module-my_user_management-user-access',
             'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/UserAccess.xlf',
             'navigationComponentId' => 'TYPO3/CMS/Backend/PageTree/PageTreeElement',
         ]
@@ -53,7 +53,7 @@ call_user_func(function (string $extension): void {
         ['FileMount' => 'index'],
         [
             'access' => 'user,group',
-            'icon' => 'EXT:my_user_management/Resources/Public/Icons/module-file-mounts.png',
+            'iconIdentifier' => 'module-my_user_management-file-mounts',
             'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/FileMount.xlf',
         ]
     );
@@ -66,7 +66,7 @@ call_user_func(function (string $extension): void {
         ['LoginHistory' => 'index, detail'],
         [
             'access' => 'user,group',
-            'icon' => 'EXT:my_user_management/Resources/Public/Icons/module-login-history.png',
+            'iconIdentifier' => 'module-my_user_management-login-history',
             'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/LoginHistory.xlf',
         ]
     );
