@@ -22,6 +22,8 @@ final class BackendUserActionPermission extends AbstractPermission
     public const ACTION_ADD_GROUP = 3;
     public const ACTION_DELETE_GROUP = 4;
     public const ACTION_SWITCH_USER = 5;
+    public const ACTION_ADD_FILEMOUNT = 6;
+    public const ACTION_DELETE_FILEMOUNT = 7;
 
     /**
      * @return array
@@ -48,6 +50,14 @@ final class BackendUserActionPermission extends AbstractPermission
             self::ACTION_SWITCH_USER => [
                 'LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:backend_access_action_permissions.action_switch_user.title',
                 'my_user_management-permissions-actions-user_switch',
+            ],
+            self::ACTION_ADD_FILEMOUNT => [
+                'LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:backend_access_action_permissions.action_add_filemount.title',
+                'my_user_management-permissions-actions-add',
+            ],
+            self::ACTION_DELETE_FILEMOUNT => [
+                'LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:backend_access_action_permissions.action_delete_filemount.title',
+                'my_user_management-permissions-actions-delete',
             ],
         ];
     }
@@ -103,5 +113,21 @@ final class BackendUserActionPermission extends AbstractPermission
     public static function switchUserAllowed(): bool
     {
         return static::isConfigured(self::ACTION_SWITCH_USER);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function filemountCreationAllowed(): bool
+    {
+        return static::isConfigured(self::ACTION_ADD_FILEMOUNT);
+    }
+
+    /**
+     * @return bool
+     */
+    public static function filemountDeletionAllowed(): bool
+    {
+        return static::isConfigured(self::ACTION_DELETE_FILEMOUNT);
     }
 }
