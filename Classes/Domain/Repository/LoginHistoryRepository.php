@@ -80,7 +80,7 @@ final class LoginHistoryRepository
             ->orderBy('sys_log.tstamp', 'desc')
 
             // Make sure only one login is shown per user
-            ->groupBy('be_users.uid');
+            ->groupBy('be_users.uid', 'sys_log.tstamp', 'sys_log.IP');
 
         if (!static::getBackendUserAuthentication()->isAdmin()) {
             $query->andWhere($queryBuilder->expr()->eq('be_users.admin', 0));
