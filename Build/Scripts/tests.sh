@@ -33,7 +33,7 @@ setUpDockerComposeDotEnv() {
 
 # Load help text into $HELP
 read -r -d '' HELP <<EOF
-styleguide test runner. Execute unit test suite and some other details.
+my_user_management test runner. Execute unit test suite and some other details.
 Also used by travis-ci for test execution.
 
 Successfully tested with docker version 18.06.1-ce and docker-compose 1.21.2.
@@ -195,17 +195,17 @@ DOCKER_PHP_IMAGE=`echo "php${PHP_VERSION}" | sed -e 's/\.//'`
 # Set $1 to first mass argument, this is the optional test file or test directory to execute
 shift $((OPTIND - 1))
 if [ -n "${1}" ]; then
-    TEST_FILE="Web/typo3conf/ext/styleguide/${1}"
+    TEST_FILE="Web/typo3conf/ext/my_user_management/${1}"
 else
     case ${TEST_SUITE} in
         acceptance)
-            TEST_FILE="Web/typo3conf/ext/styleguide/Tests/Acceptance"
+            TEST_FILE="Web/typo3conf/ext/my_user_management/Tests/Acceptance"
             ;;
         functional)
-            TEST_FILE="Web/typo3conf/ext/styleguide/Tests/Functional"
+            TEST_FILE="Web/typo3conf/ext/my_user_management/Tests/Functional"
             ;;
         unit)
-            TEST_FILE="Web/typo3conf/ext/styleguide/Tests/Unit"
+            TEST_FILE="Web/typo3conf/ext/my_user_management/Tests/Unit"
             ;;
     esac
 fi
