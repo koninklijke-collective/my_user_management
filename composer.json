@@ -16,7 +16,7 @@
     "license": "LGPL-3.0+",
     "require-dev": {
         "typo3/cms-core": "10.*.*@dev",
-        "typo3/cms-frontend": "10.*.*@dev",
+        "typo3/cms-beuser": "10.*.*@dev",
         "typo3/cms-install": "10.*.*@dev",
         "typo3/cms-about": "10.*.*@dev",
         "typo3/testing-framework": "^6.3.3",
