@@ -3,9 +3,14 @@
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
+use KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository;
+use KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository;
 use KoninklijkeCollective\MyUserManagement\Functions\TranslateTrait;
 use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
 use TYPO3\CMS\Beuser\Domain\Model\Demand;
+use TYPO3\CMS\Beuser\Domain\Repository\BackendUserSessionRepository;
+use TYPO3\CMS\Beuser\Service\ModuleDataStorageService;
+use TYPO3\CMS\Beuser\Service\UserInformationService;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
 
@@ -35,6 +40,23 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
     protected $backendUserGroupRepository;
 
     /**
+     * @param  \TYPO3\CMS\Beuser\Service\ModuleDataStorageService  $moduleDataStorageService
+     * @param  \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository  $backendUserRepository
+     * @param  \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository  $backendUserGroupRepository
+     * @param  \TYPO3\CMS\Beuser\Domain\Repository\BackendUserSessionRepository  $backendUserSessionRepository
+     * @param  \TYPO3\CMS\Beuser\Service\UserInformationService  $userInformationService
+     */
+    public function __construct(
+        ModuleDataStorageService $moduleDataStorageService,
+        BackendUserRepository $backendUserRepository,
+        BackendUserGroupRepository $backendUserGroupRepository,
+        BackendUserSessionRepository $backendUserSessionRepository,
+        UserInformationService $userInformationService
+    ) {
+        parent::__construct($moduleDataStorageService, $backendUserRepository, $backendUserGroupRepository, $backendUserSessionRepository, $userInformationService);
+    }
+
+    /**
      * @param  \TYPO3\CMS\Extbase\Mvc\View\ViewInterface  $view
      * @return void
      */
@@ -57,8 +79,8 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
     {
         if (AccessUtility::beUserHasRightToEditTable(BackendUser::TABLE) === false) {
             $this->addFlashMessage(
-                static::translate('backend_user_no_rights_to_table_description', [BackendUser::TABLE]),
-                static::translate('backend_user_no_rights_to_table_title'),
+                self::translate('backend_user_no_rights_to_table_description', [BackendUser::TABLE]),
+                self::translate('backend_user_no_rights_to_table_title'),
                 AbstractMessage::ERROR
             );
         }
@@ -68,8 +90,8 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
                 $demand = $this->moduleData->getDemand();
             } elseif ($demand->getUserType() !== Demand::USERTYPE_USERONLY) {
                 $this->addFlashMessage(
-                    static::translate('filter_on_admin_is_not_allowed_description'),
-                    static::translate('filter_on_admin_is_not_allowed_title'),
+                    self::translate('filter_on_admin_is_not_allowed_description'),
+                    self::translate('filter_on_admin_is_not_allowed_title'),
                     AbstractMessage::ERROR
                 );
             }
@@ -101,8 +123,8 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
         $targetUser = $this->backendUserRepository->findByUid($switchUser);
         if ($targetUser === null) {
             $this->addFlashMessage(
-                static::translate('switch_user_not_found_description'),
-                static::translate('switch_user_not_found_title'),
+                self::translate('switch_user_not_found_description'),
+                self::translate('switch_user_not_found_title'),
                 AbstractMessage::ERROR
             );
 
@@ -111,8 +133,8 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
 
         if ($targetUser->getIsAdministrator()) {
             $this->addFlashMessage(
-                static::translate('admin_switch_not_allowed_description'),
-                static::translate('admin_switch_not_allowed_title'),
+                self::translate('admin_switch_not_allowed_description'),
+                self::translate('admin_switch_not_allowed_title'),
                 AbstractMessage::ERROR
             );
 

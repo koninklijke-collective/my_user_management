@@ -3,7 +3,13 @@
       data-namespace-typo3-fluid="true">
 
 <be:moduleLayout>
-    <f:be.pageRenderer includeRequireJsModules="{0:'TYPO3/CMS/Backend/ContextMenu', 1:'TYPO3/CMS/Backend/Modal'}"/>
+    <f:be.pageRenderer
+            includeRequireJsModules="{
+            0:'TYPO3/CMS/Backend/ContextMenu',
+            1:'TYPO3/CMS/Backend/Modal',
+            2:'TYPO3/CMS/Beuser/BackendUserListing'
+        }"
+    />
 
     <f:render section="Menu" optional="1"/>
 

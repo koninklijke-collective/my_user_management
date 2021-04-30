@@ -49,8 +49,8 @@ final class UserAccessController extends ActionController
         $page = $this->getSelectedPage();
         if ($page === null) {
             $this->addFlashMessage(
-                static::translate('no_page_selected_description'),
-                static::translate('no_page_selected_title'),
+                self::translate('no_page_selected_description'),
+                self::translate('no_page_selected_title'),
                 AbstractMessage::WARNING
             );
 
@@ -88,7 +88,7 @@ final class UserAccessController extends ActionController
 
         $page = BackendUtility::readPageAccess(
             $pageId,
-            static::getBackendUserAuthentication()->getPagePermsClause(Permission::PAGE_SHOW)
+            self::getBackendUserAuthentication()->getPagePermsClause(Permission::PAGE_SHOW)
         );
 
         return is_array($page) ? $page : null;

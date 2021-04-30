@@ -41,17 +41,17 @@ return [
         'tableName' => 'sys_filemounts',
         'properties' => [
             'title' => [
-                'fieldName' => 'title'
+                'fieldName' => 'title',
             ],
             'path' => [
-                'fieldName' => 'path'
+                'fieldName' => 'path',
             ],
             'isAbsolutePath' => [
-                'fieldName' => 'base'
+                'fieldName' => 'base',
             ],
             'storage' => [
-                'fieldName' => 'base'
+                'fieldName' => 'base',
             ],
         ],
-    ]
+    ],
 ];

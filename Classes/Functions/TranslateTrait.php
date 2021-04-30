@@ -11,10 +11,10 @@ trait TranslateTrait
     /**
      * Translate key for local extension from locallang_be.xlf
      *
-     * @param  string  $key
-     * @param  array  $arguments
-     * @return string
      * @see EXT:my_user_management/Resources/Private/Language/locallang_be.xlf
+     * @param  array  $arguments
+     * @param  string  $key
+     * @return string
      */
     protected static function translate(string $key, array $arguments = []): string
     {

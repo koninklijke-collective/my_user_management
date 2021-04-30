@@ -39,7 +39,7 @@ final class StoragePathViewHelper extends AbstractViewHelper
         Closure $renderChildrenClosure,
         RenderingContextInterface $renderingContext
     ): string {
-        return static::getStorageService()->path(
+        return self::getStorageService()->path(
             $arguments['storageId'],
             $arguments['location'] ?? '/'
         );

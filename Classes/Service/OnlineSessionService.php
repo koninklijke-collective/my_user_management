@@ -8,7 +8,7 @@ use TYPO3\CMS\Core\Session\SessionManager;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-class OnlineSessionService implements SingletonInterface
+final class OnlineSessionService implements SingletonInterface
 {
     /** @var array */
     protected $userSessions;

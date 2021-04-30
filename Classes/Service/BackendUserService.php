@@ -4,7 +4,7 @@ namespace KoninklijkeCollective\MyUserManagement\Service;
 
 use DateTime;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
-use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
+use KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository;
 use KoninklijkeCollective\MyUserManagement\Functions\BackendUserAuthenticationTrait;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\SingletonInterface;
@@ -17,11 +17,13 @@ final class BackendUserService implements SingletonInterface
 {
     use BackendUserAuthenticationTrait;
 
-    /**
-     * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
-     */
+    /** @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository */
     protected $backendUserRepository;
+
+    public function __construct(BackendUserRepository $backendUserRepository)
+    {
+        $this->backendUserRepository = $backendUserRepository;
+    }
 
     /**
      * Find users which has access to given page id
@@ -132,7 +134,7 @@ final class BackendUserService implements SingletonInterface
      */
     public function isAllowedUser(BackendUser $user): bool
     {
-        if ($user->getIsAdministrator() && !static::getBackendUserAuthentication()->isAdmin()) {
+        if ($user->getIsAdministrator() && !self::getBackendUserAuthentication()->isAdmin()) {
             // Ignore admins if a non admin is retrieving the information!
             return false;
         }
@@ -143,28 +145,6 @@ final class BackendUserService implements SingletonInterface
         }
 
         return true;
-    }
-
-    /**
-     * @param  \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup  $group
-     * @param  array  $mounts
-     * @return array
-     */
-    protected function getAllDatabaseMountsFromUserGroup(BackendUserGroup $group, array $mounts = []): array
-    {
-        $dbMounts = $group->getDatabaseMountPoints();
-        if (is_array($dbMounts)) {
-            $mounts = array_unique(array_merge($mounts, $dbMounts));
-        }
-
-        if ($group->getSubGroups() !== null) {
-            foreach ($group->getSubGroups() as $subGroup) {
-                /** @var \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup $subGroup */
-                $mounts = $this->getAllDatabaseMountsFromUserGroup($subGroup, $mounts);
-            }
-        }
-
-        return $mounts;
     }
 
     /**

@@ -28,18 +28,11 @@ call_user_func(function (string $table): void {
         'autoSizeMax' => 50,
     ];
 
+    // Make sure admin is not configurable for non admins.
+    $GLOBALS['TCA'][$table]['columns']['admin']['displayCond'] = 'HIDE_FOR_NON_ADMINS';
+
     // Make all fields to exclude for users
     foreach ($GLOBALS['TCA'][$table]['columns'] as $key => &$configuration) {
         $configuration['exclude'] = 1;
-
-        switch ($key) {
-            // Ignore certain fields
-            case 'admin':
-            case 'starttime':
-            case 'endtime':
-                $configuration['displayCond'] = 'HIDE_FOR_NON_ADMINS';
-
-                break;
-        }
     }
 }, 'be_users');

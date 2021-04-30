@@ -73,15 +73,23 @@
             <div class="btn-group" role="group">
                 <f:if condition="{backendUser.currentlyLoggedIn} == 1">
                     <f:then>
-                        <span class="btn btn-default disabled"><core:icon identifier="empty-empty" /></span>
+                        <span class="btn btn-default disabled"><core:icon identifier="empty-empty"/></span>
                     </f:then>
                     <f:else>
                         <f:if condition="{backendUser.isDisabled} == 1">
                             <f:then>
-                                <a class="btn btn-default" href="{bu:issueCommand(parameters: 'data[be_users][{backendUser.uid}][disable]=0', redirectUrl: redirectUrl)}" title="{f:translate(key:'visibility.unhide')}"><core:icon identifier="actions-edit-unhide" /></a>
+                                <a class="btn btn-default"
+                                   href="{be:moduleLink(route:'tce_db', query:'data[be_users][{backendUser.uid}][disable]=0', currentUrlParameterName:'redirect')}"
+                                   title="{f:translate(key:'visibility.unhide')}">
+                                    <core:icon identifier="actions-edit-unhide"/>
+                                </a>
                             </f:then>
                             <f:else>
-                                <a class="btn btn-default" href="{bu:issueCommand(parameters: 'data[be_users][{backendUser.uid}][disable]=1', redirectUrl: redirectUrl)}" title="{f:translate(key:'visibility.hide')}"><core:icon identifier="actions-edit-hide" /></a>
+                                <a class="btn btn-default"
+                                   href="{be:moduleLink(route:'tce_db', query:'data[be_users][{backendUser.uid}][disable]=1', currentUrlParameterName:'redirect')}"
+                                   title="{f:translate(key:'visibility.hide')}">
+                                    <core:icon identifier="actions-edit-hide"/>
+                                </a>
                             </f:else>
                         </f:if>
                     </f:else>
@@ -93,13 +101,14 @@
                     </f:then>
                     <f:else>
                         <um:security.isActionAllowed action="DELETE_USER">
-                            <a class="btn btn-default t3js-modal-trigger" href="{bu:removeUser(backendUser: backendUser)}"
-                               title="{f:translate(key:'LLL:EXT:beuser/Resources/Private/Language/locallang.xlf:delete')}"
+                            <a class="btn btn-default t3js-modal-trigger"
+                               href="{be:moduleLink(route:'tce_db', query:'cmd[be_users][{backendUser.uid}][delete]=1', currentUrlParameterName:'redirect')}"
+                               title="{f:translate(key:'delete')}"
                                data-severity="warning"
                                data-title="{f:translate(key:'LLL:EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf:label.confirm.delete_record.title')}"
                                data-content="{f:translate(key:'confirm',arguments:'{0:backendUser.userName}')}"
                                data-button-close-text="{f:translate(key:'LLL:EXT:core/Resources/Private/Language/locallang_common.xlf:cancel')}">
-                                <core:icon identifier="actions-edit-delete" />
+                                <core:icon identifier="actions-edit-delete"/>
                             </a>
                         </um:security.isActionAllowed>
                     </f:else>

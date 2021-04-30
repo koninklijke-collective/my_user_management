@@ -56,7 +56,7 @@
             <core:icon identifier="status-user-backend"/>
         </td>
         <td class="col-title">
-            <f:then>{log.login_date -> f:format.date(format: '{dateFormat} {timeFormat}')}</f:then>
+            {log.login_date -> f:format.date(format: '{dateFormat} {timeFormat}')}
         </td>
         <td>
             {log.login_ip}

@@ -2,15 +2,13 @@
     <table id="typo3-user-access-list" class="table table-striped table-hover">
         <thead>
         <tr>
-            <th class="col-icon"></th>
-            <th class="col-title">
-                <strong>{f:translate(key: 'userName')}</strong> / {f:translate(key: 'realName')}
-            </th>
+            <th></th>
+            <th class="col-title"><f:translate key="userName" /> / <f:translate key="realName" /></th>
             <th>
                 <f:translate key="LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf:inherited_mount_points"/>
             </th>
             <th class="col-control"></th>
-            <th>{f:translate(key: 'lastLogin')}</th>
+            <th><f:translate key="lastLogin" /></th>
         </tr>
         </thead>
         <tbody>
@@ -23,7 +21,9 @@
         </tbody>
         <tfoot>
         <tr>
-            <td colspan="5">{f:count(subject: backendUsers)} {f:translate(key: 'users')}</td>
+            <td colspan="5">
+                <f:count subject="{backendUsers}" /> <f:translate key="users" />
+            </td>
         </tr>
         </tfoot>
     </table>

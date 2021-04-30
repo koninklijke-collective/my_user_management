@@ -24,12 +24,12 @@ final class LoginHistoryRepository
      */
     public function findUserLoginActions(BackendUser $user): array
     {
-        $queryBuilder = static::getQueryBuilderForTable('sys_log');
+        $queryBuilder = self::getQueryBuilderForTable('sys_log');
 
         $query = $this->getQueryForUserLoginHistory($queryBuilder);
         $query->andWhere($queryBuilder->expr()->eq('be_users.uid', $user->getUid()));
 
-        return $query->execute()->fetchAll();
+        return $query->execute()->fetchAllAssociative();
     }
 
     /**
@@ -38,12 +38,12 @@ final class LoginHistoryRepository
      */
     public function lastLoggedInUsers(int $max = 20): array
     {
-        $queryBuilder = static::getQueryBuilderForTable('sys_log');
+        $queryBuilder = self::getQueryBuilderForTable('sys_log');
 
         $query = $this->getQueryForUserLoginHistory($queryBuilder);
         $query->setMaxResults($max);
 
-        return $query->execute()->fetchAll();
+        return $query->execute()->fetchAllAssociative();
     }
 
     /**
@@ -82,7 +82,7 @@ final class LoginHistoryRepository
             // Make sure only one login is shown per user
             ->groupBy('be_users.uid', 'sys_log.tstamp', 'sys_log.IP');
 
-        if (!static::getBackendUserAuthentication()->isAdmin()) {
+        if (!self::getBackendUserAuthentication()->isAdmin()) {
             $query->andWhere($queryBuilder->expr()->eq('be_users.admin', 0));
         }
 

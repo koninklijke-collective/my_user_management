@@ -16,13 +16,13 @@
                 <f:then>
                     <be:moduleLayout.button.linkButton
                             icon="actions-edit-unhide" title="{f:translate(key:'visibility.unhide')}"
-                            link="{bu:issueCommand(parameters: 'data[be_users][{user.uid}][disable]=0')}"
+                            link="{be:moduleLink(route:'tce_db', query:'data[be_users][{user.uid}][disable]=0', currentUrlParameterName:'redirect')}"
                     />
                 </f:then>
                 <f:else>
                     <be:moduleLayout.button.linkButton
-                            icon="actions-edit-hide" title="{f:translate(key:'visibility.hide')}"
-                            link="{bu:issueCommand(parameters: 'data[be_users][{user.uid}][disable]=1')}"
+                            icon="actions-edit-hide" title="{f:translate(key:'visibility.unhide')}"
+                            link="{be:moduleLink(route:'tce_db', query:'data[be_users][{user.uid}][disable]=1', currentUrlParameterName:'redirect')}"
                     />
                 </f:else>
             </f:if>
@@ -99,48 +99,3 @@
     </f:if>
 </f:section>
 </html>
-
-
-<f:section name="OldContent">
-    <f:if condition="{user}">
-
-        <div class="history">
-            <h2>
-                <f:translate key="backendLoginHistory_all_records"/>
-            </h2>
-
-            <f:if condition="{logs.items}">
-                <div class="table-fit">
-                    <table border="0" cellpadding="0" cellspacing="0"
-                           class="typo3-dblist table table-striped table-hover">
-                        <thead>
-                        <tr class="t3-row-header">
-                            <th class="col-title">
-                                <strong>
-                                    <f:translate key="date"/>
-                                </strong>
-                            </th>
-                            <th class="col-from">
-                                <f:translate key="ip"/>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <f:for each="{logs.items}" as="log">
-                            <tr class="db_list_normal">
-                                <td class="col-title">
-                                    <f:format.date format="{dateFormat} {timeFormat}">{log.tstamp}</f:format.date>
-                                </td>
-                                <td class="col-date">
-                                    {log.user_ip}
-                                </td>
-                            </tr>
-                        </f:for>
-                        </tbody>
-                    </table>
-                </div>
-            </f:if>
-        </div>
-    </f:if>
-
-</f:section>

@@ -43,9 +43,9 @@ final class IsActionAllowedViewHelper extends AbstractConditionViewHelper
         }
 
         if (is_numeric($action)) {
-            $id = static::getKeyFromInt($action);
+            $id = self::getKeyFromInt($action);
         } else {
-            $id = static::getKeyFromString($action);
+            $id = self::getKeyFromString($action);
         }
 
         if ($id === null) {

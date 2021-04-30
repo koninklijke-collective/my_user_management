@@ -3,8 +3,11 @@
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
+use KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository;
 use KoninklijkeCollective\MyUserManagement\Functions\TranslateTrait;
 use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
+use TYPO3\CMS\Beuser\Domain\Repository\BackendUserGroupRepository as CoreBackendUserRepository;
+use TYPO3\CMS\Beuser\Service\UserInformationService;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 
 /**
@@ -14,11 +17,25 @@ final class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\Back
 {
     use TranslateTrait;
 
-    /**
-     * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
-     */
+    /** @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository */
     protected $backendUserGroupRepository;
+
+    public function __construct(
+        UserInformationService $userInformationService,
+        BackendUserGroupRepository $backendUserGroupRepository
+    ) {
+        parent::__construct($userInformationService);
+        $this->backendUserGroupRepository = $backendUserGroupRepository;
+    }
+
+    /**
+     * @param  \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository  $backendUserGroupRepository
+     */
+    public function injectBackendUserGroupRepository(CoreBackendUserRepository $backendUserGroupRepository)
+    {
+        // @see self::__construct(); Dont inject through this.. ignore parent inject
+        return;
+    }
 
     /**
      * Displays all BackendUserGroups
@@ -30,8 +47,8 @@ final class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\Back
     {
         if (AccessUtility::beUserHasRightToEditTable(BackendUserGroup::TABLE) === false) {
             $this->addFlashMessage(
-                static::translate('backend_user_no_rights_to_table_description', [BackendUserGroup::TABLE]),
-                static::translate('backend_user_no_rights_to_table_title'),
+                self::translate('backend_user_no_rights_to_table_description', [BackendUserGroup::TABLE]),
+                self::translate('backend_user_no_rights_to_table_title'),
                 AbstractMessage::ERROR
             );
         }

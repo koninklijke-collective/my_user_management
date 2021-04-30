@@ -16,13 +16,13 @@ call_user_func(function (string $extension): void {
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'KoninklijkeCollective.' . $extension,
+        'MyUserManagement',
         'myusermanagement',
         'UserAdmin',
         '',
         [
-            'BackendUser' => 'index, online, compare, addToCompareList, removeFromCompareList, terminateBackendUserSession',
-            'BackendUserGroup' => 'index',
+            \KoninklijkeCollective\MyUserManagement\Controller\BackendUserController::class => 'index, online, compare, addToCompareList, removeFromCompareList, terminateBackendUserSession',
+            \KoninklijkeCollective\MyUserManagement\Controller\BackendUserGroupController::class => 'index',
         ],
         [
             'access' => 'user,group',
@@ -32,11 +32,11 @@ call_user_func(function (string $extension): void {
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'KoninklijkeCollective.' . $extension,
+        'MyUserManagement',
         'myusermanagement',
         'UserAccess',
         '',
-        ['UserAccess' => 'index'],
+        [\KoninklijkeCollective\MyUserManagement\Controller\UserAccessController::class => 'index'],
         [
             'access' => 'user,group',
             'iconIdentifier' => 'module-my_user_management-user-access',
@@ -46,11 +46,11 @@ call_user_func(function (string $extension): void {
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'KoninklijkeCollective.' . $extension,
+        'MyUserManagement',
         'myusermanagement',
         'FileMountAdmin',
         '',
-        ['FileMount' => 'index'],
+        [\KoninklijkeCollective\MyUserManagement\Controller\FileMountController::class => 'index'],
         [
             'access' => 'user,group',
             'iconIdentifier' => 'module-my_user_management-file-mounts',
@@ -59,11 +59,11 @@ call_user_func(function (string $extension): void {
     );
 
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'KoninklijkeCollective.' . $extension,
+        'MyUserManagement',
         'myusermanagement',
         'LoginHistory',
         '',
-        ['LoginHistory' => 'index, detail'],
+        [\KoninklijkeCollective\MyUserManagement\Controller\LoginHistoryController::class => 'index, detail'],
         [
             'access' => 'user,group',
             'iconIdentifier' => 'module-my_user_management-login-history',

@@ -80,7 +80,7 @@ final class BackendUserActionPermission extends AbstractPermission
      */
     public static function userCreationAllowed(): bool
     {
-        return static::isConfigured(self::ACTION_ADD_USER);
+        return self::isConfigured(self::ACTION_ADD_USER);
     }
 
     /**
@@ -88,7 +88,7 @@ final class BackendUserActionPermission extends AbstractPermission
      */
     public static function userDeletionAllowed(): bool
     {
-        return static::isConfigured(self::ACTION_DELETE_USER);
+        return self::isConfigured(self::ACTION_DELETE_USER);
     }
 
     /**
@@ -96,7 +96,7 @@ final class BackendUserActionPermission extends AbstractPermission
      */
     public static function groupCreationAllowed(): bool
     {
-        return static::isConfigured(self::ACTION_ADD_GROUP);
+        return self::isConfigured(self::ACTION_ADD_GROUP);
     }
 
     /**
@@ -104,7 +104,7 @@ final class BackendUserActionPermission extends AbstractPermission
      */
     public static function groupDeletionAllowed(): bool
     {
-        return static::isConfigured(self::ACTION_DELETE_GROUP);
+        return self::isConfigured(self::ACTION_DELETE_GROUP);
     }
 
     /**
@@ -112,7 +112,7 @@ final class BackendUserActionPermission extends AbstractPermission
      */
     public static function switchUserAllowed(): bool
     {
-        return static::isConfigured(self::ACTION_SWITCH_USER);
+        return self::isConfigured(self::ACTION_SWITCH_USER);
     }
 
     /**
@@ -120,7 +120,7 @@ final class BackendUserActionPermission extends AbstractPermission
      */
     public static function filemountCreationAllowed(): bool
     {
-        return static::isConfigured(self::ACTION_ADD_FILEMOUNT);
+        return self::isConfigured(self::ACTION_ADD_FILEMOUNT);
     }
 
     /**
@@ -128,6 +128,6 @@ final class BackendUserActionPermission extends AbstractPermission
      */
     public static function filemountDeletionAllowed(): bool
     {
-        return static::isConfigured(self::ACTION_DELETE_FILEMOUNT);
+        return self::isConfigured(self::ACTION_DELETE_FILEMOUNT);
     }
 }

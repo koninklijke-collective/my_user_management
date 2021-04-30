@@ -6,21 +6,23 @@ use Exception;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 
 final class StorageService implements SingletonInterface
 {
-
     /** @var array */
     protected $storage = [];
 
-    /**
-     * @var \TYPO3\CMS\Core\Resource\StorageRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
-     */
+    /** @var \TYPO3\CMS\Core\Resource\StorageRepository */
     protected $storageRepository;
+
+    /**
+     * @param  \TYPO3\CMS\Core\Resource\StorageRepository  $storageRepository
+     */
+    public function __construct(StorageRepository $storageRepository)
+    {
+        $this->storageRepository = $storageRepository;
+    }
 
     /**
      * Retrieve path details from given id
@@ -38,13 +40,12 @@ final class StorageService implements SingletonInterface
 
         $folder = null;
         try {
-            $folder = $storage
-                ->getFolder($location);
+            $folder = $storage->getFolder($location);
         } catch (Exception $e) {
         }
 
-        if ($folder === null) {
-            return $storage->getUid() . ':' . $location;
+        if ($folder === null || $folder->getPublicUrl() === null) {
+            return $storage->getUid() . ':' . ($location ?: '/');
         }
 
         return $folder->getPublicUrl();
@@ -67,22 +68,9 @@ final class StorageService implements SingletonInterface
                 return $this->storage[$storageId];
             }
 
-            return $this->storage[$storageId] = $this->getStorageRepository()->findByIdentifier($storageId);
+            return $this->storage[$storageId] = $this->storageRepository->findByIdentifier($storageId);
         }
 
         return null;
-    }
-
-    /**
-     * @return \TYPO3\CMS\Core\Resource\StorageRepository
-     */
-    protected function getStorageRepository(): StorageRepository
-    {
-        if ($this->storageRepository === null) {
-            $this->storageRepository = GeneralUtility::makeInstance(ObjectManager::class)
-                ->get(StorageRepository::class);
-        }
-
-        return $this->storageRepository;
     }
 }

@@ -20,16 +20,16 @@ final class TableConfigurationArrayHook implements SingletonInterface
     /**
      * ItemsProcFunc: Filter configured backend user groups based on Custom Options
      *
+     * @see https://forge.typo3.org/issues/85622
      * @param  array  $parameters
      * @return void
      * @todo itemsProcFunc is not after all items are generated.. therefor this hook is not available since TYPO3 9.x.
-     * @see https://forge.typo3.org/issues/85622
      */
     public function filterConfiguredBackendGroups(array $parameters): void
     {
         $items = &$parameters['items'] ?? [];
 
-        if (static::getBackendUserAuthentication()->isAdmin()) {
+        if (self::getBackendUserAuthentication()->isAdmin()) {
             return;
         }
 
@@ -62,7 +62,7 @@ final class TableConfigurationArrayHook implements SingletonInterface
     public function addGroupsForUser(array $parameters): void
     {
         $items = &$parameters['items'] ?? [];
-        $queryBuilder = static::getQueryBuilderForTable('be_groups');
+        $queryBuilder = self::getQueryBuilderForTable('be_groups');
         $queryBuilder->getRestrictions()
             ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
 

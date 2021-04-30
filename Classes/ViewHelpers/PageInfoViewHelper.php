@@ -3,9 +3,9 @@
 namespace KoninklijkeCollective\MyUserManagement\ViewHelpers;
 
 use Closure;
+use TYPO3\CMS\Core\Domain\Repository\PageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Frontend\Page\PageRepository;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractViewHelper;
 use TYPO3Fluid\Fluid\Core\ViewHelper\Traits\CompileWithRenderStatic;
@@ -41,7 +41,7 @@ final class PageInfoViewHelper extends AbstractViewHelper
         RenderingContextInterface $renderingContext
     ): string {
         $variableProvider = $renderingContext->getVariableProvider();
-        $variableProvider->add($arguments['as'], static::getPageRepository()->getPage($arguments['pageId']));
+        $variableProvider->add($arguments['as'], self::getPageRepository()->getPage($arguments['pageId']));
         $output = $renderChildrenClosure();
         $variableProvider->remove($arguments['as']);
 
@@ -49,11 +49,10 @@ final class PageInfoViewHelper extends AbstractViewHelper
     }
 
     /**
-     * @return \TYPO3\CMS\Frontend\Page\PageRepository
+     * @return \TYPO3\CMS\Core\Domain\Repository\PageRepository
      */
     protected static function getPageRepository(): PageRepository
     {
-        return GeneralUtility::makeInstance(ObjectManager::class)
-            ->get(PageRepository::class);
+        return GeneralUtility::makeInstance(PageRepository::class);
     }
 }

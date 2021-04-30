@@ -40,7 +40,7 @@ final class ButtonBarHook
         $buttons = $parameters['buttons'];
 
         // Admins always have access to all buttons
-        if (static::getBackendUserAuthentication()->isAdmin()) {
+        if (self::getBackendUserAuthentication()->isAdmin()) {
             return $buttons;
         }
 
@@ -118,5 +118,4 @@ final class ButtonBarHook
 
         return $table;
     }
-
 }

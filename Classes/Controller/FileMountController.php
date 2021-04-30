@@ -20,11 +20,16 @@ final class FileMountController extends ActionController
 {
     use TranslateTrait;
 
-    /**
-     * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\FileMountRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
-     */
+    /** @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\FileMountRepository */
     protected $fileMountRepository;
+
+    /**
+     * @param  \KoninklijkeCollective\MyUserManagement\Domain\Repository\FileMountRepository  $fileMountRepository
+     */
+    public function __construct(FileMountRepository $fileMountRepository)
+    {
+        $this->fileMountRepository = $fileMountRepository;
+    }
 
     /**
      * Assign default variables to view
@@ -49,25 +54,13 @@ final class FileMountController extends ActionController
     {
         if (AccessUtility::beUserHasRightToEditTable(FileMount::TABLE) === false) {
             $this->addFlashMessage(
-                static::translate('backend_user_no_rights_to_table_description', [BackendUserGroup::TABLE]),
-                static::translate('backend_user_no_rights_to_table_title'),
+                self::translate('backend_user_no_rights_to_table_description', [BackendUserGroup::TABLE]),
+                self::translate('backend_user_no_rights_to_table_title'),
                 AbstractMessage::ERROR
             );
         }
 
-        $fileMounts = $this->getFileMountRepository()->findAll();
+        $fileMounts = $this->fileMountRepository->findAll();
         $this->view->assign('fileMounts', $fileMounts);
-    }
-
-    /**
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Repository\FileMountRepository
-     */
-    protected function getFileMountRepository(): FileMountRepository
-    {
-        if ($this->fileMountRepository === null) {
-            $this->fileMountRepository = $this->objectManager->get(FileMountRepository::class);
-        }
-
-        return $this->fileMountRepository;
     }
 }

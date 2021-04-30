@@ -15,8 +15,8 @@
     "homepage": "https://github.com/koninklijke-collective/my_user_management",
     "license": "LGPL-3.0+",
     "require": {
-        "typo3/cms-core": "^9.5.24 || ^10.4.12 || ^11.0",
-        "typo3/cms-beuser": "^9.5.24 || ^10.4.12 || ^11.0"
+        "typo3/cms-core": "^10.4.15 || ^11.0",
+        "typo3/cms-beuser": "^10.4.15 || ^11.0"
     },
     "require-dev": {
         "typo3/testing-framework": "^4.15.2 || ^6.6.0"
@@ -47,7 +47,7 @@
         {
             "name": "Benjamin Serfhos",
             "email": "benjamin@serfhos.com",
-            "homepage": "http://serfhos.com"
+            "homepage": "https://serfhos.com"
         }
     ],
     "extra": {

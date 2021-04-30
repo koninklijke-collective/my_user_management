@@ -74,6 +74,6 @@ final class BackendUserGroupPermission extends AbstractPermission
      */
     public static function hasAccessToGroup(int $group): bool
     {
-        return static::isConfigured($group);
+        return self::isConfigured($group);
     }
 }

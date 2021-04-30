@@ -7,7 +7,6 @@ $EM_CONF[$_EXTKEY] = [
     'version' => '4.1.0',
     'state' => 'stable',
     'uploadFolder' => false,
-    'createDirs' => '',
     'clearCacheOnLoad' => true,
     'author' => 'Benjamin Serfhos',
     'author_email' => 'benjamin@serfhos.com',
