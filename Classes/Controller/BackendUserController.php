@@ -119,7 +119,7 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
         if ($this->getBackendUserAuthentication()->isAdmin()) {
             parent::switchUser($switchUser);
         }
-        /** @var \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser $targetUser */
+        /** @var \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser|null $targetUser */
         $targetUser = $this->backendUserRepository->findByUid($switchUser);
         if ($targetUser === null) {
             $this->addFlashMessage(

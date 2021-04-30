@@ -26,7 +26,7 @@ trait PermissionTrait
      */
     protected static function key(): string
     {
-        if (static::KEY === null) {
+        if (empty(static::KEY)) {
             throw new NotImplementedMethodException('Key should return the permission key in custom_options');
         }
 
@@ -65,9 +65,9 @@ trait PermissionTrait
                 return [];
             }
 
-            /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication $backendUser */
+            /** @var \TYPO3\CMS\Core\Authentication\BackendUserAuthentication|null $backendUser */
             $backendUser = $GLOBALS['BE_USER'];
-            if ($backendUser === null) {
+            if (!$backendUser) {
                 return [];
             }
 

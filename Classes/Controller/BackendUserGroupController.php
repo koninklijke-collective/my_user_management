@@ -31,10 +31,9 @@ final class BackendUserGroupController extends \TYPO3\CMS\Beuser\Controller\Back
     /**
      * @param  \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository  $backendUserGroupRepository
      */
-    public function injectBackendUserGroupRepository(CoreBackendUserRepository $backendUserGroupRepository)
+    public function injectBackendUserGroupRepository(CoreBackendUserRepository $backendUserGroupRepository): void
     {
         // @see self::__construct(); Dont inject through this.. ignore parent inject
-        return;
     }
 
     /**

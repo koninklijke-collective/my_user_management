@@ -29,7 +29,7 @@ final class LoginHistoryRepository
         $query = $this->getQueryForUserLoginHistory($queryBuilder);
         $query->andWhere($queryBuilder->expr()->eq('be_users.uid', $user->getUid()));
 
-        return $query->execute()->fetchAllAssociative();
+        return $query->execute()->fetchAll();
     }
 
     /**
@@ -43,7 +43,7 @@ final class LoginHistoryRepository
         $query = $this->getQueryForUserLoginHistory($queryBuilder);
         $query->setMaxResults($max);
 
-        return $query->execute()->fetchAllAssociative();
+        return $query->execute()->fetchAll();
     }
 
     /**

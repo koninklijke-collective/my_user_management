@@ -63,10 +63,6 @@ final class IsActionAllowedViewHelper extends AbstractConditionViewHelper
      */
     protected static function getKeyFromInt(int $value): ?int
     {
-        if ($value === null) {
-            return null;
-        }
-
         if (!array_key_exists($value, BackendUserActionPermission::getItems())) {
             return null;
         }
@@ -82,7 +78,7 @@ final class IsActionAllowedViewHelper extends AbstractConditionViewHelper
      */
     protected static function getKeyFromString(string $value): ?int
     {
-        if ($value === null) {
+        if (empty($value)) {
             return null;
         }
 

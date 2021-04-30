@@ -6,3 +6,4 @@ parameters:
     - %currentWorkingDirectory%/Tests
 
   checkMissingIterableValueType: false
+  checkGenericClassInNonGenericObjectType: false

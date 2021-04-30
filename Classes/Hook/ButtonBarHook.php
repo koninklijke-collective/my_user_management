@@ -68,7 +68,7 @@ final class ButtonBarHook
             foreach ($rows as $key => $buttonGroup) {
                 foreach ($buttonGroup as $index => $button) {
                     // Check rights for button by icon identifier
-                    if ($button instanceof AbstractButton && $button->getIcon()) {
+                    if ($button instanceof AbstractButton) {
                         switch ($button->getIcon()->getIdentifier()) {
                             case 'actions-document-history-open':
                                 continue 2;
