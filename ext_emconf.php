@@ -13,8 +13,8 @@ $EM_CONF[$_EXTKEY] = [
     'author_company' => 'Rotterdam School of Management, Erasmus University',
     'constraints' => [
         'depends' => [
-            'typo3' => '9.5.0-9.5.99',
-            'beuser' => '9.5.0-9.5.99',
+            'typo3' => '10.0.0-10.9.99',
+            'beuser' => '10.0.0.-10.9.99',
         ],
         'conflicts' => [],
         'suggests' => [],
