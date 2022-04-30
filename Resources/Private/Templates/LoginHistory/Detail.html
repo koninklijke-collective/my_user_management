@@ -3,32 +3,7 @@
       xmlns:bu="http://typo3.org/ns/TYPO3/CMS/Beuser/ViewHelpers" bu:preserve="true"
       data-namespace-typo3-fluid="true">
 
-<f:layout name="Backend"/>
-
-<f:section name="Buttons">
-    <f:if condition="{user}">
-        <be:moduleLayout.button.linkButton
-                icon="actions-open" title="Edit"
-                link="{be:uri.editRecord(table: 'be_users', uid: user.uid)}"
-        />
-        <f:if condition="{backendUser.currentlyLoggedIn} == 0">
-            <f:if condition="{user.isDisabled} == 1">
-                <f:then>
-                    <be:moduleLayout.button.linkButton
-                            icon="actions-edit-unhide" title="{f:translate(key:'visibility.unhide')}"
-                            link="{be:moduleLink(route:'tce_db', query:'data[be_users][{user.uid}][disable]=0', currentUrlParameterName:'redirect')}"
-                    />
-                </f:then>
-                <f:else>
-                    <be:moduleLayout.button.linkButton
-                            icon="actions-edit-hide" title="{f:translate(key:'visibility.unhide')}"
-                            link="{be:moduleLink(route:'tce_db', query:'data[be_users][{user.uid}][disable]=1', currentUrlParameterName:'redirect')}"
-                    />
-                </f:else>
-            </f:if>
-        </f:if>
-    </f:if>
-</f:section>
+<f:layout name="Default"/>
 
 <f:section name="Content">
     <f:if condition="{user}">

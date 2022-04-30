@@ -49,8 +49,17 @@
             <trans-unit id="never" resname="never">
                 <source>Never</source>
             </trans-unit>
+            <trans-unit id="edit" resname="edit">
+                <source>Edit</source>
+            </trans-unit>
             <trans-unit id="delete" resname="delete">
                 <source>Delete backend user (!)</source>
+            </trans-unit>
+            <trans-unit id="details" resname="details">
+                <source>Show details</source>
+            </trans-unit>
+            <trans-unit id="info" resname="info">
+                <source>Display information</source>
             </trans-unit>
             <trans-unit id="disable" resname="disable">
                 <source>Disable</source>
@@ -76,14 +85,17 @@
             <trans-unit id="fileMounts" resname="fileMounts">
                 <source>File mountpoints</source>
             </trans-unit>
-            <trans-unit id="disableIpLock" resname="disableIpLock">
-                <source>Disable IP lock</source>
-            </trans-unit>
             <trans-unit id="compareBackendUsers" resname="compareBackendUsers">
                 <source>Compare backend users</source>
             </trans-unit>
             <trans-unit id="compareUserList" resname="compareUserList">
                 <source>Compare user list</source>
+            </trans-unit>
+            <trans-unit id="compareBackendUsersGroups" resname="compareBackendUsersGroups">
+                <source>Compare backend usergroups</source>
+            </trans-unit>
+            <trans-unit id="clearCompareList" resname="clearCompareList">
+                <source>Clear compare list</source>
             </trans-unit>
             <trans-unit id="status" resname="status">
                 <source>Status</source>
@@ -114,6 +126,9 @@
             </trans-unit>
             <trans-unit id="filter" resname="filter">
                 <source>Filter</source>
+            </trans-unit>
+            <trans-unit id="reset" resname="reset">
+                <source>Reset</source>
             </trans-unit>
             <trans-unit id="reallyLogout" resname="reallyLogout">
                 <source>Really logout</source>
@@ -154,8 +169,14 @@
             <trans-unit id="section.compare" resname="section.compare">
                 <source>Compare</source>
             </trans-unit>
+            <trans-unit id="section.allUserGroups" resname="section.allUserGroups">
+                <source>All User Groups</source>
+            </trans-unit>
             <trans-unit id="compare" resname="compare">
                 <source>Compare</source>
+            </trans-unit>
+            <trans-unit id="remove" resname="remove">
+                <source>Remove</source>
             </trans-unit>
             <trans-unit id="terminateSessionSuccess" resname="terminateSessionSuccess">
                 <source>Session successfully terminated.</source>
@@ -166,103 +187,132 @@
             <trans-unit id="online" resname="online">
                 <source>online</source>
             </trans-unit>
+            <trans-unit id="lockedMfaProviders" resname="lockedMfaProviders">
+                <source>Locked MFA providers</source>
+            </trans-unit>
+            <trans-unit id="mfaEnabled" resname="mfaEnabled">
+                <source>MFA enabled</source>
+            </trans-unit>
             <trans-unit id="visibility.hide" resname="visibility.hide">
-                <source>hide</source>
+                <source>Hide</source>
             </trans-unit>
             <trans-unit id="visibility.unhide" resname="visibility.unhide">
-                <source>unhide</source>
+                <source>Un-hide</source>
             </trans-unit>
-
-            <!-- deprecated -->
-            <trans-unit id="_backendFileMountOverview_access_users_table_not_allowed_title">
-                <source>Unable to edit!</source>
+            <trans-unit id="information.defaultLanguage" resname="information.defaultLanguage">
+                <source>Default</source>
             </trans-unit>
-            <trans-unit id="_backendFileMountOverview_access_users_table_not_allowed_description">
-                <source>You are not allowed to edit the table "%s".</source>
+            <trans-unit id="groups" resname="groups">
+                <source>Groups</source>
             </trans-unit>
-            <trans-unit id="_backendFileMountOverview_file_mount_add_new">
-                <source>Add new file mount</source>
+            <trans-unit id="information.groups.direct" resname="information.groups.direct">
+                <source>Directly assigned</source>
             </trans-unit>
-
-            <trans-unit id="_backendUserAccessOverview_no_selection_title">
+            <trans-unit id="information.groups.inheritance" resname="information.groups.inheritance">
+                <source>Assigned through inheritance</source>
+            </trans-unit>
+            <trans-unit id="languages" resname="languages">
+                <source>Languages</source>
+            </trans-unit>
+            <trans-unit id="dbMounts" resname="dbMounts">
+                <source>DB Mounts</source>
+            </trans-unit>
+            <trans-unit id="fileMounts" resname="fileMounts">
+                <source>File Mounts</source>
+            </trans-unit>
+            <trans-unit id="categories" resname="categories">
+                <source>Categories</source>
+            </trans-unit>
+            <trans-unit id="permissions" resname="permissions">
+                <source>Permissions</source>
+            </trans-unit>
+            <trans-unit id="modules" resname="modules">
+                <source>Modules</source>
+            </trans-unit>
+            <trans-unit id="tableModes" resname="tableModes">
+                <source>Table select/modify</source>
+            </trans-unit>
+            <trans-unit id="tableModes.select" resname="tableModes.select">
+                <source>Select</source>
+            </trans-unit>
+            <trans-unit id="tableModes.modify" resname="tableModes.modify">
+                <source>Modify</source>
+            </trans-unit>
+            <trans-unit id="information.defaultWorkspace" resname="information.defaultWorkspace">
+                <source>Default workspace</source>
+            </trans-unit>
+            <trans-unit id="backendUser" resname="backendUser">
+                <source>Backend User</source>
+            </trans-unit>
+            <trans-unit id="backendUserDetails" resname="backendUserDetails">
+                <source>Backend user details</source>
+            </trans-unit>
+            <trans-unit id="flashMessage.resetPassword.error.title" resname="flashMessage.resetPassword.error.title">
+                <source>Password reset not triggered</source>
+            </trans-unit>
+            <trans-unit id="flashMessage.resetPassword.error.text" resname="flashMessage.resetPassword.error.text">
+                <source>Sorry, the password of this user cannot be reset.</source>
+            </trans-unit>
+            <trans-unit id="flashMessage.resetPassword.success.title" resname="flashMessage.resetPassword.success.title">
+                <source>Password reset triggered</source>
+            </trans-unit>
+            <trans-unit id="flashMessage.resetPassword.success.text" resname="flashMessage.resetPassword.success.text">
+                <source>Password reset for email address %s initiated.</source>
+            </trans-unit>
+            <trans-unit id="resetPassword.label" resname="resetPassword.label">
+                <source>Reset Password</source>
+            </trans-unit>
+            <trans-unit id="resetPassword.confirmation.header" resname="resetPassword.confirmation.header">
+                <source>Reset Password</source>
+            </trans-unit>
+            <trans-unit id="resetPassword.confirmation.text" resname="resetPassword.confirmation.text">
+                <source>Are you sure you want to reset the password for %s?</source>
+            </trans-unit>
+            <trans-unit id="compare.tables" resname="compare.tables">
+                <source>Table permissions</source>
+            </trans-unit>
+            <trans-unit id="compare.direct.inherit" resname="compare.direct.inherit">
+                <source>Inherit</source>
+            </trans-unit>
+            <trans-unit id="compare.direct.direct" resname="compare.direct.direct">
+                <source>Direct</source>
+            </trans-unit>
+            <trans-unit id="pagination.previous" resname="pagination.previous">
+                <source>previous</source>
+            </trans-unit>
+            <trans-unit id="pagination.next" resname="pagination.next">
+                <source>next</source>
+            </trans-unit>
+            <trans-unit id="pagination.first" resname="pagination.first">
+                <source>first</source>
+            </trans-unit>
+            <trans-unit id="pagination.last" resname="pagination.last">
+                <source>last</source>
+            </trans-unit>
+            <trans-unit id="pagination.records" resname="pagination.records">
+                <source>Records</source>
+            </trans-unit>
+            <trans-unit id="pagination.page" resname="pagination.page">
+                <source>Page</source>
+            </trans-unit>
+            <trans-unit id="pagination.refresh" resname="pagination.refresh">
+                <source>Refresh</source>
+            </trans-unit>
+            <!-- Additional labels -->
+            <trans-unit id="myUserManagement" resname="myUserManagement">
+                <source>User Administration</source>
+            </trans-unit>
+            <trans-unit id="myUserManagementGroups" resname="myUserManagementGroups">
+                <source>User Group Administration</source>
+            </trans-unit>
+            <trans-unit id="myUserManagementFilemountadmin" resname="myUserManagementFilemountadmin">
+                <source>File Mount Administration</source>
+            </trans-unit>
+            <trans-unit id="myUserManagementLoginhistory" resname="myUserManagementLoginhistory">
+                <source>Login History</source>
+            </trans-unit>
+            <trans-unit id="myusermanagement_MyUserManagementUseraccess" resname="myusermanagement_MyUserManagementUseraccess">
                 <source>User Access Overview</source>
-            </trans-unit>
-            <trans-unit id="_backendUserAccessOverview_no_selection_description">
-                <source>Please click a page title in the page tree.</source>
-            </trans-unit>
-            <trans-unit id="_backendUserAccessOverview_empty_title">
-                <source>No users found</source>
-            </trans-unit>
-            <trans-unit id="_backendUserAccessOverview_empty_description">
-                <source>No backend users found which has configured access to page id: %s.</source>
-            </trans-unit>
-            <trans-unit id="_backendFileMountOverview_empty_title">
-                <source>No file mounts</source>
-            </trans-unit>
-            <trans-unit id="_backendFileMountOverview_empty_description">
-                <source>No file mounts found in the database. Create a new filemount above.</source>
-            </trans-unit>
-            <trans-unit id="_mount_action_new">
-                <source>Add new filemount</source>
-            </trans-unit>
-            <trans-unit id="_mount_action_edit">
-                <source>Edit filemount</source>
-            </trans-unit>
-            <trans-unit id="_mount_action_delete">
-                <source>Delete filemount</source>
-            </trans-unit>
-            <trans-unit id="_mount_confirm_delete">
-                <source><![CDATA[Are you sure you want to delete this filemount: "%s" (id: %s)]]></source>
-            </trans-unit>
-            <trans-unit id="_backend_access_action_permissions">
-                <source>Backend User Management: Allowed actions for maintenance</source>
-            </trans-unit>
-            <trans-unit id="_backend_access_action_permissions.action_add_user.title">
-                <source>Add backend user</source>
-            </trans-unit>
-            <trans-unit id="_backend_access_action_permissions.action_delete_user.title">
-                <source>Delete backend user</source>
-            </trans-unit>
-            <trans-unit id="_backend_access_action_permissions.action_add_group.title">
-                <source>Add backend group</source>
-            </trans-unit>
-            <trans-unit id="_backend_access_action_permissions.action_delete_group.title">
-                <source>Delete backend group</source>
-            </trans-unit>
-            <trans-unit id="_backend_access_action_permissions.action_switch_user.title">
-                <source>Switch to different user</source>
-            </trans-unit>
-            <trans-unit id="_warning.action.insert.title">
-                <source>Delete backend group</source>
-            </trans-unit>
-            <trans-unit id="_warning.action.insert.description">
-                <source>Delete backend group</source>
-            </trans-unit>
-            <trans-unit id="_backend_access_group_permissions">
-                <source>Backend User Management: Allowed backend groups for maintenance</source>
-            </trans-unit>
-            <trans-unit id="_backendLoginHistory_inactive_users">
-                <source><![CDATA[Inactive users <small>Last login of 6 months or older</small>]]></source>
-            </trans-unit>
-            <trans-unit id="_backendLoginHistory_user_show">
-                <source>Show user %s</source>
-            </trans-unit>
-            <trans-unit id="_backendLoginHistory_close">
-                <source>Close</source>
-            </trans-unit>
-            <trans-unit id="_backendLoginHistory_empty_title">
-                <source>No login records found</source>
-            </trans-unit>
-            <trans-unit id="_backendLoginHistory_empty_description">
-                <source>Your log has no login records, is your sys_log generating data? Ask an admin to enable logging
-                    of generic log records.
-                </source>
-            </trans-unit>
-            <trans-unit id="_backendLoginHistory_last_known_records">
-                <source>Last 20 records</source>
-            </trans-unit>
-            <trans-unit id="_backendLoginHistory_all_records">
-                <source>All known records</source>
             </trans-unit>
         </body>
     </file>

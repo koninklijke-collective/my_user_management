@@ -21,7 +21,7 @@ call_user_func(function (string $extension): void {
         'UserAdmin',
         '',
         [
-            \KoninklijkeCollective\MyUserManagement\Controller\BackendUserController::class => 'index, online, compare, addToCompareList, removeFromCompareList, terminateBackendUserSession',
+            \KoninklijkeCollective\MyUserManagement\Controller\BackendUserController::class => 'index, show, addToCompareList, removeFromCompareList, removeAllFromCompareList, compare, online, terminateBackendUserSession, initiatePasswordReset, groups, addGroupToCompareList, removeGroupFromCompareList, removeAllGroupsFromCompareList, compareGroups',
             \KoninklijkeCollective\MyUserManagement\Controller\BackendUserGroupController::class => 'index',
         ],
         [

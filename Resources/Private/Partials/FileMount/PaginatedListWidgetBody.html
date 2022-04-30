@@ -13,12 +13,12 @@
         </tr>
         </thead>
         <tbody>
-        <f:for each="{paginatedFileMounts}" as="fileMount">
+        <f:for as="fileMount" each="{paginator.paginatedItems}" iteration="iterator">
             <f:render partial="FileMount/IndexListRow" arguments="{_all}"/>
         </f:for>
-        <f:comment>
+        <f:comment><!--
             Footer row: no officially defined style yet
-        </f:comment>
+        --></f:comment>
         </tbody>
         <tfoot>
         <tr>

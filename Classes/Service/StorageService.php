@@ -10,15 +10,9 @@ use TYPO3\CMS\Core\Utility\MathUtility;
 
 final class StorageService implements SingletonInterface
 {
-    /** @var array */
-    protected $storage = [];
+    private array $storage = [];
+    private StorageRepository $storageRepository;
 
-    /** @var \TYPO3\CMS\Core\Resource\StorageRepository */
-    protected $storageRepository;
-
-    /**
-     * @param  \TYPO3\CMS\Core\Resource\StorageRepository  $storageRepository
-     */
     public function __construct(StorageRepository $storageRepository)
     {
         $this->storageRepository = $storageRepository;
@@ -27,7 +21,7 @@ final class StorageService implements SingletonInterface
     /**
      * Retrieve path details from given id
      *
-     * @param  int|\TYPO3\CMS\Core\Resource\ResourceStorage  $value
+     * @param  int|ResourceStorage $value
      * @param  string  $location
      * @return string
      */
@@ -52,10 +46,10 @@ final class StorageService implements SingletonInterface
     }
 
     /**
-     * @param  int|\TYPO3\CMS\Core\Resource\ResourceStorage  $storage
-     * @return \TYPO3\CMS\Core\Resource\ResourceStorage
+     * @param int|ResourceStorage $storage
+     * @return ResourceStorage|null
      */
-    protected function getStorage($storage): ?ResourceStorage
+    private function getStorage($storage): ?ResourceStorage
     {
         if ($storage instanceof ResourceStorage) {
             return $this->storage[$storage->getUid()] = $storage;
@@ -64,11 +58,7 @@ final class StorageService implements SingletonInterface
         if (MathUtility::canBeInterpretedAsInteger($storage)) {
             $storageId = (int)$storage;
 
-            if ($this->storage[$storageId] !== null) {
-                return $this->storage[$storageId];
-            }
-
-            return $this->storage[$storageId] = $this->storageRepository->findByIdentifier($storageId);
+            return $this->storage[$storageId] ?? ($this->storage[$storageId] = $this->storageRepository->findByUid($storageId));
         }
 
         return null;

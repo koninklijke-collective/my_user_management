@@ -38,25 +38,21 @@ final class BackendUserGroupPermission extends AbstractPermission
         }
     }
 
-    /**
-     * @return array
-     */
-    protected function getBackendGroupsForList(): array
+    private function getBackendGroupsForList(): array
     {
-        $queryBuilder = $this->getQueryBuilderForTable('be_groups');
-        $query = $queryBuilder->select('uid', 'title', 'description')
+        $query = $this->getQueryBuilderForTable('be_groups')->select('uid', 'title', 'description')
             ->from('be_groups');
 
-        return $query->execute()->fetchAll();
+        return $query->execute()->fetchAllAssociative();
     }
 
     /**
      * Get QueryBuilder without any default restrictions
      *
      * @param  string  $table
-     * @return \TYPO3\CMS\Core\Database\Query\QueryBuilder
+     * @return QueryBuilder
      */
-    protected function getQueryBuilderForTable(string $table): QueryBuilder
+    private function getQueryBuilderForTable(string $table): QueryBuilder
     {
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
         // Show all records except versioning placeholders

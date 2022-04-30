@@ -14,11 +14,13 @@
     ],
     "homepage": "https://github.com/koninklijke-collective/my_user_management",
     "license": "LGPL-3.0+",
+    "require": {
+        "typo3/cms-core": "11.*@dev",
+        "typo3/cms-beuser": "11.*@dev"
+    },
     "require-dev": {
-        "typo3/cms-core": "10.*.*@dev",
-        "typo3/cms-beuser": "10.*.*@dev",
-        "typo3/cms-install": "10.*.*@dev",
-        "typo3/cms-about": "10.*.*@dev",
+        "typo3/cms-install": "11.*@dev"
+        "typo3/cms-about": "11.*@dev",
         "typo3/testing-framework": "^6.3.3",
         "codeception/codeception": "^4.1",
         "codeception/module-webdriver": "^1.1",
