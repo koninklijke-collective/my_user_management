@@ -41,7 +41,7 @@ final class LoginHistoryController extends ActionController
         ModuleTemplateFactory $moduleTemplateFactory,
         OnlineSessionService $onlineSessionService,
         BackendUriBuilder $backendUriBuilder,
-        IconFactory $iconFactory,
+        IconFactory $iconFactory
     ) {
         $this->loginHistoryRepository = $loginHistoryRepository;
         $this->backendUserService = $backendUserService;
