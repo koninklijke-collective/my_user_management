@@ -39,7 +39,7 @@ final class FileMountController extends ActionController
         FileMountRepository $fileMountRepository,
         ModuleTemplateFactory $moduleTemplateFactory,
         BackendUriBuilder $backendUriBuilder,
-        IconFactory $iconFactory,
+        IconFactory $iconFactory
     )
     {
         $this->fileMountRepository = $fileMountRepository;
