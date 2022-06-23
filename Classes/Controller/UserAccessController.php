@@ -30,7 +30,7 @@ final class UserAccessController extends ActionController
 
     public function __construct(
         BackendUserService $backendUserService,
-        ModuleTemplateFactory $moduleTemplateFactory,
+        ModuleTemplateFactory $moduleTemplateFactory
     ) {
         $this->backendUserService = $backendUserService;
         $this->moduleTemplateFactory = $moduleTemplateFactory;
