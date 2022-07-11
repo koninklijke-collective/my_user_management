@@ -5,12 +5,15 @@ namespace KoninklijkeCollective\MyUserManagement\Controller;
 use KoninklijkeCollective\MyUserManagement\Functions\BackendUserAuthenticationTrait;
 use KoninklijkeCollective\MyUserManagement\Functions\TranslateTrait;
 use KoninklijkeCollective\MyUserManagement\Service\BackendUserService;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Http\ServerRequestFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Controller: User Access
@@ -20,67 +23,71 @@ final class UserAccessController extends ActionController
     use TranslateTrait;
     use BackendUserAuthenticationTrait;
 
-    /**
-     * @var \KoninklijkeCollective\MyUserManagement\Service\BackendUserService
-     * @TYPO3\CMS\Extbase\Annotation\Inject
-     */
-    protected $backendUserService;
+    private ModuleTemplateFactory $moduleTemplateFactory;
+    private BackendUserService $backendUserService;
+    private \TYPO3\CMS\Backend\Template\ModuleTemplate $moduleTemplate;
 
-    /**
-     * @param  \TYPO3\CMS\Extbase\Mvc\View\ViewInterface  $view
-     * @return void
-     */
-    protected function initializeView(ViewInterface $view): void
-    {
-        $this->view->assignMultiple([
-            'shortcutLabel' => 'MyUserAccess',
-            'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
-            'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
-        ]);
+
+    public function __construct(
+        BackendUserService $backendUserService,
+        ModuleTemplateFactory $moduleTemplateFactory
+    ) {
+        $this->backendUserService = $backendUserService;
+        $this->moduleTemplateFactory = $moduleTemplateFactory;
     }
 
+
     /**
-     * Action: List users
-     *
-     * @return void
+     * Init module state.
+     * This isn't done within __construct() since the controller
+     * object is only created once in extbase when multiple actions are called in
+     * one call. When those change module state, the second action would see old state.
      */
-    public function indexAction(): void
+    public function initializeAction(): void
     {
-        $page = $this->getSelectedPage();
+        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $this->moduleTemplate->setTitle(LocalizationUtility::translate('LLL:EXT:my_user_management/Resources/Private/Language/Backend/UserAccess.xlf:mlang_tabs_tab'));
+    }
+
+
+    public function indexAction(): ResponseInterface
+    {
+        $this->view->assignMultiple(
+            [
+                'shortcutLabel' => 'MyUserAccess',
+                'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
+                'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
+            ]
+        );
+        $page = $this->getSelectedPage($this->request);
         if ($page === null) {
             $this->addFlashMessage(
                 self::translate('no_page_selected_description'),
                 self::translate('no_page_selected_title'),
                 AbstractMessage::WARNING
             );
-
-            return;
+        } else {
+            $this->view->assignMultiple(
+                [
+                    'page' => $page,
+                    'backendUsers' => $this->backendUserService->findUsersWithPageAccess($page['uid']),
+                ]
+            );
         }
-        $this->view->assignMultiple([
-            'page' => $page,
-            'backendUsers' => $this->getBackendUserService()->findUsersWithPageAccess($page['uid']),
-        ]);
+        $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
+        $shortcutButton = $buttonBar->makeShortcutButton()
+            ->setRouteIdentifier('myusermanagement_MyUserManagementUseraccess')
+            ->setArguments(['id' => $page['uid']])
+            ->setDisplayName(LocalizationUtility::translate('myusermanagement_MyUserManagementUseraccess', 'myUserManagement') . ' - ' . $page['uid']);
+        $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
+
+        $this->moduleTemplate->setContent($this->view->render());
+        return $this->htmlResponse($this->moduleTemplate->renderContent());
     }
 
-    /**
-     * @return \KoninklijkeCollective\MyUserManagement\Service\BackendUserService
-     */
-    protected function getBackendUserService(): BackendUserService
-    {
-        if ($this->backendUserService === null) {
-            $this->backendUserService = $this->objectManager->get(BackendUserService::class);
-        }
 
-        return $this->backendUserService;
-    }
-
-    /**
-     * @return array|null
-     */
-    protected function getSelectedPage(): ?array
+    private function getSelectedPage(ServerRequestInterface $request): ?array
     {
-        // @todo refactor for generic ServerRequest instead of using the internal Factory
-        $request = ServerRequestFactory::fromGlobals();
         $pageId = (int)($request->getParsedBody()['id'] ?? $request->getQueryParams()['id'] ?? 0);
         if ($pageId === 0) {
             return null;

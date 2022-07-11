@@ -122,4 +122,9 @@ final class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\Ba
 
         return $query;
     }
+
+    private function getBackendUserAuthentication()
+    {
+        return $GLOBALS['BE_USER'];
+    }
 }

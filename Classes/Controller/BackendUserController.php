@@ -3,16 +3,24 @@
 namespace KoninklijkeCollective\MyUserManagement\Controller;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
-use KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository;
-use KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository;
+use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
 use KoninklijkeCollective\MyUserManagement\Functions\TranslateTrait;
 use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Backend\Routing\UriBuilder as BackendUriBuilder;
+use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Beuser\Domain\Model\Demand;
 use TYPO3\CMS\Beuser\Domain\Repository\BackendUserSessionRepository;
-use TYPO3\CMS\Beuser\Service\ModuleDataStorageService;
 use TYPO3\CMS\Beuser\Service\UserInformationService;
+use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Extbase\Mvc\View\ViewInterface;
+use TYPO3\CMS\Core\Page\PageRenderer;
+use TYPO3\CMS\Core\Pagination\SimplePagination;
+use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Override Controller: BackendUser
@@ -23,126 +31,155 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
 {
     use TranslateTrait;
 
-    /**
-     * Override generic backend user repository
-     *
-     * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
-     */
-    protected $backendUserRepository;
-
-    /**
-     * Override generic backend user group repository
-     *
-     * @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
-     */
-    protected $backendUserGroupRepository;
-
-    /**
-     * @param  \TYPO3\CMS\Beuser\Service\ModuleDataStorageService  $moduleDataStorageService
-     * @param  \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository  $backendUserRepository
-     * @param  \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository  $backendUserGroupRepository
-     * @param  \TYPO3\CMS\Beuser\Domain\Repository\BackendUserSessionRepository  $backendUserSessionRepository
-     * @param  \TYPO3\CMS\Beuser\Service\UserInformationService  $userInformationService
-     */
     public function __construct(
-        ModuleDataStorageService $moduleDataStorageService,
-        BackendUserRepository $backendUserRepository,
-        BackendUserGroupRepository $backendUserGroupRepository,
+        \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository $backendUserRepository,
+        \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository $backendUserGroupRepository,
         BackendUserSessionRepository $backendUserSessionRepository,
-        UserInformationService $userInformationService
+        UserInformationService $userInformationService,
+        ModuleTemplateFactory $moduleTemplateFactory,
+        BackendUriBuilder $backendUriBuilder,
+        IconFactory $iconFactory,
+        PageRenderer $pageRenderer
     ) {
-        parent::__construct($moduleDataStorageService, $backendUserRepository, $backendUserGroupRepository, $backendUserSessionRepository, $userInformationService);
+        parent::__construct(
+            $backendUserRepository,
+            $backendUserGroupRepository,
+            $backendUserSessionRepository,
+            $userInformationService,
+            $moduleTemplateFactory,
+            $backendUriBuilder,
+            $iconFactory,
+            $pageRenderer
+        );
     }
 
-    /**
-     * @param  \TYPO3\CMS\Extbase\Mvc\View\ViewInterface  $view
-     * @return void
-     */
-    protected function initializeView(ViewInterface $view): void
+    public function indexAction(Demand $demand = null, int $currentPage = 1, string $operation = ''): ResponseInterface
     {
-        parent::initializeView($view);
-        // Override shortcut label
-        $view->assign('shortcutLabel', 'myBackendUsers');
-    }
-
-    /**
-     * Displays all BackendUsers
-     * - Switch session to different user
-     *
-     * @param  \TYPO3\CMS\Beuser\Domain\Model\Demand  $demand
-     * @return void
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
-     */
-    public function indexAction(?Demand $demand = null): void
-    {
-        if (AccessUtility::beUserHasRightToEditTable(BackendUser::TABLE) === false) {
+        if (!AccessUtility::beUserHasRightToEditTable(BackendUser::TABLE)) {
             $this->addFlashMessage(
                 self::translate('backend_user_no_rights_to_table_description', [BackendUser::TABLE]),
                 self::translate('backend_user_no_rights_to_table_title'),
                 AbstractMessage::ERROR
             );
         }
+        $backendUser = $this->getBackendUser();
+        if ($operation === 'reset-filters') {
+            // Reset the module data demand object
+            $this->moduleData->setDemand(new Demand());
+            $demand = null;
+        }
 
-        if (!$this->getBackendUserAuthentication()->isAdmin()) {
-            if ($demand === null) {
-                $demand = $this->moduleData->getDemand();
-            } elseif ($demand->getUserType() !== Demand::USERTYPE_USERONLY) {
-                $this->addFlashMessage(
-                    self::translate('filter_on_admin_is_not_allowed_description'),
-                    self::translate('filter_on_admin_is_not_allowed_title'),
-                    AbstractMessage::ERROR
-                );
+        if ($demand === null) {
+            $demand = $this->moduleData->getDemand();
+        } else {
+            if (!$backendUser->isAdmin()) {
+                if ($demand->getUserType() !== Demand::USERTYPE_USERONLY) {
+                    $this->addFlashMessage(
+                        self::translate('filter_on_admin_is_not_allowed_description'),
+                        self::translate('filter_on_admin_is_not_allowed_title'),
+                        AbstractMessage::ERROR
+                    );
+                }
+                $demand->setUserType(Demand::USERTYPE_USERONLY);
             }
-
-            $demand->setUserType(Demand::USERTYPE_USERONLY);
             $this->moduleData->setDemand($demand);
         }
 
-        parent::indexAction($demand);
+        $backendUser->pushModuleData('tx_beuser', $this->moduleData->forUc());
 
-        // Override backend user group key for view
-        $this->view->assign(
-            'backendUserGroups',
-            array_merge([''], $this->backendUserGroupRepository->findAllConfigured()->toArray())
+        $compareUserList = $this->moduleData->getCompareUserList();
+        $backendUsers = $this->backendUserRepository->findDemanded($demand);
+        $paginator = new QueryResultPaginator($backendUsers, $currentPage, 50);
+        $pagination = new SimplePagination($paginator);
+
+        $this->view->assignMultiple(
+            [
+                'onlineBackendUsers' => $this->getOnlineBackendUsers(),
+                'demand' => $demand,
+                'paginator' => $paginator,
+                'pagination' => $pagination,
+                'totalAmountOfBackendUsers' => $backendUsers->count(),
+                'backendUserGroups' => array_merge([''], $this->backendUserGroupRepository->findAllConfigured()->toArray()),
+                'compareUserUidList' => array_combine($compareUserList, $compareUserList),
+                'currentUserUid' => $backendUser->user['uid'],
+                'compareUserList' => !empty($compareUserList) ? $this->backendUserRepository->findByUidList($compareUserList) : '',
+            ]
         );
+
+        $this->addMainMenu('index');
+        $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
+        $addUserButton = $buttonBar->makeLinkButton()
+            ->setIcon($this->iconFactory->getIcon('actions-add', Icon::SIZE_SMALL))
+            ->setTitle(LocalizationUtility::translate('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newRecordGeneral'))
+            ->setHref(
+                $this->backendUriBuilder->buildUriFromRoute('record_edit', [
+                    'edit' => ['be_users' => [0 => 'new']],
+                    'returnUrl' => $this->request->getAttribute('normalizedParams')->getRequestUri(),
+                ])
+            );
+        $buttonBar->addButton($addUserButton);
+        $shortcutButton = $buttonBar->makeShortcutButton()
+            ->setRouteIdentifier('myusermanagement_MyUserManagementUseradmin')
+            ->setDisplayName(LocalizationUtility::translate('myUserManagement', 'myUserManagement'));
+        $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
+
+        $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/SwitchUser');
+
+        $this->moduleTemplate->setContent($this->view->render());
+        return $this->htmlResponse($this->moduleTemplate->renderContent());
     }
 
     /**
-     * @param  int  $switchUser
-     * @return void
-     * @inheritDoc
+     * Displays all BackendUserGroups
+     *
+     * @param int $currentPage
+     * @return ResponseInterface
      */
-    public function switchUser($switchUser): void
+    public function groupsAction(int $currentPage = 1): ResponseInterface
     {
-        if ($this->getBackendUserAuthentication()->isAdmin()) {
-            parent::switchUser($switchUser);
-        }
-        /** @var \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser|null $targetUser */
-        $targetUser = $this->backendUserRepository->findByUid($switchUser);
-        if ($targetUser === null) {
+        if (!AccessUtility::beUserHasRightToEditTable(BackendUserGroup::TABLE)) {
             $this->addFlashMessage(
-                self::translate('switch_user_not_found_description'),
-                self::translate('switch_user_not_found_title'),
+                self::translate('backend_user_no_rights_to_table_description', [BackendUserGroup::TABLE]),
+                self::translate('backend_user_no_rights_to_table_title'),
                 AbstractMessage::ERROR
             );
-
-            return;
         }
+        /** @var QueryResultInterface $groups */
+        $groups = $this->backendUserGroupRepository->findAllConfigured();
+        $paginator = new QueryResultPaginator($groups, $currentPage, 50);
+        $pagination = new SimplePagination($paginator);
+        $compareGroupUidList = array_keys($this->getBackendUser()->uc['beuser']['compareGroupUidList'] ?? []);
+        $this->view->assignMultiple(
+            [
+                'paginator' => $paginator,
+                'pagination' => $pagination,
+                'totalAmountOfBackendUserGroups' => $groups->count(),
+                'compareGroupUidList' => array_map(static function ($value) { // uid as key and force value to 1
+                    return 1;
+                }, array_flip($compareGroupUidList)),
+                'compareGroupList' => !empty($compareGroupUidList) ? $this->backendUserGroupRepository->findByUidList($compareGroupUidList) : [],
+            ]
+        );
 
-        if ($targetUser->getIsAdministrator()) {
-            $this->addFlashMessage(
-                self::translate('admin_switch_not_allowed_description'),
-                self::translate('admin_switch_not_allowed_title'),
-                AbstractMessage::ERROR
+        $this->addMainMenu('groups');
+        $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
+        $addGroupButton = $buttonBar->makeLinkButton()
+            ->setIcon($this->iconFactory->getIcon('actions-add', Icon::SIZE_SMALL))
+            ->setTitle(LocalizationUtility::translate('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newRecordGeneral'))
+            ->setHref(
+                $this->backendUriBuilder->buildUriFromRoute('record_edit', [
+                    'edit' => ['be_groups' => [0 => 'new']],
+                    'returnUrl' => $this->request->getAttribute('normalizedParams')->getRequestUri(),
+                ])
             );
+        $buttonBar->addButton($addGroupButton);
+        $shortcutButton = $buttonBar->makeShortcutButton()
+            ->setRouteIdentifier('myusermanagement_MyUserManagementUseradmin')
+            ->setArguments(['tx_myusermanagement_myusermanagement_myusermanagementuseradmin' => ['action' => 'groups']])
+            ->setDisplayName(LocalizationUtility::translate('myUserManagementGroups', 'myUserManagement'));
+        $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
 
-            return;
-        }
-
-        // If all is as expected, fake admin functionality before switching user
-        $this->getBackendUserAuthentication()->user['admin'] = 1;
-        parent::switchUser($switchUser);
+        $this->moduleTemplate->setContent($this->view->render());
+        return $this->htmlResponse($this->moduleTemplate->renderContent());
     }
 }
