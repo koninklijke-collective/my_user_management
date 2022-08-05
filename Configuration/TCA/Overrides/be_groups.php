@@ -11,21 +11,11 @@ call_user_func(function (string $table): void {
     $GLOBALS['TCA'][$table]['ctrl']['security']['ignoreWebMountRestriction'] = 1;
 
     // Make sure user only shows configured groups
-    // @obsolete since TYPO3 9.5
-    // $GLOBALS['TCA'][$table]['columns']['subgroup']['config']['itemsProcFunc'] =
-    //     TableConfigurationArrayHook::class . '->filterConfiguredBackendGroups';
-    // For legacy override full subgroup config
-    $GLOBALS['TCA'][$table]['columns']['subgroup']['config'] = [
-        'type' => 'select',
-        'renderType' => 'selectMultipleSideBySide',
-        'enableMultiSelectFilterTextfield' => true,
-        'itemsProcFunc' => TableConfigurationArrayHook::class . '->addGroupsForUser',
-        'size' => 5,
-        'autoSizeMax' => 50,
-    ];
+    $GLOBALS['TCA'][$table]['columns']['subgroup']['config']['itemsProcFunc'] =
+        TableConfigurationArrayHook::class . '->filterConfiguredBackendGroups';
 
     // Make all fields to exclude for users
-    foreach ($GLOBALS['TCA'][$table]['columns'] as $key => &$configuration) {
+    foreach ($GLOBALS['TCA'][$table]['columns'] as &$configuration) {
         if (!isset($configuration['exclude'])) {
             $configuration['exclude'] = 1;
         }

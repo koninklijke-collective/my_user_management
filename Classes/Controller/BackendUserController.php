@@ -4,6 +4,8 @@ namespace KoninklijkeCollective\MyUserManagement\Controller;
 
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
+use KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository as CustomBackendUserGroupRepository;
+use KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository as CustomBackendUserRepository;
 use KoninklijkeCollective\MyUserManagement\Functions\TranslateTrait;
 use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
 use Psr\Http\Message\ResponseInterface;
@@ -32,8 +34,8 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
     use TranslateTrait;
 
     public function __construct(
-        \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository $backendUserRepository,
-        \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserGroupRepository $backendUserGroupRepository,
+        CustomBackendUserRepository $backendUserRepository,
+        CustomBackendUserGroupRepository $backendUserGroupRepository,
         BackendUserSessionRepository $backendUserSessionRepository,
         UserInformationService $userInformationService,
         ModuleTemplateFactory $moduleTemplateFactory,
@@ -92,19 +94,18 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
         $paginator = new QueryResultPaginator($backendUsers, $currentPage, 50);
         $pagination = new SimplePagination($paginator);
 
-        $this->view->assignMultiple(
-            [
-                'onlineBackendUsers' => $this->getOnlineBackendUsers(),
-                'demand' => $demand,
-                'paginator' => $paginator,
-                'pagination' => $pagination,
-                'totalAmountOfBackendUsers' => $backendUsers->count(),
-                'backendUserGroups' => array_merge([''], $this->backendUserGroupRepository->findAllConfigured()->toArray()),
-                'compareUserUidList' => array_combine($compareUserList, $compareUserList),
-                'currentUserUid' => $backendUser->user['uid'],
-                'compareUserList' => !empty($compareUserList) ? $this->backendUserRepository->findByUidList($compareUserList) : '',
-            ]
-        );
+        $this->view->assignMultiple([
+            'onlineBackendUsers' => $this->getOnlineBackendUsers(),
+            'demand' => $demand,
+            'paginator' => $paginator,
+            'pagination' => $pagination,
+            'totalAmountOfBackendUsers' => $backendUsers->count(),
+            'backendUserGroups' => array_merge([''], $this->backendUserGroupRepository->findAllConfigured()
+                ->toArray()),
+            'compareUserUidList' => array_combine($compareUserList, $compareUserList),
+            'currentUserUid' => $backendUser->user['uid'],
+            'compareUserList' => !empty($compareUserList) ? $this->backendUserRepository->findByUidList($compareUserList) : '',
+        ]);
 
         $this->addMainMenu('index');
         $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
@@ -126,13 +127,14 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
         $this->pageRenderer->loadRequireJsModule('TYPO3/CMS/Backend/SwitchUser');
 
         $this->moduleTemplate->setContent($this->view->render());
+
         return $this->htmlResponse($this->moduleTemplate->renderContent());
     }
 
     /**
      * Displays all BackendUserGroups
      *
-     * @param int $currentPage
+     * @param  int  $currentPage
      * @return ResponseInterface
      */
     public function groupsAction(int $currentPage = 1): ResponseInterface
@@ -149,17 +151,15 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
         $paginator = new QueryResultPaginator($groups, $currentPage, 50);
         $pagination = new SimplePagination($paginator);
         $compareGroupUidList = array_keys($this->getBackendUser()->uc['beuser']['compareGroupUidList'] ?? []);
-        $this->view->assignMultiple(
-            [
-                'paginator' => $paginator,
-                'pagination' => $pagination,
-                'totalAmountOfBackendUserGroups' => $groups->count(),
-                'compareGroupUidList' => array_map(static function ($value) { // uid as key and force value to 1
-                    return 1;
-                }, array_flip($compareGroupUidList)),
-                'compareGroupList' => !empty($compareGroupUidList) ? $this->backendUserGroupRepository->findByUidList($compareGroupUidList) : [],
-            ]
-        );
+        $this->view->assignMultiple([
+            'paginator' => $paginator,
+            'pagination' => $pagination,
+            'totalAmountOfBackendUserGroups' => $groups->count(),
+            'compareGroupUidList' => array_map(static function ($value) { // uid as key and force value to 1
+                return 1;
+            }, array_flip($compareGroupUidList)),
+            'compareGroupList' => !empty($compareGroupUidList) ? $this->backendUserGroupRepository->findByUidList($compareGroupUidList) : [],
+        ]);
 
         $this->addMainMenu('groups');
         $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
@@ -180,6 +180,7 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
         $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
 
         $this->moduleTemplate->setContent($this->view->render());
+
         return $this->htmlResponse($this->moduleTemplate->renderContent());
     }
 }

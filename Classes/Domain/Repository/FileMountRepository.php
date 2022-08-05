@@ -12,7 +12,6 @@ use TYPO3\CMS\Extbase\Persistence\Repository;
  */
 final class FileMountRepository extends Repository
 {
-
     protected $defaultOrderings = [
         'title' => QueryInterface::ORDER_ASCENDING,
         'path' => QueryInterface::ORDER_ASCENDING,

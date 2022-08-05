@@ -1,10 +1,10 @@
 <?php
 
-$EM_CONF[$_EXTKEY] = [
+$EM_CONF['my_user_management'] = [
     'title' => 'My Backend User Management',
     'description' => 'A module that makes it possible for editors to maintain backend users.',
     'category' => 'module',
-    'version' => '5.0.0-dev',
+    'version' => '7.0.0',
     'state' => 'stable',
     'uploadFolder' => false,
     'clearCacheOnLoad' => true,
@@ -13,8 +13,8 @@ $EM_CONF[$_EXTKEY] = [
     'author_company' => 'Rotterdam School of Management, Erasmus University',
     'constraints' => [
         'depends' => [
-            'typo3' => '10.0.0-11.4.99',
-            'beuser' => '10.0.0-11.4.99',
+            'typo3' => '11.4.0-11.4.99',
+            'beuser' => '11.4.0-11.4.99',
         ],
         'conflicts' => [],
         'suggests' => [],

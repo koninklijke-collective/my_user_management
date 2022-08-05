@@ -8,7 +8,6 @@ use KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserReposito
 use KoninklijkeCollective\MyUserManagement\Functions\BackendUserAuthenticationTrait;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\SingletonInterface;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Service: Backend User - Repository functionality with access check
@@ -127,7 +126,7 @@ final class BackendUserService implements SingletonInterface
     }
 
     /**
-     * Check if given user is allowed for current logged in user
+     * Check if given user is allowed for current logged-in user
      *
      * @param  \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser  $user
      * @return bool
@@ -139,8 +138,7 @@ final class BackendUserService implements SingletonInterface
             return false;
         }
 
-        if (GeneralUtility::isFirstPartOfStr($user->getUserName(), '_cli_')) {
-            // Ignore _cli users
+        if (str_starts_with($user->getUserName(), '_cli_')) {
             return false;
         }
 
@@ -148,7 +146,7 @@ final class BackendUserService implements SingletonInterface
     }
 
     /**
-     * Find users that has access in rootline
+     * Find users that have access in rootline
      *
      * @param  array  $rootLine
      * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser[]

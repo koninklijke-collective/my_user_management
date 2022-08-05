@@ -21,7 +21,7 @@ final class StorageService implements SingletonInterface
     /**
      * Retrieve path details from given id
      *
-     * @param  int|ResourceStorage $value
+     * @param  int|ResourceStorage  $value
      * @param  string  $location
      * @return string
      */
@@ -46,7 +46,7 @@ final class StorageService implements SingletonInterface
     }
 
     /**
-     * @param int|ResourceStorage $storage
+     * @param  int|ResourceStorage  $storage
      * @return ResourceStorage|null
      */
     private function getStorage($storage): ?ResourceStorage

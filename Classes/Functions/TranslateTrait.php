@@ -2,12 +2,10 @@
 
 namespace KoninklijkeCollective\MyUserManagement\Functions;
 
-use KoninklijkeCollective\MyUserManagement\Utility\ConfigurationUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 trait TranslateTrait
 {
-
     /**
      * Translate key for local extension from locallang_be.xlf
      *
@@ -23,9 +21,9 @@ trait TranslateTrait
         }
 
         $translation = LocalizationUtility::translate(
-            'LLL:EXT:' . ConfigurationUtility::EXTENSION . '/Resources/Private/Language/locallang_be.xlf'
+            'LLL:EXT:my_user_management/Resources/Private/Language/locallang_be.xlf'
             . ':' . $key,
-            ConfigurationUtility::EXTENSION,
+            'my_user_management',
             $arguments
         );
 

@@ -5,7 +5,6 @@ namespace KoninklijkeCollective\MyUserManagement\Hook;
 use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission;
 use KoninklijkeCollective\MyUserManagement\Functions\BackendUserAuthenticationTrait;
 use KoninklijkeCollective\MyUserManagement\Functions\QueryBuilderTrait;
-use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\SingletonInterface;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -23,23 +22,20 @@ final class TableConfigurationArrayHook implements SingletonInterface
      * @see https://forge.typo3.org/issues/85622
      * @param  array  $parameters
      * @return void
-     * @todo itemsProcFunc is not after all items are generated.. therefor this hook is not available since TYPO3 9.x.
      */
-    public function filterConfiguredBackendGroups(array $parameters): void
+    public function filterConfiguredBackendGroups(array &$parameters): void
     {
-        $items = &$parameters['items'] ?? [];
+        if (!isset($parameters['items'])) {
+            $parameters['items'] = [];
+        }
 
         if (self::getBackendUserAuthentication()->isAdmin()) {
             return;
         }
 
-        if ($items === []) {
-            return;
-        }
-
         $selectedItems = GeneralUtility::intExplode(',', $parameters['row'][$parameters['field']], true);
         $options = [];
-        foreach ($items as $key => $item) {
+        foreach ($parameters['items'] as $item) {
             // Get id from option
             [$label, $id, $icon] = $item;
             $id = (int)$id;
@@ -49,34 +45,8 @@ final class TableConfigurationArrayHook implements SingletonInterface
 
         // Only apply when there are any items filtered. Fallback on default items!
         if (!empty($options)) {
-            $items = $options;
+            $parameters['items'] = $options;
         }
-    }
-
-    /**
-     * Workaround to manually add groups for TCA field based on current user
-     *
-     * @param  array  $parameters
-     * @return void
-     */
-    public function addGroupsForUser(array $parameters): void
-    {
-        $items = &$parameters['items'] ?? [];
-        $queryBuilder = self::getQueryBuilderForTable('be_groups');
-        $queryBuilder->getRestrictions()
-            ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
-
-        $query = $queryBuilder->select('uid', 'title')
-            ->from('be_groups')
-            ->orderBy('title');
-
-        $result = $query->execute();
-        while ($row = $result->fetch()) {
-            $items[] = [$row['title'], $row['uid'], 'status-user-group-backend'];
-        }
-
-        // Now go to the original ItemsProcFunc functionality
-        $this->filterConfiguredBackendGroups($parameters);
     }
 
     /**

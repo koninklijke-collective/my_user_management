@@ -9,7 +9,6 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
 final class IsAdminViewHelper extends AbstractConditionViewHelper
 {
-
     /**
      * @param  array  $arguments
      * @param  \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface  $renderingContext

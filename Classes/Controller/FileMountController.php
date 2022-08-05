@@ -40,8 +40,7 @@ final class FileMountController extends ActionController
         ModuleTemplateFactory $moduleTemplateFactory,
         BackendUriBuilder $backendUriBuilder,
         IconFactory $iconFactory
-    )
-    {
+    ) {
         $this->fileMountRepository = $fileMountRepository;
         $this->moduleTemplateFactory = $moduleTemplateFactory;
         $this->backendUriBuilder = $backendUriBuilder;
@@ -66,20 +65,19 @@ final class FileMountController extends ActionController
             $this->addFlashMessage(
                 self::translate('backend_user_no_rights_to_table_description', [BackendUserGroup::TABLE]),
                 self::translate('backend_user_no_rights_to_table_title'),
-                AbstractMessage::ERROR
+                AbstractMessage::ERROR,
+                false
             );
         }
 
         $fileMounts = $this->fileMountRepository->findAll();
         $paginator = new QueryResultPaginator($fileMounts, $currentPage, 50);
         $pagination = new SimplePagination($paginator);
-        $this->view->assignMultiple(
-            [
-                'fileMounts' => $fileMounts,
-                'paginator' => $paginator,
-                'pagination' => $pagination,
-            ]
-        );
+        $this->view->assignMultiple([
+            'fileMounts' => $fileMounts,
+            'paginator' => $paginator,
+            'pagination' => $pagination,
+        ]);
         $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
         $addFilemountButton = $buttonBar->makeLinkButton()
             ->setIcon($this->iconFactory->getIcon('actions-add', Icon::SIZE_SMALL))
@@ -97,6 +95,7 @@ final class FileMountController extends ActionController
         $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
 
         $this->moduleTemplate->setContent($this->view->render());
+
         return $this->htmlResponse($this->moduleTemplate->renderContent());
     }
 }

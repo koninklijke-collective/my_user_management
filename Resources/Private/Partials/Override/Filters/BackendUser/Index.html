@@ -2,42 +2,45 @@
       xmlns:um="http://typo3.org/ns/KoninklijkeCollective/MyUserManagement/ViewHelpers" um:preserve="true"
 >
 
-<f:form action="index" objectName="demand" object="{demand}" class="form-inline form-inline-spaced">
-    <div class="form-group">
-        <label for="tx_Beuser_username"><f:translate key="userName">Username</f:translate></label>
-        <f:form.textfield id="tx_Beuser_username" class="form-control input-sm" property="userName"/>
-    </div>
-    <um:security.isAdmin>
-        <f:then>
-            <div class="form-group">
-                <label for="tx_Beuser_usertype"><f:translate key="admin">Admin</f:translate></label>
-                <f:form.select id="tx_Beuser_usertype" class="form-control input-sm" property="userType"
-                        options="{0: '{f:translate(key:\"both\")}', 1: '{f:translate(key:\"adminOnly\")}', 2: '{f:translate(key:\"normalUserOnly\")}'}" />
-            </div>
-        </f:then>
-        <f:else>
-            <f:comment>Force non-admin users when user is not an admin</f:comment>
-            <f:form.hidden property="userType" value="2"/>
-        </f:else>
-    </um:security.isAdmin>
-    <f:form.hidden property="userType" value="2"/>
-    <div class="form-group">
-        <label for="tx_Beuser_status"><f:translate key="status">Status</f:translate></label>
-        <f:form.select id="tx_Beuser_status" class="form-control input-sm" property="status"
-            options="{0: '{f:translate(key:\"both\")}', 1: '{f:translate(key:\"activeOnly\")}', 2: '{f:translate(key:\"inactiveOnly\")}'}"/>
-    </div>
-    <div class="form-group">
-        <label for="tx_Beuser_logins"><f:translate key="login">Login</f:translate></label>
-        <f:form.select id="tx_Beuser_logins" class="form-control input-sm" property="logins"
-                options="{0: '{f:translate(key:\"both\")}', 1: '{f:translate(key:\"loginBefore\")}', 2: '{f:translate(key:\"neverLoggedIn\")}'}"/>
-    </div>
-    <div class="form-group">
-        <label for="tx_beuser_backendUserGroup"><f:translate key="backendUserGroup">User Group</f:translate></label>
-        <f:form.select id="tx_beuser_backendUserGroup" class="form-control input-sm" property="backendUserGroup"
-                options="{backendUserGroups}" optionLabelField="title" optionValueField="uid"/>
-    </div>
-    <div class="form-group">
-        <f:form.submit value="{f:translate(key: 'filter')}" class="btn btn-default btn-sm" />
+<f:form action="index" objectName="demand" object="{demand}">
+    <div class="row row-cols-auto align-items-end g-3 mb-4">
+        <div class="col">
+            <label for="tx_Beuser_username" class="form-label"><f:translate key="userName">Username</f:translate></label>
+            <f:form.textfield id="tx_Beuser_username" class="form-control" property="userName"/>
+        </div>
+        <um:security.isAdmin>
+            <f:then>
+                <div class="col">
+                    <label for="tx_Beuser_usertype" class="form-label"><f:translate key="admin">Admin</f:translate></label>
+                    <f:form.select id="tx_Beuser_usertype" class="form-select" property="userType"
+                            options="{0: '{f:translate(key:\"both\")}', 1: '{f:translate(key:\"adminOnly\")}', 2: '{f:translate(key:\"normalUserOnly\")}'}" />
+                </div>
+            </f:then>
+            <f:else>
+                <f:comment>Force non-admin users when user is not an admin</f:comment>
+                <f:form.hidden property="userType" value="2"/>
+            </f:else>
+        </um:security.isAdmin>
+        <f:form.hidden property="userType" value="2"/>
+        <div class="col">
+            <label for="tx_Beuser_status" class="form-label"><f:translate key="status">Status</f:translate></label>
+            <f:form.select id="tx_Beuser_status" class="form-select" property="status"
+                options="{0: '{f:translate(key:\"both\")}', 1: '{f:translate(key:\"activeOnly\")}', 2: '{f:translate(key:\"inactiveOnly\")}'}"/>
+        </div>
+        <div class="col">
+            <label for="tx_Beuser_logins" class="form-label"><f:translate key="login">Login</f:translate></label>
+            <f:form.select id="tx_Beuser_logins" class="form-select" property="logins"
+                    options="{0: '{f:translate(key:\"both\")}', 1: '{f:translate(key:\"loginBefore\")}', 2: '{f:translate(key:\"neverLoggedIn\")}'}"/>
+        </div>
+        <div class="col">
+            <label for="tx_beuser_backendUserGroup" class="form-label"><f:translate key="backendUserGroup">User Group</f:translate></label>
+            <f:form.select id="tx_beuser_backendUserGroup" class="form-select" property="backendUserGroup"
+                    options="{backendUserGroups}" optionLabelField="title" optionValueField="uid"/>
+        </div>
+        <div class="col">
+            <f:form.button type="submit" name="operation" value="filter" class="btn btn-light">{f:translate(key: 'filter')}</f:form.button>
+            <f:form.button type="submit" name="operation" value="reset-filters" class="btn btn-link">{f:translate(key: 'reset')}</f:form.button>
+        </div>
     </div>
 </f:form>
 

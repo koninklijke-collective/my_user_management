@@ -16,7 +16,6 @@ use TYPO3\CMS\Extbase\Security\Exception;
  */
 final class DataHandlerCheckModifyAccessListHook implements DataHandlerCheckModifyAccessListHookInterface
 {
-
     /**
      * Hook that determines whether a user has access to modify a table.
      *

@@ -1,1 +1,1 @@
-<INCLUDE_TYPOSCRIPT: source="FILE: ./Configuration/TypoScript/setup.typoscript">
+@import 'EXT:my_user_management/Configuration/TypoScript/setup.typoscript'

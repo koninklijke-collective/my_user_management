@@ -9,7 +9,7 @@ call_user_func(function (string $table): void {
     $GLOBALS['TCA'][$table]['ctrl']['security']['ignoreWebMountRestriction'] = 1;
 
     // Make all fields to exclude for users
-    foreach ($GLOBALS['TCA'][$table]['columns'] as $key => &$configuration) {
+    foreach ($GLOBALS['TCA'][$table]['columns'] as &$configuration) {
         if (!isset($configuration['exclude'])) {
             $configuration['exclude'] = 1;
         }

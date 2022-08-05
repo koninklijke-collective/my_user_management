@@ -4,6 +4,7 @@ namespace KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject;
 
 use ArrayAccess;
 use Countable;
+use ReturnTypeWillChange;
 
 /**
  * DTO: Permission access Backend User Groups
@@ -48,6 +49,7 @@ abstract class AbstractPermission implements ArrayAccess, Countable
      * @param  mixed  $offset
      * @return mixed
      */
+    #[ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->data[$offset] ?? null;

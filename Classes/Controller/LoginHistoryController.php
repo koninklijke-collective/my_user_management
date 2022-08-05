@@ -72,22 +72,21 @@ final class LoginHistoryController extends ActionController
             ->setDisplayName(LocalizationUtility::translate('myUserManagementLoginhistory', 'myUserManagement'));
         $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
         $loginSince = new DateTime($this->settings['since'] ?? '- 6 months');
-        $this->view->assignMultiple(
-            [
-                'onlineBackendUsers' => $this->onlineSessionService->getSessions(),
-                'backendUsers' => $this->backendUserService->findAllBackendUsersForDropdown(),
-                'loginHistory' => $this->loginHistoryRepository->lastLoggedInUsers(),
-                'inactiveUsers' => $this->backendUserService->findAllInactiveBackendUsers($loginSince),
-            ]
-        );
+        $this->view->assignMultiple([
+            'onlineBackendUsers' => $this->onlineSessionService->getSessions(),
+            'backendUsers' => $this->backendUserService->findAllBackendUsersForDropdown(),
+            'loginHistory' => $this->loginHistoryRepository->lastLoggedInUsers(),
+            'inactiveUsers' => $this->backendUserService->findAllInactiveBackendUsers($loginSince),
+        ]);
         $this->moduleTemplate->setContent($this->view->render());
+
         return $this->htmlResponse($this->moduleTemplate->renderContent());
     }
 
     /**
      * Action: Get login overview
      *
-     * @param int |null $user
+     * @param  int|null  $user
      * @return void
      */
     public function detailAction(?int $user = null): ResponseInterface
@@ -115,16 +114,14 @@ final class LoginHistoryController extends ActionController
             $this->redirect('index');
         }
 
-
         $this->addDetailButtons($backendUser);
 
-        $this->view->assignMultiple(
-            [
-                'user' => $backendUser,
-                'loginSessions' => $this->loginHistoryRepository->findUserLoginActions($backendUser),
-            ]
-        );
+        $this->view->assignMultiple([
+            'user' => $backendUser,
+            'loginSessions' => $this->loginHistoryRepository->findUserLoginActions($backendUser),
+        ]);
         $this->moduleTemplate->setContent($this->view->render());
+
         return $this->htmlResponse($this->moduleTemplate->renderContent());
     }
 
@@ -174,18 +171,21 @@ final class LoginHistoryController extends ActionController
 
         $shortcutButton = $buttonBar->makeShortcutButton()
             ->setRouteIdentifier('myusermanagement_MyUserManagementLoginhistory')
-            ->setArguments(['tx_myusermanagement_myusermanagement_myusermanagementloginhistory' => ['action' => 'detail', 'user' => $backendUser->getUid()]])
+            ->setArguments([
+                'tx_myusermanagement_myusermanagement_myusermanagementloginhistory' => [
+                    'action' => 'detail',
+                    'user' => $backendUser->getUid(),
+                ],
+            ])
             ->setDisplayName(LocalizationUtility::translate('myUserManagementLoginhistory', 'myUserManagement') . ': ' . $backendUser->getUsername());
         $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
     }
 
     private function initializeDefaultViewVariables(): void
     {
-        $this->view->assignMultiple(
-            [
-                'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
-                'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
-            ]
-        );
+        $this->view->assignMultiple([
+            'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
+            'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
+        ]);
     }
 }
