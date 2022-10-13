@@ -111,7 +111,7 @@
                     </f:else>
                 </f:if>
                 <um:security.isActionAllowed action="SWITCH_USER">
-                    <f:if condition="{backendUser.uid} !== {currentUserUid}">
+                    <f:if condition="{backendUser.uid} !== {currentUserUid} && !{backendUser.isAdministrator} && !{backendUser.isDisabled}">
                         <f:then>
                             <typo3-backend-switch-user targetUser="{backendUser.uid}">
                                 <button type="button" class="btn btn-default" title="{f:translate(key: 'LLL:EXT:beuser/Resources/Private/Language/locallang.xlf:switchBackMode')}">
