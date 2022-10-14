@@ -183,4 +183,52 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
 
         return $this->htmlResponse($this->moduleTemplate->renderContent());
     }
+
+    /**
+     * Displays a BackendUser
+     *
+     * @param int $uid
+     * @return ResponseInterface
+     */
+    public function showAction(int $uid = 0): ResponseInterface
+    {
+        $data = $this->userInformationService->getUserInformation($uid);
+        $this->view->assign('data', $data);
+
+        $this->addMainMenu('show');
+        $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
+        $backButton = $buttonBar->makeLinkButton()
+            ->setIcon($this->iconFactory->getIcon('actions-view-go-back', Icon::SIZE_SMALL))
+            ->setTitle(LocalizationUtility::translate('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.goBack'))
+            ->setHref('javascript:history.back()');
+        $buttonBar->addButton($backButton);
+        $editButton = $buttonBar->makeLinkButton()
+            ->setIcon($this->iconFactory->getIcon('actions-open', Icon::SIZE_SMALL))
+            ->setTitle(LocalizationUtility::translate('LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.edit'))
+            ->setShowLabelText(true)
+            ->setHref((string)$this->backendUriBuilder->buildUriFromRoute('record_edit', [
+                'edit' => ['be_users' => [$uid => 'edit']],
+                'returnUrl' => $this->request->getAttribute('normalizedParams')->getRequestUri(),
+            ]));
+        $buttonBar->addButton($editButton);
+        $addUserButton = $buttonBar->makeLinkButton()
+            ->setIcon($this->iconFactory->getIcon('actions-add', Icon::SIZE_SMALL))
+            ->setTitle(LocalizationUtility::translate('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newRecordGeneral'))
+            ->setShowLabelText(true)
+            ->setHref((string)$this->backendUriBuilder->buildUriFromRoute('record_edit', [
+                'edit' => ['be_users' => [0 => 'new']],
+                'returnUrl' => $this->request->getAttribute('normalizedParams')->getRequestUri(),
+            ]));
+        $buttonBar->addButton($addUserButton);
+        $username = empty($data['user']['username']) ? '' : ': ' . $data['user']['username'];
+        $shortcutButton = $buttonBar->makeShortcutButton()
+            ->setRouteIdentifier('system_BeuserTxBeuser')
+            ->setArguments(['action' => 'show', 'uid' => $uid])
+            ->setDisplayName(LocalizationUtility::translate('backendUser', 'beuser') . $username);
+        $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
+
+        $this->moduleTemplate->setContent($this->view->render());
+
+        return $this->htmlResponse($this->moduleTemplate->renderContent());
+    }
 }
