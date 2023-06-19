@@ -47,10 +47,6 @@ class SwitchUserController extends \TYPO3\CMS\Backend\Controller\SwitchUserContr
             return $this->jsonResponse(['success' => false]);
         }
 
-        if (ExtensionManagementUtility::isLoaded('beuser')) {
-            // Set backend user listing module as starting module if installed
-            $currentUser->uc['startModuleOnFirstLogin'] = 'system_BeuserTxBeuser';
-        }
         $currentUser->uc['recentSwitchedToUsers'] = $this->generateListOfMostRecentSwitchedUsers($targetUserId);
         $currentUser->writeUC();
 
