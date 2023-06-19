@@ -1,7 +1,6 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
       xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
       xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
-      xmlns:bu="http://typo3.org/ns/TYPO3/CMS/Beuser/ViewHelpers"
       xmlns:um="http://typo3.org/ns/KoninklijkeCollective/MyUserManagement/ViewHelpers"
 >
 
@@ -112,7 +111,16 @@
                     </f:else>
                 </f:if>
                 <um:security.isActionAllowed action="SWITCH_USER">
-                    <bu:SwitchUser backendUser="{backendUser}" />
+                    <f:if condition="{backendUser.uid} !== {currentUserUid} && !{backendUser.isAdministrator} && !{backendUser.isDisabled}">
+                        <f:then>
+                            <typo3-backend-switch-user targetUser="{backendUser.uid}">
+                                <button type="button" class="btn btn-default" title="{f:translate(key: 'LLL:EXT:beuser/Resources/Private/Language/locallang.xlf:switchBackMode')}">
+                                    <core:icon identifier="actions-system-backend-user-switch" size="small" />
+                                </button>
+                            </typo3-switch-user-button>
+                        </f:then>
+                        <f:else><span class="btn btn-default disabled"><core:icon identifier="empty-empty" size="small" /></span></f:else>
+                    </f:if>
                 </um:security.isActionAllowed>
             </div>
         </td>

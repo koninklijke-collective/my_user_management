@@ -10,3 +10,6 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['chec
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['Backend\Template\Components\ButtonBar']['getButtonsHook']['my_user_management'] =
     ButtonBarHook::class . '->getButtons';
 
+$GLOBALS['TYPO3_CONF_VARS']['SYS']['Objects'][\TYPO3\CMS\Backend\Controller\SwitchUserController::class] = [
+    'className' => \KoninklijkeCollective\MyUserManagement\Controller\SwitchUserController::class
+];
