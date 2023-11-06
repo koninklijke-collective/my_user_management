@@ -21,7 +21,6 @@ use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Page\PageRenderer;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
@@ -29,7 +28,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  *
  * @see \TYPO3\CMS\Beuser\Controller\BackendUserController
  */
-final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserController
+final class OgBackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUserController
 {
     use TranslateTrait;
 
@@ -137,7 +136,7 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
      * @param  int  $currentPage
      * @return ResponseInterface
      */
-    public function groupsAction(int $currentPage = 1): ResponseInterface
+    public function groupsAction(\TYPO3\CMS\Beuser\Domain\Dto\BackendUserGroup $userGroupDto = null, int $currentPage = 1, string $operation = ''): ResponseInterface
     {
         if (!AccessUtility::beUserHasRightToEditTable(BackendUserGroup::TABLE)) {
             $this->addFlashMessage(
@@ -146,41 +145,56 @@ final class BackendUserController extends \TYPO3\CMS\Beuser\Controller\BackendUs
                 AbstractMessage::ERROR
             );
         }
-        /** @var QueryResultInterface $groups */
-        $groups = $this->backendUserGroupRepository->findAllConfigured();
-        $paginator = new QueryResultPaginator($groups, $currentPage, 50);
+
+        $backendUser = $this->getBackendUser();
+
+        if ($operation === 'reset-filters') {
+            $this->moduleData->set('userGroupDto', []);
+            $userGroupDto = null;
+        }
+
+        if ($userGroupDto === null) {
+            $userGroupDto = \TYPO3\CMS\Beuser\Domain\Dto\BackendUserGroup::fromUc((array)$this->moduleData->get('userGroupDto', []));
+        } else {
+            $this->moduleData->set('userGroupDto', $userGroupDto->forUc());
+        }
+
+        $backendUser->pushModuleData($this->moduleData->getModuleIdentifier(), $this->moduleData->toArray());
+
+        $backendUsers = $this->backendUserGroupRepository->findByFilter($userGroupDto);
+        $paginator = new QueryResultPaginator($backendUsers, $currentPage, 50);
         $pagination = new SimplePagination($paginator);
-        $compareGroupUidList = array_keys($this->getBackendUser()->uc['beuser']['compareGroupUidList'] ?? []);
-        $this->view->assignMultiple([
-            'paginator' => $paginator,
-            'pagination' => $pagination,
-            'totalAmountOfBackendUserGroups' => $groups->count(),
-            'compareGroupUidList' => array_map(static function ($value) { // uid as key and force value to 1
-                return 1;
-            }, array_flip($compareGroupUidList)),
-            'compareGroupList' => !empty($compareGroupUidList) ? $this->backendUserGroupRepository->findByUidList($compareGroupUidList) : [],
-        ]);
+        $compareGroupUidList = array_keys((array)$this->moduleData->get('compareGroupUidList', []));
+        $this->moduleTemplate->assignMultiple(
+            [
+                'paginator' => $paginator,
+                'pagination' => $pagination,
+                'totalAmountOfBackendUserGroups' => $backendUsers->count(),
+                'compareGroupUidList' => array_map(static function ($value) { // uid as key and force value to 1
+                    return 1;
+                }, array_flip($compareGroupUidList)),
+                'compareGroupList' => !empty($compareGroupUidList) ? $this->backendUserGroupRepository->findByUidList($compareGroupUidList) : [],
+                'userGroupDto' => $userGroupDto,
+            ]
+        );
 
         $this->addMainMenu('groups');
         $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
         $addGroupButton = $buttonBar->makeLinkButton()
-            ->setIcon($this->iconFactory->getIcon('actions-add', Icon::SIZE_SMALL))
-            ->setTitle(LocalizationUtility::translate('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:newRecordGeneral'))
-            ->setHref(
-                $this->backendUriBuilder->buildUriFromRoute('record_edit', [
-                    'edit' => ['be_groups' => [0 => 'new']],
-                    'returnUrl' => $this->request->getAttribute('normalizedParams')->getRequestUri(),
-                ])
-            );
+            ->setIcon($this->iconFactory->getIcon('actions-plus', Icon::SIZE_SMALL))
+            ->setTitle(LocalizationUtility::translate('LLL:EXT:beuser/Resources/Private/Language/locallang.xlf:backendUserGroup.create', 'beuser'))
+            ->setShowLabelText(true)
+            ->setHref((string)$this->backendUriBuilder->buildUriFromRoute('record_edit', [
+                'edit' => ['be_groups' => [0 => 'new']],
+                'returnUrl' => $this->request->getAttribute('normalizedParams')->getRequestUri(),
+            ]));
         $buttonBar->addButton($addGroupButton);
         $shortcutButton = $buttonBar->makeShortcutButton()
-            ->setRouteIdentifier('myusermanagement_MyUserManagementUseradmin')
-            ->setArguments(['tx_myusermanagement_myusermanagement_myusermanagementuseradmin' => ['action' => 'groups']])
-            ->setDisplayName(LocalizationUtility::translate('myUserManagementGroups', 'myUserManagement'));
+            ->setRouteIdentifier('backend_user_management')
+            ->setArguments(['action' => 'groups'])
+            ->setDisplayName(LocalizationUtility::translate('LLL:EXT:beuser/Resources/Private/Language/locallang.xlf:backendUserGroupsMenu', 'beuser'));
         $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
 
-        $this->moduleTemplate->setContent($this->view->render());
-
-        return $this->htmlResponse($this->moduleTemplate->renderContent());
+        return $this->moduleTemplate->renderResponse('BackendUserGroup/List');
     }
 }

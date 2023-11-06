@@ -1,8 +1,9 @@
 <?php
 
-/**
- * Definitions for modules provided by EXT:examples
- */
+use KoninklijkeCollective\MyUserManagement\Controller\UserManagementController;
+use KoninklijkeCollective\MyUserManagement\Controller\LoginHistoryController;
+use KoninklijkeCollective\MyUserManagement\Controller\UserAccessController;
+
 return [
     'myusermanagement' => [
         'parent' => '',
@@ -21,7 +22,7 @@ return [
         'extensionName' => 'MyUserManagement',
         'iconIdentifier' => 'module-my_user_management-user-admin',
         'controllerActions' => [
-            \KoninklijkeCollective\MyUserManagement\Controller\BackendUserController::class => [
+            UserManagementController::class => [
                 'index',
                 'show',
                 'addToCompareList',
@@ -49,7 +50,7 @@ return [
         'iconIdentifier' => 'module-my_user_management-user-access',
         'navigationComponent' => '@typo3/backend/page-tree/page-tree-element',
         'controllerActions' => [
-            \KoninklijkeCollective\MyUserManagement\Controller\UserAccessController::class => ['index'],
+            UserAccessController::class => ['index'],
         ],
     ],
     'myusermanagement_login_history' => [
@@ -60,7 +61,7 @@ return [
         'extensionName' => 'MyUserManagement',
         'iconIdentifier' => 'module-my_user_management-login-history',
         'controllerActions' => [
-            \KoninklijkeCollective\MyUserManagement\Controller\LoginHistoryController::class => ['index', 'detail'],
+            LoginHistoryController::class => ['index', 'detail'],
         ],
     ],
 ];
