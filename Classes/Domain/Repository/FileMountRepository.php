@@ -7,9 +7,6 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 
-/**
- * Repository: FileMount
- */
 final class FileMountRepository extends Repository
 {
     protected $defaultOrderings = [
@@ -17,11 +14,6 @@ final class FileMountRepository extends Repository
         'path' => QueryInterface::ORDER_ASCENDING,
     ];
 
-    /**
-     * Initializes the repository.
-     *
-     * @return void
-     */
     public function initializeObject(): void
     {
         $querySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class)

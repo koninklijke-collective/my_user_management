@@ -17,12 +17,8 @@ final class ButtonBarHook
 {
     use BackendUserAuthenticationTrait;
 
-    /** @var \TYPO3\CMS\Core\Http\ServerRequest */
-    protected $request;
+    protected ServerRequest $request;
 
-    /**
-     * @param  \TYPO3\CMS\Core\Http\ServerRequest  $request
-     */
     public function __construct(?ServerRequest $request = null)
     {
         $this->request = $request ?? $GLOBALS['TYPO3_REQUEST'];
@@ -30,10 +26,6 @@ final class ButtonBarHook
 
     /**
      * Change button bar when editing BackendUser & BackendUserGroup
-     *
-     * @param  array  $parameters
-     * @param  \TYPO3\CMS\Backend\Template\Components\ButtonBar  $buttonBar
-     * @return array
      */
     public function getButtons(array $parameters, ButtonBar $buttonBar): array
     {
@@ -49,18 +41,13 @@ final class ButtonBarHook
         }
 
         $table = $this->getEditedTable();
-        if ($table === null || !in_array($table, [BackendUser::TABLE, BackendUserGroup::TABLE], true)) {
+        if (!in_array($table, [BackendUser::TABLE, BackendUserGroup::TABLE], true)) {
             return $buttons;
         }
 
         return $this->filterButtonsForCurrentUser($buttons, $table);
     }
 
-    /**
-     * @param  array  $buttons
-     * @param  string  $currentTable
-     * @return array
-     */
     protected function filterButtonsForCurrentUser(array $buttons, string $currentTable): array
     {
         $result = [];
@@ -96,9 +83,6 @@ final class ButtonBarHook
         return $result;
     }
 
-    /**
-     * @return bool
-     */
     protected function isEditRecord(): bool
     {
         $route = $this->request->getQueryParams()['route'] ?? 'unknown';
@@ -106,9 +90,6 @@ final class ButtonBarHook
         return $route === '/record/edit';
     }
 
-    /**
-     * @return string|null
-     */
     protected function getEditedTable(): ?string
     {
         $table = array_key_first($this->request->getQueryParams()['edit'] ?? []);

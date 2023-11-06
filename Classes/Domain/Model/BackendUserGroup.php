@@ -11,22 +11,18 @@ final class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserG
 {
     public const TABLE = 'be_groups';
 
-    /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup> */
-    protected $subGroups;
-
-    /** @var string */
-    protected $databaseMountPoints = '';
-    /** @var array exploded from $databaseMountPoints */
-    protected $_databaseMountPoints;
-
-    /** @var string */
-    protected $fileMountPoints = '';
-    /** @var array exploded from $fileMountPoint */
-    protected $_fileMountPoints;
+    protected string $databaseMountPoints = '';
+    protected ?array $_databaseMountPoints = null;
+    protected string $fileMountPoints = '';
+    protected ?array $_fileMountPoints = null;
 
     /**
-     * @return array
+     * Override default sub groups to map own custom model
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup>
      */
+    protected $subGroups;
+
     public function getDatabaseMountPoints(): array
     {
         if ($this->_databaseMountPoints === null) {
@@ -36,10 +32,6 @@ final class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserG
         return $this->_databaseMountPoints;
     }
 
-    /**
-     * @param  string  $databaseMountPoints
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup
-     */
     public function setDatabaseMountPoints(string $databaseMountPoints): BackendUserGroup
     {
         $this->databaseMountPoints = $databaseMountPoints;
@@ -48,9 +40,6 @@ final class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserG
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getFileMountPoints(): array
     {
         if ($this->_fileMountPoints === null) {
@@ -60,10 +49,6 @@ final class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserG
         return $this->_fileMountPoints;
     }
 
-    /**
-     * @param  string  $fileMountPoints
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup
-     */
     public function setFileMountPoints(string $fileMountPoints): BackendUserGroup
     {
         $this->fileMountPoints = $fileMountPoints;
@@ -72,9 +57,6 @@ final class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserG
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isDisabled(): bool
     {
         return $this->hidden === true;

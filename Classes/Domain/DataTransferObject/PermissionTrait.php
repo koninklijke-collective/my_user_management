@@ -21,9 +21,6 @@ trait PermissionTrait
     /** @var bool cached admin lookup from aspect context */
     protected static $isAdmin;
 
-    /**
-     * @return string
-     */
     protected static function key(): string
     {
         if (empty(static::KEY)) {
@@ -33,9 +30,6 @@ trait PermissionTrait
         return static::KEY;
     }
 
-    /**
-     * @return bool
-     */
     protected static function userIsAdmin(): bool
     {
         if (static::$isAdmin === null) {
@@ -52,15 +46,13 @@ trait PermissionTrait
 
     /**
      * Get configured options based on current backend user
-     *
-     * @return array
      */
     public static function getConfigured(): array
     {
         if (static::$configured === null) {
             static::$configured = [];
 
-            // If admin, dont return any configured options
+            // If admin, don't return any configured options
             if (static::userIsAdmin()) {
                 return [];
             }
@@ -71,10 +63,13 @@ trait PermissionTrait
                 return [];
             }
 
+
+            //$backendUser->check('custom_options', $catKey . ':' . $itemKey);
+
             $options = $backendUser->groupData['custom_options'] ?? '';
             foreach (GeneralUtility::trimExplode(',', $options, true) as $value) {
                 // Check if custom option value is a key for this object
-                if (strpos($value, static::key()) === 0) {
+                if (str_starts_with($value, static::key())) {
                     // Only return id; remove `my_custom_key` and cast as int
                     $id = (int)substr($value, strlen(static::key()) + 1);
                     if ($id > 0) {
@@ -87,9 +82,6 @@ trait PermissionTrait
         return static::$configured;
     }
 
-    /**
-     * @return bool
-     */
     public static function hasConfigured(): bool
     {
         return static::getConfigured() !== [];
@@ -97,9 +89,6 @@ trait PermissionTrait
 
     /**
      * Check if identifier is configured by backend user
-     *
-     * @param  int  $identifier
-     * @return bool
      */
     public static function isConfigured(int $identifier): bool
     {

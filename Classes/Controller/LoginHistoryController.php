@@ -9,46 +9,29 @@ use KoninklijkeCollective\MyUserManagement\Functions\TranslateTrait;
 use KoninklijkeCollective\MyUserManagement\Service\BackendUserService;
 use KoninklijkeCollective\MyUserManagement\Service\OnlineSessionService;
 use Psr\Http\Message\ResponseInterface;
-use TYPO3\CMS\Backend\Routing\UriBuilder as BackendUriBuilder;
+use TYPO3\CMS\Backend\Attribute\Controller;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
-use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Mvc\Request;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
-/**
- * Controller: User Login History
- */
+#[Controller]
 final class LoginHistoryController extends ActionController
 {
     use TranslateTrait;
 
-    private BackendUriBuilder $backendUriBuilder;
-    private IconFactory $iconFactory;
-    private ModuleTemplateFactory $moduleTemplateFactory;
-    private LoginHistoryRepository $loginHistoryRepository;
-    private BackendUserService $backendUserService;
-    private OnlineSessionService $onlineSessionService;
-    private ModuleTemplate $moduleTemplate;
+    private \TYPO3\CMS\Backend\Template\ModuleTemplate $moduleTemplate;
 
     public function __construct(
-        LoginHistoryRepository $loginHistoryRepository,
-        BackendUserService $backendUserService,
-        ModuleTemplateFactory $moduleTemplateFactory,
-        OnlineSessionService $onlineSessionService,
-        BackendUriBuilder $backendUriBuilder,
-        IconFactory $iconFactory
+        private readonly BackendUserService $backendUserService,
+        private readonly LoginHistoryRepository $loginHistoryRepository,
+        private readonly ModuleTemplateFactory $moduleTemplateFactory,
+        private readonly OnlineSessionService $onlineSessionService,
     ) {
-        $this->loginHistoryRepository = $loginHistoryRepository;
-        $this->backendUserService = $backendUserService;
-        $this->onlineSessionService = $onlineSessionService;
-        $this->moduleTemplateFactory = $moduleTemplateFactory;
-        $this->backendUriBuilder = $backendUriBuilder;
-        $this->iconFactory = $iconFactory;
     }
 
     /**
@@ -61,131 +44,114 @@ final class LoginHistoryController extends ActionController
     {
         $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->moduleTemplate->setTitle(LocalizationUtility::translate('LLL:EXT:my_user_management/Resources/Private/Language/Backend/FileMount.xlf:mlang_tabs_tab'));
+        $this->moduleTemplate->setFlashMessageQueue($this->getFlashMessageQueue());
+
+        $this->moduleTemplate->assignMultiple([
+            'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
+            'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
+        ]);
     }
 
     public function indexAction(): ResponseInterface
     {
-        $this->initializeDefaultViewVariables();
+        // Add shortcut possibility
         $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
         $shortcutButton = $buttonBar->makeShortcutButton()
-            ->setRouteIdentifier('myusermanagement_MyUserManagementLoginhistory')
+            ->setRouteIdentifier('myusermanagement_login_history')
             ->setDisplayName(LocalizationUtility::translate('myUserManagementLoginhistory', 'myUserManagement'));
         $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
+
+        // Render variables
         $loginSince = new DateTime($this->settings['since'] ?? '- 6 months');
-        $this->view->assignMultiple([
+        $this->moduleTemplate->assignMultiple([
             'onlineBackendUsers' => $this->onlineSessionService->getSessions(),
             'backendUsers' => $this->backendUserService->findAllBackendUsersForDropdown(),
             'loginHistory' => $this->loginHistoryRepository->lastLoggedInUsers(),
             'inactiveUsers' => $this->backendUserService->findAllInactiveBackendUsers($loginSince),
         ]);
-        $this->moduleTemplate->setContent($this->view->render());
 
-        return $this->htmlResponse($this->moduleTemplate->renderContent());
+        return $this->moduleTemplate->renderResponse('LoginHistory/List');
     }
 
-    /**
-     * Action: Get login overview
-     *
-     * @param  int|null  $user
-     * @return void
-     */
     public function detailAction(?int $user = null): ResponseInterface
-    {
-        $this->initializeDefaultViewVariables();
-        // Forward POST request to GET for correct workflow
-        if ($this->request instanceof Request && $this->request->getMethod() === 'POST') {
-            $this->redirect('detail', null, null, ['user' => $user]);
+    {  // Forward POST request to GET for correct workflow
+        if ($this->request->getMethod() === 'POST') {
+            return $this->redirect('detail', null, null, ['user' => $user]);
         }
-
         if ($user === null) {
-            // throws StopActionException - in v12 needs to return Response
-            $this->redirect('index');
+            return $this->redirect('index');
         }
-
         $backendUser = $this->backendUserService->findBackendUser($user);
         if ($backendUser === null) {
             $this->addFlashMessage(
                 self::translate('backend_user_not_allowed_description', [$user]),
                 self::translate('backend_user_not_allowed_title'),
-                AbstractMessage::ERROR
+                \TYPO3\CMS\Core\Type\ContextualFeedbackSeverity::ERROR
             );
 
-            // throws StopActionException - in v12 needs to return Response
-            $this->redirect('index');
+            return $this->redirect('index');
         }
 
-        $this->addDetailButtons($backendUser);
+        // Register available buttons
+        $this->registerDetailButtons($backendUser);
 
-        $this->view->assignMultiple([
+        // Render variables
+        $this->moduleTemplate->assignMultiple([
             'user' => $backendUser,
             'loginSessions' => $this->loginHistoryRepository->findUserLoginActions($backendUser),
         ]);
-        $this->moduleTemplate->setContent($this->view->render());
 
-        return $this->htmlResponse($this->moduleTemplate->renderContent());
+        return $this->moduleTemplate->renderResponse('LoginHistory/Detail');
     }
 
-    private function addDetailButtons(?BackendUser $backendUser): void
+    private function registerDetailButtons(?BackendUser $backendUser): void
     {
         if ($backendUser === null) {
             return;
         }
         $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
 
+        $iconFactory = GeneralUtility::makeInstance(IconFactory::class);
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+
         $editUserButton = $buttonBar->makeLinkButton()
-            ->setIcon($this->iconFactory->getIcon('actions-open', Icon::SIZE_SMALL))
+            ->setIcon($iconFactory->getIcon('actions-open', Icon::SIZE_SMALL))
             ->setTitle(LocalizationUtility::translate('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:edit'))
-            ->setHref(
-                $this->backendUriBuilder->buildUriFromRoute('record_edit', [
-                    'edit' => ['be_users' => [$backendUser->getUid() => 'edit']],
-                    'returnUrl' => $this->request->getAttribute('normalizedParams')->getRequestUri(),
-                ])
-            );
+            ->setHref($uriBuilder->buildUriFromRoute('record_edit', [
+                'edit' => ['be_users' => [$backendUser->getUid() => 'edit']],
+                'returnUrl' => $this->request->getAttribute('normalizedParams')->getRequestUri(),
+            ]));
         $buttonBar->addButton($editUserButton);
 
         if (!$backendUser->isCurrentlyLoggedIn()) {
             if ($backendUser->getIsDisabled()) {
                 $enableUserButton = $buttonBar->makeLinkButton()
-                    ->setIcon($this->iconFactory->getIcon('actions-edit-hide', Icon::SIZE_SMALL))
+                    ->setIcon($iconFactory->getIcon('actions-edit-hide', Icon::SIZE_SMALL))
                     ->setTitle(LocalizationUtility::translate('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:hide'))
-                    ->setHref(
-                        $this->backendUriBuilder->buildUriFromRoute('tce_db', [
-                            'data' => ['be_users' => [$backendUser->getUid() => ['disable' => 0]]],
-                            'redirect' => $this->request->getAttribute('normalizedParams')->getRequestUri(),
-                        ])
-                    );
+                    ->setHref($uriBuilder->buildUriFromRoute('tce_db', [
+                        'data' => ['be_users' => [$backendUser->getUid() => ['disable' => 0]]],
+                        'redirect' => $this->request->getAttribute('normalizedParams')->getRequestUri(),
+                    ]));
                 $buttonBar->addButton($enableUserButton);
             } else {
                 $enableUserButton = $buttonBar->makeLinkButton()
-                    ->setIcon($this->iconFactory->getIcon('actions-edit-unhide', Icon::SIZE_SMALL))
-                    ->setTitle(LocalizationUtility::translate('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:unHide'))
-                    ->setHref(
-                        $this->backendUriBuilder->buildUriFromRoute('tce_db', [
+                    ->setIcon($iconFactory->getIcon('actions-edit-unhide', Icon::SIZE_SMALL))
+                    ->setTitle(LocalizationUtility::translate('LLL:EXT:backend/Resources/Private/Language/locallang_layout.xlf:unHide'))->setHref(
+                        $uriBuilder->buildUriFromRoute('tce_db', [
                             'data' => ['be_users' => [$backendUser->getUid() => ['disable' => 1]]],
                             'redirect' => $this->request->getAttribute('normalizedParams')->getRequestUri(),
-                        ])
-                    );
+                        ]));
                 $buttonBar->addButton($enableUserButton);
             }
         }
 
         $shortcutButton = $buttonBar->makeShortcutButton()
-            ->setRouteIdentifier('myusermanagement_MyUserManagementLoginhistory')
+            ->setRouteIdentifier('myusermanagement_login_history')
             ->setArguments([
-                'tx_myusermanagement_myusermanagement_myusermanagementloginhistory' => [
-                    'action' => 'detail',
-                    'user' => $backendUser->getUid(),
-                ],
+                'action' => 'detail',
+                'user' => $backendUser->getUid(),
             ])
             ->setDisplayName(LocalizationUtility::translate('myUserManagementLoginhistory', 'myUserManagement') . ': ' . $backendUser->getUsername());
         $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
-    }
-
-    private function initializeDefaultViewVariables(): void
-    {
-        $this->view->assignMultiple([
-            'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
-            'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
-        ]);
     }
 }

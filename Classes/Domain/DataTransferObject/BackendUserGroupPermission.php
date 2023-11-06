@@ -4,8 +4,8 @@ namespace KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject;
 
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\Database\Query\Restriction\BackendWorkspaceRestriction;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
+use TYPO3\CMS\Core\Database\Query\Restriction\WorkspaceRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -15,14 +15,8 @@ final class BackendUserGroupPermission extends AbstractPermission
 {
     use PermissionTrait;
 
-    /**
-     * @var string
-     */
     public const KEY = 'my_user_management_group_permissions';
 
-    /**
-     * @return void
-     */
     protected function populateData(): void
     {
         $this->data = [
@@ -48,9 +42,6 @@ final class BackendUserGroupPermission extends AbstractPermission
 
     /**
      * Get QueryBuilder without any default restrictions
-     *
-     * @param  string  $table
-     * @return QueryBuilder
      */
     private function getQueryBuilderForTable(string $table): QueryBuilder
     {
@@ -58,16 +49,12 @@ final class BackendUserGroupPermission extends AbstractPermission
         // Show all records except versioning placeholders
         $queryBuilder->getRestrictions()
             ->removeAll()
-            ->add(GeneralUtility::makeInstance(BackendWorkspaceRestriction::class))
+            ->add(GeneralUtility::makeInstance(WorkspaceRestriction::class))
             ->add(GeneralUtility::makeInstance(DeletedRestriction::class));
 
         return $queryBuilder;
     }
 
-    /**
-     * @param  int  $group
-     * @return bool
-     */
     public static function hasAccessToGroup(int $group): bool
     {
         return self::isConfigured($group);

@@ -11,94 +11,53 @@ final class FileMount extends AbstractEntity
 {
     public const TABLE = 'sys_filemounts';
 
-    /** @var string */
-    protected $title = '';
+    protected ?string $title;
+    protected ?string $path;
+    protected ?int $storage;
+    protected ?bool $isDisabled;
 
-    /** @var string */
-    protected $path = '';
-
-    /** @var int */
-    protected $storage;
-
-    /** @var bool */
-    protected $isDisabled;
-
-    /**
-     * @return string|null
-     */
-    public function getTitle(): ?string
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @param  string|null  $value
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount
-     */
-    public function setTitle(?string $value): FileMount
+    public function setTitle(?string $value): self
     {
         $this->title = $value;
 
         return $this;
     }
 
-    /**
-     * Getter for the path of the file mount.
-     *
-     * @return string|null
-     */
     public function getPath(): ?string
     {
         return $this->path;
     }
 
-    /**
-     * Setter for the path of the file mount.
-     *
-     * @param  string|null  $value
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount
-     */
-    public function setPath(?string $value): FileMount
+    public function setPath(?string $value): self
     {
         $this->path = $value;
 
         return $this;
     }
 
-    /**
-     * @return int|null
-     */
     public function getStorage(): ?int
     {
         return $this->storage;
     }
 
-    /**
-     * @param  int|null  $storage
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount
-     */
-    public function setStorage(?int $storage): FileMount
+    public function setStorage(?int $storage): self
     {
         $this->storage = $storage;
 
         return $this;
     }
 
-    /**
-     * @return bool|null
-     */
     public function getIsDisabled(): ?bool
     {
         return $this->isDisabled;
     }
 
-    /**
-     * Sets the disabled state
-     *
-     * @param  bool|string  $isDisabled
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount
-     */
-    public function setIsDisabled($isDisabled): FileMount
+    public function setIsDisabled($isDisabled): self
     {
         $this->isDisabled = filter_var($isDisabled, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 

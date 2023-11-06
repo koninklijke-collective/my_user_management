@@ -14,28 +14,17 @@ use ReturnTypeWillChange;
  */
 abstract class AbstractPermission implements ArrayAccess, Countable
 {
-    /** @var array */
-    protected $data;
+    protected ?array $data;
 
-    /**
-     * @return void
-     */
     abstract protected function populateData(): void;
 
-    /**
-     * Constructor: Abstract invoke of function
-     */
     public function __construct()
     {
         $this->populateData();
     }
 
     /**
-     * Whether a offset exists
-     *
-     * @link http://php.net/manual/en/arrayaccess.offsetexists.php
-     * @param  mixed  $offset
-     * @return bool
+     * Whether an offset exists
      */
     public function offsetExists($offset): bool
     {
@@ -44,10 +33,6 @@ abstract class AbstractPermission implements ArrayAccess, Countable
 
     /**
      * Offset to retrieve
-     *
-     * @link http://php.net/manual/en/arrayaccess.offsetget.php
-     * @param  mixed  $offset
-     * @return mixed
      */
     #[ReturnTypeWillChange]
     public function offsetGet($offset)
@@ -59,9 +44,6 @@ abstract class AbstractPermission implements ArrayAccess, Countable
      * Offset to set
      *
      * @link http://php.net/manual/en/arrayaccess.offsetset.php
-     * @param  mixed  $offset
-     * @param  mixed  $value
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
@@ -76,8 +58,6 @@ abstract class AbstractPermission implements ArrayAccess, Countable
      * Offset to unset
      *
      * @link http://php.net/manual/en/arrayaccess.offsetunset.php
-     * @param  mixed  $offset
-     * @return void
      */
     public function offsetUnset($offset): void
     {
@@ -88,7 +68,6 @@ abstract class AbstractPermission implements ArrayAccess, Countable
      * Count elements of an object
      *
      * @link http://php.net/manual/en/countable.count.php
-     * @return int
      */
     public function count(): int
     {

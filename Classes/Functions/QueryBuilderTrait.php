@@ -10,9 +10,6 @@ trait QueryBuilderTrait
 {
     /**
      * Get QueryBuilder without any default restrictions
-     *
-     * @param  string  $table
-     * @return \TYPO3\CMS\Core\Database\Query\QueryBuilder
      */
     protected static function getQueryBuilderForTable(string $table): QueryBuilder
     {

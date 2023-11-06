@@ -3,7 +3,7 @@
 use KoninklijkeCollective\MyUserManagement\Hook\ButtonBarHook;
 use KoninklijkeCollective\MyUserManagement\Hook\DataHandlerCheckModifyAccessListHook;
 
-defined('TYPO3_MODE') or die('Access denied.');
+defined('TYPO3') or die('Access denied.');
 
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['checkModifyAccessList']['my_user_management'] =
     DataHandlerCheckModifyAccessListHook::class;

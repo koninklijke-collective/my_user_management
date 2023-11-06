@@ -2,7 +2,7 @@
 
 use KoninklijkeCollective\MyUserManagement\Hook\TableConfigurationArrayHook;
 
-defined('TYPO3_MODE') or die('Access denied.');
+defined('TYPO3') or die('Access denied.');
 
 call_user_func(function (string $table): void {
     // Enabling regular BE users to edit BE groups

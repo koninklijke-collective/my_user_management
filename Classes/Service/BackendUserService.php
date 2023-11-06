@@ -16,19 +16,14 @@ final class BackendUserService implements SingletonInterface
 {
     use BackendUserAuthenticationTrait;
 
-    /** @var \KoninklijkeCollective\MyUserManagement\Domain\Repository\BackendUserRepository */
-    protected $backendUserRepository;
-
-    public function __construct(BackendUserRepository $backendUserRepository)
+    public function __construct(protected BackendUserRepository $backendUserRepository)
     {
-        $this->backendUserRepository = $backendUserRepository;
     }
 
     /**
      * Find users which has access to given page id
      * Checks db mounts
      *
-     * @param  int  $pageId
      * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser[]
      */
     public function findUsersWithPageAccess(int $pageId): array
@@ -52,9 +47,6 @@ final class BackendUserService implements SingletonInterface
         return $this->filterUsers($this->backendUserRepository->findAllActive());
     }
 
-    /**
-     * @return array
-     */
     public function findAllBackendUsersForDropdown(): array
     {
         $users = [];
@@ -66,24 +58,11 @@ final class BackendUserService implements SingletonInterface
         return $users;
     }
 
-    /**
-     * Find all inactive backend users
-     *
-     * @param  \DateTime  $since
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser[]
-     * @throws \Exception
-     */
     public function findAllInactiveBackendUsers(DateTime $since): array
     {
         return $this->filterUsers($this->backendUserRepository->findAllInactive($since), true);
     }
 
-    /**
-     * Find backend user
-     *
-     * @param  int  $userId
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser|null
-     */
     public function findBackendUser(int $userId): ?BackendUser
     {
         $user = $this->backendUserRepository->findByUid($userId);
@@ -98,11 +77,6 @@ final class BackendUserService implements SingletonInterface
         return $user;
     }
 
-    /**
-     * @param  \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array  $result
-     * @param  bool  $displayDisabled
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser[]
-     */
     protected function filterUsers($result, bool $displayDisabled = false): array
     {
         $users = [];
@@ -127,9 +101,6 @@ final class BackendUserService implements SingletonInterface
 
     /**
      * Check if given user is allowed for current logged-in user
-     *
-     * @param  \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser  $user
-     * @return bool
      */
     public function isAllowedUser(BackendUser $user): bool
     {
@@ -145,12 +116,6 @@ final class BackendUserService implements SingletonInterface
         return true;
     }
 
-    /**
-     * Find users that have access in rootline
-     *
-     * @param  array  $rootLine
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser[]
-     */
     protected function findAllowedUsersInRootLine(array $rootLine): array
     {
         $users = [];

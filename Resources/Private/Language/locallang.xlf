@@ -311,7 +311,7 @@
             <trans-unit id="myUserManagementLoginhistory" resname="myUserManagementLoginhistory">
                 <source>Login History</source>
             </trans-unit>
-            <trans-unit id="myusermanagement_MyUserManagementUseraccess" resname="myusermanagement_MyUserManagementUseraccess">
+            <trans-unit id="myusermanagement_user_access" resname="myusermanagement_MyUserManagementUseraccess">
                 <source>User Access Overview</source>
             </trans-unit>
         </body>

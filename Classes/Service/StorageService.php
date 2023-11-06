@@ -11,21 +11,15 @@ use TYPO3\CMS\Core\Utility\MathUtility;
 final class StorageService implements SingletonInterface
 {
     private array $storage = [];
-    private StorageRepository $storageRepository;
 
-    public function __construct(StorageRepository $storageRepository)
+    public function __construct(private StorageRepository $storageRepository)
     {
-        $this->storageRepository = $storageRepository;
     }
 
     /**
      * Retrieve path details from given id
-     *
-     * @param  int|ResourceStorage  $value
-     * @param  string  $location
-     * @return string
      */
-    public function path($value, string $location = '/'): string
+    public function path(ResourceStorage|string|int $value, string $location = '/'): string
     {
         $storage = $this->getStorage($value);
         if ($storage === null) {
@@ -38,18 +32,14 @@ final class StorageService implements SingletonInterface
         } catch (Exception $e) {
         }
 
-        if ($folder === null || $folder->getPublicUrl() === null) {
-            return $storage->getUid() . ':' . ($location ?: '/');
+        if ($folder?->getPublicUrl() === null) {
+            return $value . ':' . $location;
         }
 
         return $folder->getPublicUrl();
     }
 
-    /**
-     * @param  int|ResourceStorage  $storage
-     * @return ResourceStorage|null
-     */
-    private function getStorage($storage): ?ResourceStorage
+    private function getStorage(ResourceStorage|string|int $storage): ?ResourceStorage
     {
         if ($storage instanceof ResourceStorage) {
             return $this->storage[$storage->getUid()] = $storage;

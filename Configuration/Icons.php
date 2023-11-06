@@ -2,8 +2,8 @@
 
 return [
     'module-my_user_management' => [
-        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\FontawesomeIconProvider::class,
-        'name' => 'user-secret',
+        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        'source' => 'EXT:my_user_management/Resources/Public/Icons/module-my_user_management.svg',
     ],
     'module-my_user_management-overview' => [
         'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
