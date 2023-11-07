@@ -1,6 +1,6 @@
 <?php
 
-use KoninklijkeCollective\MyUserManagement\Controller\UserManagementController;
+use KoninklijkeCollective\MyUserManagement\Controller\BackendUserController;
 use KoninklijkeCollective\MyUserManagement\Controller\LoginHistoryController;
 use KoninklijkeCollective\MyUserManagement\Controller\UserAccessController;
 
@@ -22,7 +22,7 @@ return [
         'extensionName' => 'MyUserManagement',
         'iconIdentifier' => 'module-my_user_management-user-admin',
         'controllerActions' => [
-            UserManagementController::class => [
+            BackendUserController::class => [
                 'index',
                 'show',
                 'addToCompareList',
