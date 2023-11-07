@@ -1,5 +1,9 @@
 # Module configuration
 module.tx_myusermanagement {
+    # This is deprecated since v12. I cannot override the default view paths for initial extending of ext:beuser
+    # Now the following Paths are used:
+    # Prioritizes: EXT:my_user_management/Resources/Private/
+    # Fallback on: EXT:backend/Resources/Private/
     view {
         templateRootPaths {
             10 = EXT:my_user_management/Resources/Private/Templates

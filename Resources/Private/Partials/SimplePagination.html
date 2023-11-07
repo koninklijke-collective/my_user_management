@@ -1,4 +1,11 @@
-<f:render partial="FileMount/PaginatedListWidgetBody" arguments="{_all}" />
+<html
+    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+    data-namespace-typo3-fluid="true"
+>
+
+<!-- COPY FROM EXT:beuser -->
+
 <f:if condition="{paginator.numberOfPages} > 1">
     <nav class="pagination-wrap">
         <ul class="pagination">
@@ -18,12 +25,12 @@
                 <f:else>
                     <li class="page-item disabled">
                         <span class="page-link">
-                            <core:icon identifier="empty-empty" />
+                            <core:icon identifier="empty-empty"/>
                         </span>
                     </li>
                     <li class="page-item disabled">
                         <span class="page-link">
-                            <core:icon identifier="empty-empty" />
+                            <core:icon identifier="empty-empty"/>
                         </span>
                     </li>
                 </f:else>
@@ -37,19 +44,19 @@
                 <span class="page-link">
                     <f:translate key="pagination.page" />
                     <form style="display:inline;"
-                          data-global-event="submit"
-                          data-action-navigate="$form=~s/$value/"
-                          data-navigate-value="{f:uri.action(arguments:'{currentPage: \'$[value]\'}')}"
-                          data-value-selector="input[name='paginator-target-page']">
+                        data-global-event="submit"
+                        data-action-navigate="$form=~s/$value/"
+                        data-navigate-value="{f:uri.action(arguments:'{currentPage: \'$[value]\'}')}"
+                        data-value-selector="input[name='paginator-target-page']">
                         <input
-                                min="{pagination.firstPageNumber}"
-                                max="{pagination.lastPageNumber}"
-                                data-number-of-pages="{paginator.numberOfPages}"
-                                name="paginator-target-page"
-                                class="form-control form-control-sm paginator-input"
-                                size="5"
-                                value="{paginator.currentPageNumber}"
-                                type="number"
+                            min="{pagination.firstPageNumber}"
+                            max="{pagination.lastPageNumber}"
+                            data-number-of-pages="{paginator.numberOfPages}"
+                            name="paginator-target-page"
+                            class="form-control form-control-sm paginator-input"
+                            size="5"
+                            value="{paginator.currentPageNumber}"
+                            type="number"
                         />
                     </form>
                     / {pagination.lastPageNumber}
@@ -72,12 +79,12 @@
                 <f:else>
                     <li class="page-item disabled">
                         <span class="page-link">
-                            <core:icon identifier="empty-empty" />
+                            <core:icon identifier="empty-empty"/>
                         </span>
                     </li>
                     <li class="page-item disabled">
                         <span class="page-link">
-                            <core:icon identifier="empty-empty" />
+                            <core:icon identifier="empty-empty"/>
                         </span>
                     </li>
                 </f:else>
@@ -90,3 +97,5 @@
         </ul>
     </nav>
 </f:if>
+
+</html>
