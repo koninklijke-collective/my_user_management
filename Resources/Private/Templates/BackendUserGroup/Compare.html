@@ -1,16 +1,16 @@
 <html
-    xmlns:backend="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
-    xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
-    xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
-    data-namespace-typo3-fluid="true"
+        xmlns:backend="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
+        xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+        xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+        data-namespace-typo3-fluid="true"
 >
 
 <!-- COPY FROM EXT:beuser -->
 
-<f:layout name="Module" />
+<f:layout name="Module"/>
 <f:section name="Content">
 
-    <h1>{f:translate(key:'compareBackendUsersGroups')}</h1>
+    <h1>{f:translate(key:'compareBackendUsersGroups', extensionName: 'beuser')}</h1>
     <div class="table-fit">
         <table id="tx_beuser_compare" class="table table-striped table-hover table-vertical-top">
             <colgroup>
@@ -34,7 +34,7 @@
                                     <core:icon identifier="actions-minus" size="small"/>
                                 </f:link.action>
                                 <backend:link.editRecord class="btn btn-default" table="be_groups" uid="{compareData.group.uid}">
-                                    <core:icon identifier="actions-open" />
+                                    <core:icon identifier="actions-open"/>
                                 </backend:link.editRecord>
                             </div>
                         </div>
@@ -47,23 +47,25 @@
                 <th class="col-word-break">{f:translate(key:'LLL:EXT:core/Resources/Private/Language/locallang_core.xlf:labels.recordInformation')}</th>
                 <f:for each="{compareGroupList}" as="compareData">
                     <td class="col-word-break">
-                        <f:render partial="Compare/Information" section="recordInformation" arguments="{recordInformation:compareData.group.description}" />
+                        <f:render partial="Compare/Information" section="recordInformation" arguments="{recordInformation:compareData.group.description}"/>
                     </td>
                 </f:for>
             </tr>
             <tr>
-                <th><f:translate key="LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:be_groups.subgroup" /></th>
+                <th>
+                    <f:translate key="LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:be_groups.subgroup"/>
+                </th>
                 <f:for each="{compareGroupList}" as="compareData">
                     <td>
-                        <f:render partial="Compare/Information" section="groups" arguments="{groups:compareData.groups}" />
+                        <f:render partial="Compare/Information" section="groups" arguments="{groups:compareData.groups}"/>
                     </td>
                 </f:for>
             </tr>
             <tr>
-                <th>{f:translate(key:'compare.tables')}</th>
+                <th>{f:translate(key:'compare.tables', extensionName: 'beuser')}</th>
                 <f:for each="{compareGroupList}" as="compareData">
                     <td>
-                        <f:render partial="Compare/Information" section="tables" arguments="{tables:compareData.tables}" />
+                        <f:render partial="Compare/Information" section="tables" arguments="{tables:compareData.tables}"/>
                     </td>
                 </f:for>
             </tr>
@@ -71,7 +73,7 @@
                 <th>{f:translate(key:'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:userMods')}</th>
                 <f:for each="{compareGroupList}" as="compareData">
                     <td>
-                        <f:render partial="Compare/Information" section="modules" arguments="{modules:compareData.modules}" />
+                        <f:render partial="Compare/Information" section="modules" arguments="{modules:compareData.modules}"/>
                     </td>
                 </f:for>
             </tr>
@@ -84,26 +86,32 @@
                 </f:for>
             </tr>
             <tr>
-                <th><f:translate key="allowedLanguages" /></th>
+                <th>
+                    <f:translate key="allowedLanguages" extensionName="beuser"/>
+                </th>
                 <f:for each="{compareGroupList}" as="compareData">
                     <td>
-                        <f:render partial="Compare/Information" section="languages" arguments="{languages:compareData.languages}" />
+                        <f:render partial="Compare/Information" section="languages" arguments="{languages:compareData.languages}"/>
                     </td>
                 </f:for>
             </tr>
             <tr>
-                <th><f:translate key="dbMountPoints" /></th>
+                <th>
+                    <f:translate key="dbMountPoints" extensionName="beuser"/>
+                </th>
                 <f:for each="{compareGroupList}" as="compareData">
                     <td>
-                        <f:render partial="Compare/Information" section="dbMounts" arguments="{dbMounts:compareData.dbMounts}" />
+                        <f:render partial="Compare/Information" section="dbMounts" arguments="{dbMounts:compareData.dbMounts}"/>
                     </td>
                 </f:for>
             </tr>
             <tr>
-                <th><f:translate key="fileMounts" /></th>
+                <th>
+                    <f:translate key="fileMounts" extensionName="beuser"/>
+                </th>
                 <f:for each="{compareGroupList}" as="compareData">
                     <td>
-                        <f:render partial="Compare/Information" section="fileMounts" arguments="{fileMounts:compareData.fileMounts}" />
+                        <f:render partial="Compare/Information" section="fileMounts" arguments="{fileMounts:compareData.fileMounts}"/>
                     </td>
                 </f:for>
             </tr>
@@ -111,7 +119,7 @@
                 <th>{f:translate(key:'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:be_groups.fileoper_perms')}</th>
                 <f:for each="{compareGroupList}" as="compareData">
                     <td>
-                        <f:render partial="Compare/Information" section="fileFolderPermissions" arguments="{fileFolderPermissions:compareData.fileFolderPermissions}" />
+                        <f:render partial="Compare/Information" section="fileFolderPermissions" arguments="{fileFolderPermissions:compareData.fileFolderPermissions}"/>
                     </td>
                 </f:for>
             </tr>
@@ -119,7 +127,7 @@
                 <th>{f:translate(key:'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:be_groups.pagetypes_select')}</th>
                 <f:for each="{compareGroupList}" as="compareData">
                     <td>
-                        <f:render partial="Compare/Information" section="pageTypes" arguments="{pageTypes:compareData.pageTypes}" />
+                        <f:render partial="Compare/Information" section="pageTypes" arguments="{pageTypes:compareData.pageTypes}"/>
                     </td>
                 </f:for>
             </tr>
@@ -135,7 +143,7 @@
                 <th>{f:translate(key:'LLL:EXT:core/Resources/Private/Language/locallang_tca.xlf:TSconfig')}</th>
                 <f:for each="{compareGroupList}" as="compareData">
                     <td>
-                        <f:render partial="Compare/Information" section="tsconfig" arguments="{tsconfig:compareData.tsconfig, id:compareData.group.uid}" />
+                        <f:render partial="Compare/Information" section="tsconfig" arguments="{tsconfig:compareData.tsconfig, id:compareData.group.uid}"/>
                     </td>
                 </f:for>
             </tr>

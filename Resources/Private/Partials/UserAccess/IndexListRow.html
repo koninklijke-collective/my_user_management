@@ -17,7 +17,7 @@
             <b>{backendUser.userName}</b>
         </be:link.editRecord>
         <f:if condition="{bu:arrayElement(array: onlineBackendUsers, key: backendUser.uid)}">
-            <span class="label label-success"><f:translate key="online"/></span>
+            <span class="label label-success"><f:translate key="online" extensionName="beuser"/></span>
         </f:if>
         <br/>
         <f:if condition="{backendUser.realName}">
@@ -53,14 +53,14 @@
                         <f:then>
                             <a class="btn btn-default"
                                href="{be:moduleLink(route:'tce_db', query:'data[be_users][{backendUser.uid}][disable]=0', currentUrlParameterName:'redirect')}"
-                               title="{f:translate(key:'visibility.unhide')}">
+                               title="{f:translate(key:'visibility.unhide', extensionName: 'beuser')}">
                                 <core:icon identifier="actions-edit-unhide"/>
                             </a>
                         </f:then>
                         <f:else>
                             <a class="btn btn-default"
                                href="{be:moduleLink(route:'tce_db', query:'data[be_users][{backendUser.uid}][disable]=1', currentUrlParameterName:'redirect')}"
-                               title="{f:translate(key:'visibility.hide')}">
+                               title="{f:translate(key:'visibility.hide', extensionName: 'beuser')}">
                                 <core:icon identifier="actions-edit-hide"/>
                             </a>
                         </f:else>
@@ -76,10 +76,10 @@
                     <um:security.isActionAllowed action="DELETE_USER">
                         <a class="btn btn-default t3js-modal-trigger"
                            href="{be:moduleLink(route:'tce_db', query:'cmd[be_users][{backendUser.uid}][delete]=1', currentUrlParameterName:'redirect')}"
-                           title="{f:translate(key:'delete')}"
+                           title="{f:translate(key:'delete', extensionName: 'beuser')}"
                            data-severity="warning"
                            data-title="{f:translate(key:'LLL:EXT:backend/Resources/Private/Language/locallang_alt_doc.xlf:label.confirm.delete_record.title')}"
-                           data-content="{f:translate(key:'confirm',arguments:'{0:backendUser.userName}')}"
+                           data-content="{f:translate(key:'confirm',arguments:'{0:backendUser.userName}', extensionName: 'beuser')}"
                            data-button-close-text="{f:translate(key:'LLL:EXT:core/Resources/Private/Language/locallang_common.xlf:cancel')}">
                             <core:icon identifier="actions-edit-delete"/>
                         </a>
@@ -99,7 +99,7 @@
                 <f:format.date format="{dateFormat} {timeFormat}">{backendUser.lastLoginDateAndTime}</f:format.date>
             </f:then>
             <f:else>
-                <f:translate key="never"/>
+                <f:translate key="never" extensionName="beuser"/>
             </f:else>
         </f:if>
     </td>

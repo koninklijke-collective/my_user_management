@@ -132,12 +132,9 @@
                         <f:link.action action="show" arguments="{uid: backendUser.uid}" class="btn btn-default" title="{f:translate(key: 'details')}">
                             <core:icon identifier="actions-system-options-view" size="small"/>
                         </f:link.action>
-
-                        <um:security.isAdmin>
-                            <a class="btn btn-default" href="#" title="{f:translate(key:'info')}" data-dispatch-action="TYPO3.InfoWindow.showItem" data-dispatch-args-list="be_users,{backendUser.uid}">
-                                <core:icon identifier="actions-document-info"/>
-                            </a>
-                        </um:security.isAdmin>
+                        <a class="btn btn-default" href="#" title="{f:translate(key:'info')}" data-dispatch-action="TYPO3.InfoWindow.showItem" data-dispatch-args-list="be_users,{backendUser.uid}">
+                            <core:icon identifier="actions-document-info"/>
+                        </a>
                     </div>
                     <div class="btn-group" role="group">
                         <f:if condition="{compareUserUidList.{backendUser.uid}}">
@@ -154,10 +151,6 @@
                                 </f:link.action>
                             </f:else>
                         </f:if>
-
-                        <um:security.isAdmin>
-                            <beuser:SwitchUser class="btn btn-default" backendUser="{backendUser}"/>
-                        </um:security.isAdmin>
                     </div>
                 </td>
             </tr>

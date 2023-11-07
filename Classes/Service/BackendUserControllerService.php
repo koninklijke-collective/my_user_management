@@ -36,7 +36,7 @@ final class BackendUserControllerService implements SingletonInterface
     {
         $table = match ($action) {
             'index' => BackendUser::TABLE,
-            'group' => BackendUserGroup::TABLE,
+            'groups' => BackendUserGroup::TABLE,
             'filemounts' => FileMount::TABLE,
         };
 
@@ -68,17 +68,23 @@ final class BackendUserControllerService implements SingletonInterface
         return $demand;
     }
 
-    public function addFlashMessage(string $messageBody, $messageTitle = '', $severity = ContextualFeedbackSeverity::OK, $storeInSession = true)
+    public function canCreate($action): bool
     {
-        if (is_int($severity)) {
-            // @deprecated int type for $severity deprecated in v12, will change to Severity only in v13.
-            $severity = ContextualFeedbackSeverity::transform($severity);
-        }
-        /* @var \TYPO3\CMS\Core\Messaging\FlashMessage $flashMessage */
+        $table = match ($action) {
+            'index' => BackendUser::TABLE,
+            'groups' => BackendUserGroup::TABLE,
+            'filemounts' => FileMount::TABLE,
+        };
+
+        return AccessUtility::beUserHasRightToAddTable($table);
+    }
+
+    private function addFlashMessage(string $messageBody, string $messageTitle = '', ContextualFeedbackSeverity $severity = ContextualFeedbackSeverity::OK, bool $storeInSession = true)
+    {
         $flashMessage = GeneralUtility::makeInstance(
             FlashMessage::class,
             $messageBody,
-            (string)$messageTitle,
+            $messageTitle,
             $severity,
             $storeInSession
         );

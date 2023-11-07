@@ -22,10 +22,10 @@
                     <tr>
                         <th class="col-icon"></th>
                         <th class="col-title">
-                            <strong>{f:translate(key: 'userName')}</strong> / {f:translate(key: 'realName')}
+                            <strong>{f:translate(key: 'userName', extensionName: 'beuser')}</strong> / {f:translate(key: 'realName', extensionName: 'beuser')}
                         </th>
                         <th class="col-control"></th>
-                        <th>{f:translate(key: 'lastLogin')}</th>
+                        <th>{f:translate(key: 'lastLogin', extensionName: 'beuser')}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -38,7 +38,7 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <td colspan="5">{f:count(subject: loginHistory)} {f:translate(key: 'users')}</td>
+                        <td colspan="5">{f:count(subject: loginHistory)} {f:translate(key: 'users', extensionName: 'beuser')}</td>
                     </tr>
                     </tfoot>
                 </table>
@@ -66,7 +66,7 @@
             </be:link.editRecord>
 
             <f:if condition="{bu:arrayElement(array: onlineBackendUsers, key: log.uid)}">
-                <span class="label label-success"><f:translate key="online"/></span>
+                <span class="label label-success"><f:translate key="online" extensionName="beuser"/></span>
             </f:if>
 
             <f:if condition="{log.realName}">

@@ -1,7 +1,6 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
       xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
       xmlns:be="http://typo3.org/ns/TYPO3/CMS/Backend/ViewHelpers"
-      xmlns:bu="http://typo3.org/ns/TYPO3/CMS/Beuser/ViewHelpers"
       xmlns:um="http://typo3.org/ns/KoninklijkeCollective/MyUserManagement/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
@@ -22,14 +21,20 @@
                     <thead>
                     <tr>
                         <th></th>
-                        <th class="col-title"><f:translate key="userName" /> / <f:translate key="realName" /></th>
+                        <th class="col-title">
+                            <f:translate key="userName" extensionName="beuser"/>
+                            /
+                            <f:translate key="realName" extensionName="beuser"/>
+                        </th>
                         <th class="col-control"></th>
-                        <th><f:translate key="lastLogin" /></th>
+                        <th>
+                            <f:translate key="lastLogin" extensionName="beuser"/>
+                        </th>
                     </tr>
                     </thead>
                     <tbody>
                     <f:for each="{inactiveUsers}" as="backendUser">
-                        <f:render section="inactive_row" arguments="{_all}" />
+                        <f:render section="inactive_row" arguments="{_all}"/>
                     </f:for>
                     <f:comment>
                         Footer row: no officially defined style yet
@@ -38,7 +43,8 @@
                     <tfoot>
                     <tr>
                         <td colspan="5">
-                            <f:count subject="{inactiveUsers}" /> <f:translate key="users" />
+                            <f:count subject="{inactiveUsers}"/>
+                            <f:translate key="users"/>
                         </td>
                     </tr>
                     </tfoot>
@@ -100,7 +106,7 @@
 
                 <f:if condition="{backendUser.currentlyLoggedIn} == 1">
                     <f:then>
-                        <span class="btn btn-default disabled"><core:icon identifier="empty-empty" /></span>
+                        <span class="btn btn-default disabled"><core:icon identifier="empty-empty"/></span>
                     </f:then>
                     <f:else>
                         <um:security.isActionAllowed action="DELETE_USER">
@@ -124,7 +130,7 @@
                     <f:format.date format="{dateFormat} {timeFormat}">{backendUser.lastLoginDateAndTime}</f:format.date>
                 </f:then>
                 <f:else>
-                    <f:translate key="never" />
+                    <f:translate key="never"/>
                 </f:else>
             </f:if>
         </td>

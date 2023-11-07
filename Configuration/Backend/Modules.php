@@ -16,7 +16,7 @@ return [
     ],
     'myusermanagement_user_admin' => [
         'parent' => 'myusermanagement',
-        'access' => 'user, group',
+        'access' => 'user',
         'path' => '/module/my-user-management/user-admin',
         'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/UserAdmin.xlf',
         'extensionName' => 'MyUserManagement',
@@ -43,7 +43,7 @@ return [
     ],
     'myusermanagement_user_access' => [
         'parent' => 'myusermanagement',
-        'access' => 'user, group',
+        'access' => 'user',
         'path' => '/module/my-user-management/user-access',
         'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/UserAccess.xlf',
         'extensionName' => 'MyUserManagement',
@@ -55,7 +55,7 @@ return [
     ],
     'myusermanagement_login_history' => [
         'parent' => 'myusermanagement',
-        'access' => 'user, group',
+        'access' => 'user',
         'path' => '/module/my-user-management/login-history',
         'labels' => 'LLL:EXT:my_user_management/Resources/Private/Language/Backend/LoginHistory.xlf',
         'extensionName' => 'MyUserManagement',

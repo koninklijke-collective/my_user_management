@@ -39,19 +39,5 @@ return [
     ],
     \KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount::class => [
         'tableName' => 'sys_filemounts',
-        'properties' => [
-            'title' => [
-                'fieldName' => 'title',
-            ],
-            'path' => [
-                'fieldName' => 'path',
-            ],
-            'isAbsolutePath' => [
-                'fieldName' => 'base',
-            ],
-            'storage' => [
-                'fieldName' => 'base',
-            ],
-        ],
     ],
 ];

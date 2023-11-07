@@ -46,16 +46,7 @@ final class AccessUtility
             return true;
         }
 
-        if (!self::getBackendUserAuthentication()->check('tables_modify', $table)) {
-            return false;
-        }
-
-        // Check minimal required field for tables
-        return match ($table) {
-            BackendUser::TABLE => self::beUserHasRightToEditTableField($table, 'username'),
-            BackendUserGroup::TABLE => self::beUserHasRightToEditTableField($table, 'title'),
-            default => true,
-        };
+        return self::getBackendUserAuthentication()->check('tables_modify', $table);
     }
 
     public static function beUserHasRightToEditTableField(string $table, string $field): bool
@@ -69,46 +60,31 @@ final class AccessUtility
 
     public static function beUserHasRightToAddTable(string $table): bool
     {
-        if (self::getBackendUserAuthentication()->isAdmin()) {
-            return true;
+        if (!self::beUserHasRightToEditTable($table)) {
+            return false;
         }
 
-        if (self::beUserHasRightToEditTable($table)) {
-            switch ($table) {
-                case BackendUser::TABLE:
-                    if (!BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_ADD_USER)) {
-                        return false;
-                    }
-
-                    return true;
-                case BackendUserGroup::TABLE:
-                    if (!BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_ADD_GROUP)) {
-                        return false;
-                    }
-
-                    return true;
-                case FileMount::TABLE:
-                    if (!BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_ADD_FILEMOUNT)) {
-                        return false;
-                    }
-
-                    return true;
-            }
-        }
-
-        return false;
+        return match ($table) {
+            BackendUser::TABLE => BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_ADD_USER),
+            BackendUserGroup::TABLE => BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_ADD_GROUP),
+            // Bugged so cant adjust or edit
+            // FileMount::TABLE => BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_ADD_FILEMOUNT),
+            default => false,
+        };
     }
 
     public static function beUserHasRightToDeleteTable(string $table): bool
     {
-        if (self::getBackendUserAuthentication()->isAdmin()) {
-            return true;
+        if (!self::beUserHasRightToEditTable($table)) {
+            return false;
         }
 
         return match ($table) {
             BackendUser::TABLE => BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_DELETE_USER),
             BackendUserGroup::TABLE => BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_DELETE_GROUP),
-            FileMount::TABLE => BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_DELETE_FILEMOUNT),
+
+            // Bugged so cant adjust or edit
+            // FileMount::TABLE => BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_DELETE_FILEMOUNT),
             default => false,
         };
     }

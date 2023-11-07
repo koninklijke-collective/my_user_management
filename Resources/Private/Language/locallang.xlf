@@ -160,9 +160,6 @@
             <trans-unit id="changeToMode" resname="changeToMode">
                 <source>[change-to mode]</source>
             </trans-unit>
-            <trans-unit id="switchBackMode" resname="switchBackMode">
-                <source>Switch to user</source>
-            </trans-unit>
             <trans-unit id="confirm" resname="confirm">
                 <source>Are you sure you want to delete this backend user %s?</source>
             </trans-unit>
