@@ -8,6 +8,7 @@ use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount;
 use KoninklijkeCollective\MyUserManagement\Functions\BackendUserAuthenticationTrait;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 
 /**
  * Utility: Access Permissions for Backend User Authentication
@@ -22,15 +23,17 @@ final class AccessUtility
      * @param  string  $moduleName
      * @return bool
      */
-    public static function beUserHasRightToSeeModule(string $moduleName = 'myusermanagement_module'): bool
+    public static function beUserHasRightToSeeModule(string $moduleName = 'myusermanagement_module', BackendUserAuthentication $backendUserAuthentication = null): bool
     {
-        if (self::getBackendUserAuthentication()->isAdmin()) {
+        $backendUserAuthentication = $backendUserAuthentication ?? self::getBackendUserAuthentication();
+
+        if ($backendUserAuthentication->isAdmin()) {
             return true;
         }
 
         $hasAccess = false;
         if (BackendUtility::isModuleSetInTBE_MODULES($moduleName)) {
-            $hasAccess = self::getBackendUserAuthentication()->check('modules', $moduleName);
+            $hasAccess = $backendUserAuthentication->check('modules', $moduleName);
         }
 
         return $hasAccess;
@@ -42,13 +45,15 @@ final class AccessUtility
      * @param  string  $table
      * @return bool
      */
-    public static function beUserHasRightToSeeTable(string $table): bool
+    public static function beUserHasRightToSeeTable(string $table, BackendUserAuthentication $backendUserAuthentication = null): bool
     {
-        if (self::getBackendUserAuthentication()->isAdmin()) {
+        $backendUserAuthentication = $backendUserAuthentication ?? self::getBackendUserAuthentication();
+
+        if ($backendUserAuthentication->isAdmin()) {
             return true;
         }
 
-        return self::getBackendUserAuthentication()->check('tables_select', $table);
+        return $backendUserAuthentication->check('tables_select', $table);
     }
 
     /**
@@ -57,23 +62,25 @@ final class AccessUtility
      * @param  string  $table
      * @return bool
      */
-    public static function beUserHasRightToEditTable(string $table): bool
+    public static function beUserHasRightToEditTable(string $table, BackendUserAuthentication $backendUserAuthentication = null): bool
     {
-        if (self::getBackendUserAuthentication()->isAdmin()) {
+        $backendUserAuthentication = $backendUserAuthentication ?? self::getBackendUserAuthentication();
+
+        if ($backendUserAuthentication->isAdmin()) {
             return true;
         }
 
-        if (!self::getBackendUserAuthentication()->check('tables_modify', $table)) {
+        if (!$backendUserAuthentication->check('tables_modify', $table)) {
             return false;
         }
 
         // Check minimal required field for tables
         switch ($table) {
             case BackendUser::TABLE:
-                return self::beUserHasRightToEditTableField($table, 'username');
+                return self::beUserHasRightToEditTableField($table, 'username', $backendUserAuthentication);
 
             case BackendUserGroup::TABLE:
-                return self::beUserHasRightToEditTableField($table, 'title');
+                return self::beUserHasRightToEditTableField($table, 'title', $backendUserAuthentication);
         }
 
         return true;
@@ -86,13 +93,15 @@ final class AccessUtility
      * @param  string  $field
      * @return bool
      */
-    public static function beUserHasRightToEditTableField(string $table, string $field): bool
+    public static function beUserHasRightToEditTableField(string $table, string $field, BackendUserAuthentication $backendUserAuthentication = null): bool
     {
-        if (self::getBackendUserAuthentication()->isAdmin()) {
+        $backendUserAuthentication = $backendUserAuthentication ?? self::getBackendUserAuthentication();
+
+        if ($backendUserAuthentication->isAdmin()) {
             return true;
         }
 
-        return self::getBackendUserAuthentication()->check('non_exclude_fields', $table . ':' . $field);
+        return $backendUserAuthentication->check('non_exclude_fields', $table . ':' . $field);
     }
 
     /**
@@ -101,13 +110,15 @@ final class AccessUtility
      * @param  string  $table
      * @return bool
      */
-    public static function beUserHasRightToAddTable(string $table): bool
+    public static function beUserHasRightToAddTable(string $table, BackendUserAuthentication $backendUserAuthentication = null): bool
     {
-        if (self::getBackendUserAuthentication()->isAdmin()) {
+        $backendUserAuthentication = $backendUserAuthentication ?? self::getBackendUserAuthentication();
+
+        if ($backendUserAuthentication->isAdmin()) {
             return true;
         }
 
-        if (self::beUserHasRightToEditTable($table)) {
+        if (self::beUserHasRightToEditTable($table, $backendUserAuthentication)) {
             switch ($table) {
                 case BackendUser::TABLE:
                     if (!BackendUserActionPermission::isConfigured(BackendUserActionPermission::ACTION_ADD_USER)) {
@@ -139,9 +150,11 @@ final class AccessUtility
      * @param  string  $table
      * @return bool
      */
-    public static function beUserHasRightToDeleteTable(string $table): bool
+    public static function beUserHasRightToDeleteTable(string $table, BackendUserAuthentication $backendUserAuthentication = null): bool
     {
-        if (self::getBackendUserAuthentication()->isAdmin()) {
+        $backendUserAuthentication = $backendUserAuthentication ?? self::getBackendUserAuthentication();
+
+        if ($backendUserAuthentication->isAdmin()) {
             return true;
         }
 

@@ -6,6 +6,7 @@ use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\FileMount;
 use KoninklijkeCollective\MyUserManagement\Utility\AccessUtility;
+use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\DataHandling\DataHandlerCheckModifyAccessListHookInterface;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -37,8 +38,10 @@ final class DataHandlerCheckModifyAccessListHook implements DataHandlerCheckModi
             return;
         }
 
+        $backendUserAuthentication = $parent->BE_USER ?? null;
+
         // If user is not allowed to edit this table through configuration
-        if (!AccessUtility::beUserHasRightToEditTable($table)) {
+        if (!AccessUtility::beUserHasRightToEditTable($table, $backendUserAuthentication)) {
             $accessAllowed = false;
 
             return;
@@ -50,10 +53,10 @@ final class DataHandlerCheckModifyAccessListHook implements DataHandlerCheckModi
                 foreach ($incomingCmdArray as $command => $value) {
                     switch ($command) {
                         case 'delete':
-                            $accessAllowed = $this->accessAllowedOnAction($table, 'delete');
+                            $accessAllowed = $this->accessAllowedOnAction($table, 'delete', $backendUserAuthentication);
                             break;
                         case 'undelete':
-                            $accessAllowed = $this->accessAllowedOnAction($table, 'insert');
+                            $accessAllowed = $this->accessAllowedOnAction($table, 'insert', $backendUserAuthentication);
                             break;
                     }
                 }
@@ -63,9 +66,9 @@ final class DataHandlerCheckModifyAccessListHook implements DataHandlerCheckModi
         if (isset($parent->datamap[$table]) && is_array($parent->datamap)) {
             foreach ($parent->datamap[$table] as $id => $value) {
                 if (strpos($id, 'NEW') !== false || MathUtility::canBeInterpretedAsInteger($id) === false) {
-                    $accessAllowed = $this->accessAllowedOnAction($table, 'insert');
+                    $accessAllowed = $this->accessAllowedOnAction($table, 'insert', $backendUserAuthentication);
                 } else {
-                    $accessAllowed = $this->accessAllowedOnAction($table, 'update');
+                    $accessAllowed = $this->accessAllowedOnAction($table, 'update', $backendUserAuthentication);
                 }
             }
         }
@@ -77,24 +80,24 @@ final class DataHandlerCheckModifyAccessListHook implements DataHandlerCheckModi
      * @return bool true, or exception otherwise
      * @throws \TYPO3\CMS\Extbase\Security\Exception
      */
-    protected function accessAllowedOnAction(string $table, string $action): bool
+    protected function accessAllowedOnAction(string $table, string $action, BackendUserAuthentication $backendUserAuthentication): bool
     {
         // Only access check for insert/delete/update possible by this extension configuration!
         switch ($action) {
             case 'insert':
-                if (!AccessUtility::beUserHasRightToAddTable($table)) {
+                if (!AccessUtility::beUserHasRightToAddTable($table, $backendUserAuthentication)) {
                     throw new Exception('You are not allowed to add new (' . $table . ') records!');
                 }
                 break;
 
             case 'delete':
-                if (!AccessUtility::beUserHasRightToDeleteTable($table)) {
+                if (!AccessUtility::beUserHasRightToDeleteTable($table, $backendUserAuthentication)) {
                     throw new Exception('You are not allowed to delete (' . $table . ') records!');
                 }
                 break;
 
             case 'update':
-                if (!AccessUtility::beUserHasRightToEditTable($table)) {
+                if (!AccessUtility::beUserHasRightToEditTable($table, $backendUserAuthentication)) {
                     throw new Exception('You are not allowed to update (' . $table . ') records!');
                 }
                 break;
