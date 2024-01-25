@@ -24,8 +24,11 @@ final class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\Ba
     public function findByUid($uid): ?BackendUser
     {
         $query = $this->createQuery();
+        $query->matching($query->equals('uid', $uid));
 
-        return $query->matching($query->equals('uid', $uid))->execute()->getFirst();
+        $query = $this->applyUserGroupPermission($query);
+
+        return $query->execute()->getFirst();
     }
 
     /**
@@ -87,6 +90,30 @@ final class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\Ba
     }
 
     /**
+     * Find Backend Users currently online
+     *
+     * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
+     */
+    public function findOnline()
+    {
+        $uids = [];
+        foreach ($this->getSessionBackend()->getAll() as $sessionRecord) {
+            if (isset($sessionRecord['ses_userid']) && !in_array($sessionRecord['ses_userid'], $uids, true)) {
+                $uids[] = $sessionRecord['ses_userid'];
+            }
+        }
+
+        $query = $this->createQuery();
+        $query->matching($query->in('uid', $uids));
+
+        $query = $this->applyUserGroupPermission($query);
+
+        /** @var QueryResult $result */
+        $result = $query->execute();
+        return $result;
+    }
+
+    /**
      * Apply allowed usergroups based on current logged in user
      *
      * @param  \TYPO3\CMS\Extbase\Persistence\QueryInterface  $query
@@ -97,6 +124,7 @@ final class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\Ba
         if (!$this->getBackendUserAuthentication()->isAdmin()) {
             $constraints = [
                 $query->getConstraint(),
+                $query->equals('admin', 0),
                 $query->logicalNot($query->like('username', '_cli_%')),
             ];
 
