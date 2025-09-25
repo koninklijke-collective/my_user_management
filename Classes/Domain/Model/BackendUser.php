@@ -4,6 +4,7 @@ namespace KoninklijkeCollective\MyUserManagement\Domain\Model;
 
 use KoninklijkeCollective\MyUserManagement\Service\OnlineSessionService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Model for backend user
@@ -25,7 +26,7 @@ final class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup>
      */
-    protected $backendUserGroups;
+    protected ObjectStorage $backendUserGroups;
 
     /**
      * @return int[]

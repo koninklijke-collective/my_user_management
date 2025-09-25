@@ -25,7 +25,7 @@ final class LoginHistoryRepository
         $query = $this->getQueryForUserLoginHistory($queryBuilder);
         $query->andWhere($queryBuilder->expr()->eq('be_users.uid', $user->getUid()));
 
-        return $query->execute()->fetchAllAssociative();
+        return $query->executeQuery()->fetchAllAssociative();
     }
 
     public function lastLoggedInUsers(int $max = 20): array
@@ -35,7 +35,7 @@ final class LoginHistoryRepository
         $query = $this->getQueryForUserLoginHistory($queryBuilder);
         $query->setMaxResults($max);
 
-        return $query->execute()->fetchAllAssociative();
+        return $query->executeQuery()->fetchAllAssociative();
     }
 
     public function getQueryForUserLoginHistory(QueryBuilder $queryBuilder): QueryBuilder

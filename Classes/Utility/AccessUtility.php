@@ -60,6 +60,10 @@ final class AccessUtility
 
     public static function beUserHasRightToAddTable(string $table): bool
     {
+        if (self::getBackendUserAuthentication()->isAdmin()) {
+            return true;
+        }
+
         if (!self::beUserHasRightToEditTable($table)) {
             return false;
         }

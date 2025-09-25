@@ -37,7 +37,7 @@ final class BackendUserGroupPermission extends AbstractPermission
         $query = $this->getQueryBuilderForTable('be_groups')->select('uid', 'title', 'description')
             ->from('be_groups');
 
-        return $query->execute()->fetchAllAssociative();
+        return $query->executeQuery()->fetchAllAssociative();
     }
 
     /**

@@ -25,7 +25,7 @@ final class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\Ba
     /**
      * Override demanded query for filtering by group access
      */
-    public function findDemanded(Demand $demand)
+    public function findDemanded(Demand $demand): \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
     {
         $result = parent::findDemanded($demand);
 

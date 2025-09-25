@@ -3,6 +3,7 @@
 namespace KoninklijkeCollective\MyUserManagement\Domain\Model;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Custom model for backend user group readability
@@ -21,7 +22,7 @@ final class BackendUserGroup extends \TYPO3\CMS\Beuser\Domain\Model\BackendUserG
      *
      * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup>
      */
-    protected $subGroups;
+    protected ObjectStorage $subGroups;
 
     public function getDatabaseMountPoints(): array
     {
