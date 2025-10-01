@@ -63,17 +63,23 @@ final class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
     /**
      * @param  \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup  $group
      * @param  array  $mounts
+     * @param  array $groups
      * @return array
      */
-    protected function getAllDatabaseMountsFromUserGroup(BackendUserGroup $group, array $mounts = []): array
+    protected function getAllDatabaseMountsFromUserGroup(BackendUserGroup $group, array $mounts = [], array $groups = []): array
     {
         $dbMounts = $group->getDatabaseMountPoints();
         $mounts = array_unique(array_merge($mounts, $dbMounts));
 
+        // Stock group UIDs to prevent infinite loop in case of subgroup circular references.
+        $groups[] = $group->getUid();
+
         if ($group->getSubGroups() !== null) {
             foreach ($group->getSubGroups() as $subGroup) {
-                /** @var \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup $subGroup */
-                $mounts = $this->getAllDatabaseMountsFromUserGroup($subGroup, $mounts);
+                if (!in_array($subGroup->getUid(), $groups, true)) {
+                    /** @var \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup $subGroup */
+                    $mounts = $this->getAllDatabaseMountsFromUserGroup($subGroup, $mounts, $groups);
+                }
             }
         }
 
