@@ -9,9 +9,6 @@ final class BackendUserActionPermission extends AbstractPermission
 {
     use PermissionTrait;
 
-    /**
-     * @var string
-     */
     public const KEY = 'my_user_management_action_permissions';
 
     /**
@@ -25,9 +22,6 @@ final class BackendUserActionPermission extends AbstractPermission
     public const ACTION_ADD_FILEMOUNT = 6;
     public const ACTION_DELETE_FILEMOUNT = 7;
 
-    /**
-     * @return array
-     */
     public static function getItems(): array
     {
         return [
@@ -62,9 +56,6 @@ final class BackendUserActionPermission extends AbstractPermission
         ];
     }
 
-    /**
-     * @return void
-     */
     protected function populateData(): void
     {
         $this->data = [
@@ -75,57 +66,36 @@ final class BackendUserActionPermission extends AbstractPermission
 
     /** Helper classes for readability */
 
-    /**
-     * @return bool
-     */
     public static function userCreationAllowed(): bool
     {
         return self::isConfigured(self::ACTION_ADD_USER);
     }
 
-    /**
-     * @return bool
-     */
     public static function userDeletionAllowed(): bool
     {
         return self::isConfigured(self::ACTION_DELETE_USER);
     }
 
-    /**
-     * @return bool
-     */
     public static function groupCreationAllowed(): bool
     {
         return self::isConfigured(self::ACTION_ADD_GROUP);
     }
 
-    /**
-     * @return bool
-     */
     public static function groupDeletionAllowed(): bool
     {
         return self::isConfigured(self::ACTION_DELETE_GROUP);
     }
 
-    /**
-     * @return bool
-     */
     public static function switchUserAllowed(): bool
     {
         return self::isConfigured(self::ACTION_SWITCH_USER);
     }
 
-    /**
-     * @return bool
-     */
     public static function filemountCreationAllowed(): bool
     {
         return self::isConfigured(self::ACTION_ADD_FILEMOUNT);
     }
 
-    /**
-     * @return bool
-     */
     public static function filemountDeletionAllowed(): bool
     {
         return self::isConfigured(self::ACTION_DELETE_FILEMOUNT);

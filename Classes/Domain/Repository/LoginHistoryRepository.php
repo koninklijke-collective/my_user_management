@@ -18,10 +18,6 @@ final class LoginHistoryRepository
     public const TYPE_LOGGED_IN = 255;
     public const ACTION_LOG_IN = 1;
 
-    /**
-     * @param  \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser  $user
-     * @return array
-     */
     public function findUserLoginActions(BackendUser $user): array
     {
         $queryBuilder = self::getQueryBuilderForTable('sys_log');
@@ -29,13 +25,9 @@ final class LoginHistoryRepository
         $query = $this->getQueryForUserLoginHistory($queryBuilder);
         $query->andWhere($queryBuilder->expr()->eq('be_users.uid', $user->getUid()));
 
-        return $query->execute()->fetchAllAssociative();
+        return $query->executeQuery()->fetchAllAssociative();
     }
 
-    /**
-     * @param  int  $max
-     * @return array
-     */
     public function lastLoggedInUsers(int $max = 20): array
     {
         $queryBuilder = self::getQueryBuilderForTable('sys_log');
@@ -43,15 +35,9 @@ final class LoginHistoryRepository
         $query = $this->getQueryForUserLoginHistory($queryBuilder);
         $query->setMaxResults($max);
 
-        return $query->execute()->fetchAllAssociative();
+        return $query->executeQuery()->fetchAllAssociative();
     }
 
-    /**
-     * Create generic query for finding login history from sys_log
-     *
-     * @param  \TYPO3\CMS\Core\Database\Query\QueryBuilder  $queryBuilder
-     * @return \TYPO3\CMS\Core\Database\Query\QueryBuilder
-     */
     public function getQueryForUserLoginHistory(QueryBuilder $queryBuilder): QueryBuilder
     {
         $query = $queryBuilder

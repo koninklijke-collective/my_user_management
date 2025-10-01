@@ -18,21 +18,12 @@ final class AllowedBackendGroupsViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
 
-    /**
-     * @return void
-     */
     public function initializeArguments(): void
     {
         parent::initializeArguments();
         $this->registerArgument('groups', 'array', 'Current list of groups', false);
     }
 
-    /**
-     * @param  array  $arguments
-     * @param  \Closure  $renderChildrenClosure
-     * @param  \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface  $renderingContext
-     * @return array
-     */
     public static function renderStatic(
         array $arguments,
         Closure $renderChildrenClosure,

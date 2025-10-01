@@ -160,9 +160,6 @@
             <trans-unit id="changeToMode" resname="changeToMode">
                 <source>[change-to mode]</source>
             </trans-unit>
-            <trans-unit id="switchBackMode" resname="switchBackMode">
-                <source>Switch to user</source>
-            </trans-unit>
             <trans-unit id="confirm" resname="confirm">
                 <source>Are you sure you want to delete this backend user %s?</source>
             </trans-unit>
@@ -311,7 +308,7 @@
             <trans-unit id="myUserManagementLoginhistory" resname="myUserManagementLoginhistory">
                 <source>Login History</source>
             </trans-unit>
-            <trans-unit id="myusermanagement_MyUserManagementUseraccess" resname="myusermanagement_MyUserManagementUseraccess">
+            <trans-unit id="myusermanagement_user_access" resname="myusermanagement_MyUserManagementUseraccess">
                 <source>User Access Overview</source>
             </trans-unit>
         </body>

@@ -4,6 +4,7 @@ namespace KoninklijkeCollective\MyUserManagement\Domain\Model;
 
 use KoninklijkeCollective\MyUserManagement\Service\OnlineSessionService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\ObjectStorage;
 
 /**
  * Model for backend user
@@ -12,20 +13,20 @@ final class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
 {
     public const TABLE = 'be_users';
 
-    /** @var array */
-    protected $_dbMountPoints;
+    protected ?array $_dbMountPoints = null;
 
-    /** @var array */
-    protected $inheritedMountPoints;
+    protected ?array $inheritedMountPoints = null;
 
-    /** @var array */
-    protected $activeMountPoints;
+    protected ?array $activeMountPoints = null;
 
-    /** @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup> */
-    protected $backendUserGroups;
+    protected ?BackendUser $createdBy = null;
 
-    /** @var \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser */
-    protected $createdBy;
+    /**
+     * Override default backend user groups to map own custom model
+     *
+     * @var \TYPO3\CMS\Extbase\Persistence\ObjectStorage<\KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUserGroup>
+     */
+    protected ObjectStorage $backendUserGroups;
 
     /**
      * @return int[]
@@ -67,9 +68,7 @@ final class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
     protected function getAllDatabaseMountsFromUserGroup(BackendUserGroup $group, array $mounts = []): array
     {
         $dbMounts = $group->getDatabaseMountPoints();
-        if (is_array($dbMounts)) {
-            $mounts = array_unique(array_merge($mounts, $dbMounts));
-        }
+        $mounts = array_unique(array_merge($mounts, $dbMounts));
 
         if ($group->getSubGroups() !== null) {
             foreach ($group->getSubGroups() as $subGroup) {
@@ -81,12 +80,6 @@ final class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
         return $mounts;
     }
 
-    /**
-     * Sets all inherited Mount Points
-     *
-     * @param  array  $allInheritedMountPoints
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser
-     */
     public function setInheritedMountPoints(array $allInheritedMountPoints): BackendUser
     {
         $this->inheritedMountPoints = $allInheritedMountPoints;
@@ -94,22 +87,11 @@ final class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
         return $this;
     }
 
-    /**
-     * Returns the generated active page mounts
-     *
-     * @return array|null when not yet generated
-     */
     public function getActiveMountPoints(): ?array
     {
         return $this->activeMountPoints;
     }
 
-    /**
-     * Sets the ActivePageMount
-     *
-     * @param  array  $activePageMount
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser
-     */
     public function setActiveMountPoints(array $activePageMount): BackendUser
     {
         $this->activeMountPoints = $activePageMount;
@@ -117,18 +99,11 @@ final class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
         return $this;
     }
 
-    /**
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser|null
-     */
     public function getCreatedBy(): ?BackendUser
     {
         return $this->createdBy;
     }
 
-    /**
-     * @param  \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser  $createdBy
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser
-     */
     public function setCreatedBy(BackendUser $createdBy): BackendUser
     {
         $this->createdBy = $createdBy;
@@ -138,8 +113,6 @@ final class BackendUser extends \TYPO3\CMS\Beuser\Domain\Model\BackendUser
 
     /**
      * Override function to actually look into session table
-     *
-     * @return bool
      */
     public function isCurrentlyLoggedIn(): bool
     {

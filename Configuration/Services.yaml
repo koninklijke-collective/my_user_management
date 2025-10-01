@@ -6,3 +6,6 @@ services:
 
   KoninklijkeCollective\MyUserManagement\:
     resource: '../Classes/*'
+
+  KoninklijkeCollective\MyUserManagement\Service\BackendUserControllerService:
+    public: true

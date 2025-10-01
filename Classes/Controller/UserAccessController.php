@@ -7,33 +7,27 @@ use KoninklijkeCollective\MyUserManagement\Functions\TranslateTrait;
 use KoninklijkeCollective\MyUserManagement\Service\BackendUserService;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\Attribute\Controller;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Type\Bitmask\Permission;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
-/**
- * Controller: User Access
- */
+#[Controller]
 final class UserAccessController extends ActionController
 {
     use TranslateTrait;
     use BackendUserAuthenticationTrait;
 
-    private ModuleTemplateFactory $moduleTemplateFactory;
-    private BackendUserService $backendUserService;
     private ModuleTemplate $moduleTemplate;
 
     public function __construct(
-        BackendUserService $backendUserService,
-        ModuleTemplateFactory $moduleTemplateFactory
+        private readonly BackendUserService $backendUserService,
+        private readonly ModuleTemplateFactory $moduleTemplateFactory,
     ) {
-        $this->backendUserService = $backendUserService;
-        $this->moduleTemplateFactory = $moduleTemplateFactory;
     }
 
     /**
@@ -46,40 +40,34 @@ final class UserAccessController extends ActionController
     {
         $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->moduleTemplate->setTitle(LocalizationUtility::translate('LLL:EXT:my_user_management/Resources/Private/Language/Backend/UserAccess.xlf:mlang_tabs_tab'));
+        $this->moduleTemplate->setFlashMessageQueue($this->getFlashMessageQueue());
+
+        $this->moduleTemplate->assignMultiple([
+            'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
+            'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
+        ]);
     }
 
     public function indexAction(): ResponseInterface
     {
-        $this->view->assignMultiple([
-            'shortcutLabel' => 'MyUserAccess',
-            'dateFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'],
-            'timeFormat' => $GLOBALS['TYPO3_CONF_VARS']['SYS']['hhmm'],
-        ]);
         $page = $this->getSelectedPage($this->request);
         if ($page === null) {
-            $this->addFlashMessage(
-                self::translate('no_page_selected_description'),
-                self::translate('no_page_selected_title'),
-                AbstractMessage::WARNING,
-                false
-            );
-        } else {
-            $this->view->assignMultiple([
-                'page' => $page,
-                'backendUsers' => $this->backendUserService->findUsersWithPageAccess($page['uid']),
-            ]);
-
-            $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
-            $shortcutButton = $buttonBar->makeShortcutButton()
-                ->setRouteIdentifier('myusermanagement_MyUserManagementUseraccess')
-                ->setArguments(['id' => $page['uid']])
-                ->setDisplayName(LocalizationUtility::translate('myusermanagement_MyUserManagementUseraccess', 'myUserManagement') . ' - ' . $page['uid']);
-            $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
+            return $this->moduleTemplate->renderResponse('UserAccess/NoPageSelected');
         }
 
-        $this->moduleTemplate->setContent($this->view->render());
+        $buttonBar = $this->moduleTemplate->getDocHeaderComponent()->getButtonBar();
+        $shortcutButton = $buttonBar->makeShortcutButton()
+            ->setRouteIdentifier('myusermanagement_user_access')
+            ->setArguments(['id' => $page['uid']])
+            ->setDisplayName(LocalizationUtility::translate('myusermanagement_user_access', 'myUserManagement') . ' - ' . $page['uid']);
+        $buttonBar->addButton($shortcutButton, ButtonBar::BUTTON_POSITION_RIGHT);
 
-        return $this->htmlResponse($this->moduleTemplate->renderContent());
+        $this->moduleTemplate->assignMultiple([
+            'page' => $page,
+            'backendUsers' => $this->backendUserService->findUsersWithPageAccess($page['uid']),
+        ]);
+
+        return $this->moduleTemplate->renderResponse('UserAccess/Overview');
     }
 
     private function getSelectedPage(ServerRequestInterface $request): ?array

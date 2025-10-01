@@ -20,8 +20,6 @@ final class TableConfigurationArrayHook implements SingletonInterface
      * ItemsProcFunc: Filter configured backend user groups based on Custom Options
      *
      * @see https://forge.typo3.org/issues/85622
-     * @param  array  $parameters
-     * @return void
      */
     public function filterConfiguredBackendGroups(array &$parameters): void
     {
@@ -49,14 +47,6 @@ final class TableConfigurationArrayHook implements SingletonInterface
         }
     }
 
-    /**
-     * @param  array  $items
-     * @param  array  $selected
-     * @param  int  $id
-     * @param  string  $label
-     * @param  string|null  $icon
-     * @return array
-     */
     protected function addGroupBasedOnUserAccess(
         array $items,
         array $selected,

@@ -16,9 +16,6 @@ final class StoragePathViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
 
-    /**
-     * @return void
-     */
     public function initializeArguments(): void
     {
         parent::initializeArguments();
@@ -26,14 +23,6 @@ final class StoragePathViewHelper extends AbstractViewHelper
         $this->registerArgument('location', 'string', '', false, '/');
     }
 
-    /**
-     * Retrieve storage path from given id
-     *
-     * @param  array  $arguments
-     * @param  \Closure  $renderChildrenClosure
-     * @param  \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface  $renderingContext
-     * @return string
-     */
     public static function renderStatic(
         array $arguments,
         Closure $renderChildrenClosure,
@@ -45,9 +34,6 @@ final class StoragePathViewHelper extends AbstractViewHelper
         );
     }
 
-    /**
-     * @return \KoninklijkeCollective\MyUserManagement\Service\StorageService
-     */
     protected static function getStorageService(): StorageService
     {
         return GeneralUtility::makeInstance(StorageService::class);

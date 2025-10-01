@@ -1,17 +1,18 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
       data-namespace-typo3-fluid="true">
 
+<!-- COPY FROM EXT:beuser -->
 <f:form action="detail">
     <div class="row row-cols-auto align-items-end g-3 mb-4">
         <div class="col">
             <label for="login-history-users" class="form-label">
-                <f:translate key="backendUser">User</f:translate>
+                <f:translate key="backendUser" extensionName="beuser">User</f:translate>
             </label>
             <f:form.select id="login-history-users" class="form-select" name="user" prependOptionLabel=""
                            options="{backendUsers}"/>
         </div>
         <div class="col">
-            <f:form.submit value="{f:translate(key: 'view', default: 'View')}" class="btn btn-light"/>
+            <f:form.submit value="{f:translate(key: 'view', default: 'View', extensionName: 'beuser')}" class="btn btn-light"/>
         </div>
     </div>
 </f:form>

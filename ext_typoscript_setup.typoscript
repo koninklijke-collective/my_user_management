@@ -1,1 +1,34 @@
-@import 'EXT:my_user_management/Configuration/TypoScript/setup.typoscript'
+# Module configuration
+module.tx_myusermanagement {
+    # This is deprecated since v12. I cannot override the default view paths for initial extending of ext:beuser
+    # Now the following Paths are used:
+    # Prioritizes: EXT:my_user_management/Resources/Private/
+    # Fallback on: EXT:backend/Resources/Private/
+    view {
+        templateRootPaths {
+            10 = EXT:my_user_management/Resources/Private/Templates
+            20 = EXT:beuser/Resources/Private/Templates
+            30 = EXT:my_user_management/Resources/Private/Templates/Override
+        }
+
+        partialRootPaths {
+            10 = EXT:my_user_management/Resources/Private/Partials
+            20 = EXT:beuser/Resources/Private/Partials
+            30 = EXT:my_user_management/Resources/Private/Partials/Override
+        }
+
+        layoutRootPaths {
+            10 = EXT:my_user_management/Resources/Private/Layouts
+            20 = EXT:beuser/Resources/Private/Layouts
+            30 = EXT:my_user_management/Resources/Private/Layouts/Override
+        }
+    }
+
+    settings {
+        // This is a dummy entry. It is used in  Tx_Beuser_Controller_BackendUserController
+        // to test that some TypoScript configuration is set.
+        // This entry can be removed if extbase setup is made frontend TS independant
+        // or if there are other settings set.
+        dummy = foo
+    }
+}

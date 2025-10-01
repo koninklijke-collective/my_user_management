@@ -19,9 +19,6 @@ final class RemoveRecordViewHelper extends AbstractViewHelper
 {
     use CompileWithRenderStatic;
 
-    /**
-     * @return void
-     */
     public function initializeArguments(): void
     {
         $this->registerArgument('uid', 'int', 'uid of record to be deleted', true);
@@ -29,13 +26,6 @@ final class RemoveRecordViewHelper extends AbstractViewHelper
         $this->registerArgument('returnUrl', 'string', '', false, '');
     }
 
-    /**
-     * @param  array  $arguments
-     * @param  \Closure  $renderChildrenClosure
-     * @param  \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface  $renderingContext
-     * @return string
-     * @throws \TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException
-     */
     public static function renderStatic(
         array $arguments,
         Closure $renderChildrenClosure,

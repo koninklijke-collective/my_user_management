@@ -5,16 +5,16 @@ namespace KoninklijkeCollective\MyUserManagement\ViewHelpers\Security;
 use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserActionPermission;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface;
 use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
+/**
+ * Renders <f:then> child if the current logged in BE user has access to the specific action
+ * otherwise renders <f:else> child.
+ */
 final class IsActionAllowedViewHelper extends AbstractConditionViewHelper
 {
-    /**
-     * Initializes the "action" argument.
-     * Renders <f:then> child if the current logged in BE user has access to the specific action
-     * otherwise renders <f:else> child.
-     */
     public function initializeArguments(): void
     {
         parent::initializeArguments();
@@ -27,23 +27,16 @@ final class IsActionAllowedViewHelper extends AbstractConditionViewHelper
         );
     }
 
-    /**
-     * @param  array  $arguments
-     * @param  \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface  $renderingContext
-     * @return bool
-     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
-     */
     public static function verdict(array $arguments, RenderingContextInterface $renderingContext): bool
     {
         $action = $arguments['action'];
 
-        $userAspect = GeneralUtility::makeInstance(Context::class)->getAspect('backend.user');
-        if (!$userAspect->isLoggedIn()) {
+        if (!GeneralUtility::makeInstance(Context::class)->getPropertyFromAspect('backend.user', 'isLoggedIn')) {
             return false;
         }
 
-        if (is_numeric($action)) {
-            $id = self::getKeyFromInt($action);
+        if (MathUtility::canBeInterpretedAsInteger($action)) {
+            $id = self::getKeyFromInt((int)$action);
         } else {
             $id = self::getKeyFromString($action);
         }
@@ -57,9 +50,6 @@ final class IsActionAllowedViewHelper extends AbstractConditionViewHelper
 
     /**
      * Validate incoming key to allow in lookup
-     *
-     * @param  int  $value
-     * @return int|null
      */
     protected static function getKeyFromInt(int $value): ?int
     {
@@ -72,9 +62,6 @@ final class IsActionAllowedViewHelper extends AbstractConditionViewHelper
 
     /**
      * Get key from constant string when defined in BackendUserActionPermission
-     *
-     * @param  string  $value
-     * @return int|null
      */
     protected static function getKeyFromString(string $value): ?int
     {

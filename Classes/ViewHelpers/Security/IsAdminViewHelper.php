@@ -9,16 +9,9 @@ use TYPO3Fluid\Fluid\Core\ViewHelper\AbstractConditionViewHelper;
 
 final class IsAdminViewHelper extends AbstractConditionViewHelper
 {
-    /**
-     * @param  array  $arguments
-     * @param  \TYPO3Fluid\Fluid\Core\Rendering\RenderingContextInterface  $renderingContext
-     * @return bool
-     * @throws \TYPO3\CMS\Core\Context\Exception\AspectNotFoundException
-     */
     public static function verdict(array $arguments, RenderingContextInterface $renderingContext): bool
     {
-        $userAspect = GeneralUtility::makeInstance(Context::class)->getAspect('backend.user');
-
-        return $userAspect->isAdmin();
+        return GeneralUtility::makeInstance(Context::class)
+            ->getPropertyFromAspect('backend.user', 'isAdmin');
     }
 }

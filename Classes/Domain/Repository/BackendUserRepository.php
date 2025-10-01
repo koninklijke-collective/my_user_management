@@ -5,22 +5,16 @@ namespace KoninklijkeCollective\MyUserManagement\Domain\Repository;
 use DateTime;
 use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission;
 use KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser;
+use KoninklijkeCollective\MyUserManagement\Functions\BackendUserAuthenticationTrait;
 use TYPO3\CMS\Beuser\Domain\Model\Demand;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 
-/**
- * Repository: BackendUser
- */
 final class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendUserRepository
 {
-    /** @var array */
+    use BackendUserAuthenticationTrait;
+
     protected $defaultOrderings = ['username' => QueryInterface::ORDER_ASCENDING];
 
-    /**
-     * @inheritDoc
-     * @param  int  $uid
-     * @return \KoninklijkeCollective\MyUserManagement\Domain\Model\BackendUser|null
-     */
     public function findByUid($uid): ?BackendUser
     {
         $query = $this->createQuery();
@@ -30,11 +24,8 @@ final class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\Ba
 
     /**
      * Override demanded query for filtering by group access
-     *
-     * @param  \TYPO3\CMS\Beuser\Domain\Model\Demand  $demand
-     * @return \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult<\TYPO3\CMS\Beuser\Domain\Model\BackendUser>|array
      */
-    public function findDemanded(Demand $demand)
+    public function findDemanded(Demand $demand): \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult
     {
         $result = parent::findDemanded($demand);
 
@@ -49,49 +40,32 @@ final class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\Ba
         return $result;
     }
 
-    /**
-     * Find all active backend users
-     *
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
-     */
-    public function findAllActive()
+    public function findAllActive(): array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
     {
         $query = $this->createQuery();
-        $query->matching($query->logicalAnd([
+        $query->matching($query->logicalAnd(
             $query->equals('deleted', false),
             $query->equals('disable', false),
-        ]));
+        ));
 
         $this->applyUserGroupPermission($query);
 
         return $query->execute();
     }
 
-    /**
-     * Find all inactive users based on last login
-     *
-     * @param  \DateTime  $lastLoginSince
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface|array
-     */
-    public function findAllInactive(DateTime $lastLoginSince)
+    public function findAllInactive(DateTime $lastLoginSince): array|\TYPO3\CMS\Extbase\Persistence\QueryResultInterface
     {
         $query = $this->createQuery();
-        $query->matching($query->logicalAnd([
+        $query->matching($query->logicalAnd(
             $query->equals('deleted', false),
             $query->lessThanOrEqual('lastlogin', $lastLoginSince),
-        ]));
+        ));
 
         $query = $this->applyUserGroupPermission($query);
 
         return $query->execute();
     }
 
-    /**
-     * Apply allowed usergroups based on current logged in user
-     *
-     * @param  \TYPO3\CMS\Extbase\Persistence\QueryInterface  $query
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryInterface
-     */
     public function applyUserGroupPermission(QueryInterface $query): QueryInterface
     {
         if (!$this->getBackendUserAuthentication()->isAdmin()) {
@@ -107,24 +81,19 @@ final class BackendUserRepository extends \TYPO3\CMS\Beuser\Domain\Repository\Ba
                 ];
                 foreach (BackendUserGroupPermission::getConfigured() as $id) {
                     // @TODO: Refactor for real n:m relations
-                    $allowedConstraints[] = $query->logicalOr([
+                    $allowedConstraints[] = $query->logicalOr(
                         $query->equals('usergroup', (int)$id),
                         $query->like('usergroup', (int)$id . ',%'),
                         $query->like('usergroup', '%,' . (int)$id),
                         $query->like('usergroup', '%,' . (int)$id . ',%'),
-                    ]);
+                    );
                 }
-                $constraints[] = $query->logicalOr($allowedConstraints);
+                $constraints[] = $query->logicalOr(...$allowedConstraints);
             }
 
-            $query->matching($query->logicalAnd($constraints));
+            $query->matching($query->logicalAnd(...$constraints));
         }
 
         return $query;
-    }
-
-    private function getBackendUserAuthentication()
-    {
-        return $GLOBALS['BE_USER'];
     }
 }

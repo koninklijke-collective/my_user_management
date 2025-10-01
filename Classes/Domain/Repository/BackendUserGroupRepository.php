@@ -4,9 +4,6 @@ namespace KoninklijkeCollective\MyUserManagement\Domain\Repository;
 
 use KoninklijkeCollective\MyUserManagement\Domain\DataTransferObject\BackendUserGroupPermission;
 
-/**
- * Repository: BackendUserGroup
- */
 final class BackendUserGroupRepository extends \TYPO3\CMS\Beuser\Domain\Repository\BackendUserGroupRepository
 {
     /**
@@ -20,9 +17,9 @@ final class BackendUserGroupRepository extends \TYPO3\CMS\Beuser\Domain\Reposito
         }
 
         $query = $this->createQuery();
-        $query->matching($query->logicalAnd([
+        $query->matching($query->logicalAnd(
             $query->in('uid', BackendUserGroupPermission::getConfigured()),
-        ]));
+        ));
 
         return $query->execute();
     }

@@ -24,20 +24,6 @@
                 <source>You are not allowed to display this user.</source>
             </trans-unit>
 
-            <trans-unit id="switch_user_not_found_title">
-                <source>No user found</source>
-            </trans-unit>
-            <trans-unit id="switch_user_not_found_description">
-                <source>You are trying to do stuff that you are not allowed to do.</source>
-            </trans-unit>
-
-            <trans-unit id="admin_switch_not_allowed_title">
-                <source>Access Denied</source>
-            </trans-unit>
-            <trans-unit id="admin_switch_not_allowed_description">
-                <source>You are not allowed to switch to an admin user.</source>
-            </trans-unit>
-
             <trans-unit id="backend_access_group_permissions">
                 <source>Backend User Management: Allowed backend groups for maintenance</source>
             </trans-unit>
@@ -58,7 +44,7 @@
                 <source>Delete backend group</source>
             </trans-unit>
             <trans-unit id="backend_access_action_permissions.action_switch_user.title">
-                <source>Switch to different user</source>
+                <source>Switch to different user (Not yet ported)</source>
             </trans-unit>
             <trans-unit id="backend_access_action_permissions.action_add_filemount.title">
                 <source>Add filemount</source>
